@@ -5,7 +5,7 @@
     "dark": "/logo/all_logo.svg",
     "light": "/logo/all_logo.svg"
   },
-  "favicon": "/favicon.svg",
+  "favicon": "/fav.svg",
   "colors": {
     "primary": "#5A2284",
     "light": "#5A2284",
@@ -60,15 +60,18 @@
     {
       "group": "Build with PureCPP",
       "pages": [
-        "Build with PureCPP/ExtractText",
-        "Build with PureCPP/SpliText",
-        "Build with PureCPP/MetadataEnrichment",
-        "Build with PureCPP/CleaningChunks",
-        "Build with PureCPP/Embeddings",
-        "Build with PureCPP/VectorDatabases",
-        "Build with PureCPP/Prompts",
-        "Build with PureCPP/Models",
-        "Build with PureCPP/Flows"
+        "ExtractText",
+        "ExtractText/PDF",
+        "ExtractText/DOCX",
+        "ExtractText/TXT",
+        "SpliText",
+        "MetadataEnrichment",
+        "CleaningChunks",
+        "Embeddings",
+        "VectorDatabases",
+        "Prompts",
+        "Models",
+        "Flows"
       ]
     }
   ],
