@@ -1,11 +1,11 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Starter Kit",
+  "name": "PureCPP",
   "logo": {
     "dark": "/logo/all_logo.svg",
     "light": "/logo/all_logo.svg"
   },
-  "favicon": "/fav.svg",
+  "favicon": "/logo/all_logo.svg",
   "colors": {
     "primary": "#5A2284",
     "light": "#5A2284",
