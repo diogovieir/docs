@@ -53,33 +53,22 @@
       "group": "Get Started",
       "pages": [
         "introduction",
-        "quickstart",
+        "Inital Setup",
         "development"
       ]
     },
     {
-      "group": "Essentials",
+      "group": "Build with PureCPP",
       "pages": [
-        "essentials/markdown",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
-      ]
-    },
-    {
-      "group": "API Documentation",
-      "pages": [
-        "api-reference/introduction"
-      ]
-    },
-    {
-      "group": "Endpoint Examples",
-      "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
+        "Build with PureCPP/ExtractText",
+        "Build with PureCPP/SpliText",
+        "Build with PureCPP/MetadataEnrichment",
+        "Build with PureCPP/CleaningChunks",
+        "Build with PureCPP/Embeddings",
+        "Build with PureCPP/VectorDatabases",
+        "Build with PureCPP/Prompts",
+        "Build with PureCPP/Models",
+        "Build with PureCPP/Flows"
       ]
     }
   ],
