@@ -29,11 +29,8 @@
     {
       "name": "API Reference",
       "url": "api-reference"
-    },
-    {
-      "name": "home",
-      "url": "home"
     }
+
   
   ],
   "anchors": [
@@ -50,35 +47,47 @@
     {
       "name": "Blog",
       "icon": "newspaper",
-      "url": "https://mintlify.com/blog"
+      "url": "https://www.pureai.com.br/"
     }
   ],
   "navigation": [
     {
-      "group": "Get Started",
+      "group": "Introduction",
       "pages": [
-        "introduction",
-        "Inital Setup",
-        "development"
+        "introduction"
+
+      ]
+    },
+    {
+      "group": "Build with PureRAG",
+      "pages": [
+        "setup",
+        {
+          "group":"Chunks",
+          "pages": [
+            "chunkdefault",
+            "chunkcount",
+            "chunkquery",
+            "chunksimilarity",
+            "chunksummarization"
+          ]
+        },
+        {
+          "group": "Clean Text",
+          "pages": [
+            "cleanregex"
+          ]
+        }
+      
       ]
     },
     {
       "group": "Build with PureCPP",
       "pages": [
-        "ExtractText",
-        "ExtractText/PDF",
-        "ExtractText/DOCX",
-        "ExtractText/TXT",
-        "SpliText",
-        "MetadataEnrichment",
-        "CleaningChunks",
-        "Embeddings",
-        "VectorDatabases",
-        "Prompts",
-        "Models",
-        "Flows"
+        "None"
       ]
     }
+
   ],
   "footerSocials": {
     "x": "https://x.com/mintlify",
