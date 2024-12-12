@@ -2,17 +2,17 @@
   "$schema": "https://mintlify.com/schema.json",
   "name": "PureCPP",
   "logo": {
-    "dark": "/logo/all_logo.svg",
-    "light": "/logo/all_logo.svg"
+    "light": "/logo/all_logo.svg",
+    "dark": "/logo/all_logo.svg"
   },
   "favicon": "/logo/all_logo.svg",
   "colors": {
-    "primary": "#5A2284",
-    "light": "#5A2284",
-    "dark": "#5A2284",
+    "primary": "#9A3BE2",
+    "light": "#9439DA",
+    "dark": "#8131BE",
     "anchors": {
-      "from": "#5A2284",
-      "to": "#5A2284"
+      "from": "#9A3BE2",
+      "to": "#8131BE"
     }
   },
   "topbarLinks": [
@@ -22,28 +22,16 @@
     }
   ],
   "topbarCtaButton": {
-    "name": "Dashboard",
-    "url": "https://dashboard.mintlify.com"
+    "name": "Go to PureAI",
+    "url": "https://www.pureai.com.br/"
   },
   "tabs": [
     {
       "name": "API Reference",
       "url": "api-reference"
     }
-
-  
   ],
   "anchors": [
-    {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
-    },
-    {
-      "name": "Community",
-      "icon": "discord",
-      "url": "https://mintlify.com/community"
-    },
     {
       "name": "Blog",
       "icon": "newspaper",
@@ -55,7 +43,6 @@
       "group": "Introduction",
       "pages": [
         "introduction"
-
       ]
     },
     {
@@ -63,7 +50,7 @@
       "pages": [
         "setup",
         {
-          "group":"Chunks",
+          "group": "Chunks",
           "pages": [
             "chunkdefault",
             "chunkcount",
@@ -78,16 +65,8 @@
             "cleanregex"
           ]
         }
-      
-      ]
-    },
-    {
-      "group": "Build with PureCPP",
-      "pages": [
-        "None"
       ]
     }
-
   ],
   "footerSocials": {
     "x": "https://x.com/mintlify",
