@@ -28,7 +28,15 @@
   "tabs": [
     {
       "name": "API Reference",
-      "url": "api-reference"
+      "url": "https://your-website.com/blog"
+    },
+    {
+      "name": "Research",
+      "url": "https://your-website.com/blog"
+    },
+    {
+      "name": "Examples",
+      "url": "https://your-website.com/blog"
     }
   ],
   "anchors": [
@@ -36,6 +44,16 @@
       "name": "Blog",
       "icon": "newspaper",
       "url": "https://www.pureai.com.br/"
+    },
+    {
+      "name": "Documentation",
+      "icon": "book-open-cover",
+      "url": "https://mintlify.com/docs"
+    },
+    {
+      "name": "Community",
+      "icon": "discord",
+      "url": "https://mintlify.com/community"
     }
   ],
   "navigation": [
