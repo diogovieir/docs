@@ -1,0 +1,80 @@
+---
+title: ChunkCount
+description: Split text based on a count pattern.
+---
+
+## Installation
+
+To use **ChunkCount**, you first need to install the ` RagPUREAI_chuncks_clean` Python package:
+
+```bash
+pip install  RagPUREAI_chuncks_clean
+```
+
+## Input Data
+
+The input data must follow the `LoaderDataStruct` format. You can manually create it or use the output of a data loader. For more details, check the [Data Loaders documentation](../loaders/introduction.mdx).
+
+**Example of input data:**
+```python
+from  RagPUREAI_chuncks_clean import LoaderDataStruct
+
+input_data = LoaderDataStruct(
+    metadata={"fileIdentifier": "example1"},
+    textContent=[
+        "This is a sample text with multiple sections.",
+        "It is used to demonstrate the ChunkCount module."
+    ]
+)
+```
+
+## Initialization
+
+To initialize the **ChunkCount**, define the `count_unit`, `chunk_size`, and `threshold`.
+
+| Parameter     | Description                                                          |
+|:--------------|:----------------------------------------------------------------------|
+| `count_unit` | The element to count before splitting (word, character, regex).     |
+| `chunk_size` | Maximum size of each chunk (in characters).                         |
+| `threshold`  | Number of times the `count_unit` must appear before splitting.      |
+
+**example:**
+
+```python
+from  RagPUREAI_chuncks_clean import ChunkCount
+
+chunk_count = ChunkCount(count_unit="keyword", chunk_size=500, threshold=2)
+```
+
+## Processing a Single Document
+
+To split a single document into chunks, use the `ProcessSingleDocument` method. This will return a list of processed documents (chunks), which you can iterate over to access each piece.
+```python
+from  RagPUREAI_chuncks_clean import ChunkCount
+
+chunk_count = ChunkCount(count_unit="keyword", chunk_size=500, threshold=2)
+documents = chunk_count.ProcessSingleDocument(item=input_data)
+
+for doc in documents:
+    print(doc.StringRepr())
+```
+
+## Processing Multiple Documents
+
+For batch processing, you can use the `ProcessDocuments` method. This method processes multiple documents in parallel.
+
+The `max_workers` parameter controls the number of concurrent threads used during processing
+
+```python
+from  RagPUREAI_chuncks_clean import ChunkCount
+
+chunk_count = ChunkCount(count_unit="keyword", chunk_size=500, threshold=2)
+documents = chunk_count.ProcessDocuments(
+    items=[input_data_1, input_data_2],
+    max_workers=4
+)
+
+for doc in documents:
+    print(doc.StringRepr())
+```
+

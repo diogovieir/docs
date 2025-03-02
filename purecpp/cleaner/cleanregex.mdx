@@ -1,0 +1,80 @@
+---
+title: Content Cleaner
+description: This module allows cleaning document content using regex patterns, removing unwanted characters, extra whitespace, or other artifacts before further processing.
+---
+
+## Installation
+
+To use the **ContentCleaner**, you first need to install the `RagPUREAI_extract` Python package.
+
+Before you begin, ensure your environment meets the following requirements:
+
+- **Python 3.10 or newer**.
+- **pip**: Ensure pip is installed and updated to the latest version.
+
+```bash
+pip install  RagPUREAI_chuncks_clean
+```
+
+---
+
+## Default Cleaning Patterns
+
+When you initialize the **ContentCleaner** without passing any patterns, it uses the following default regex patterns:
+
+| Name                       | Regex Pattern             | Description                                  |
+|:---------------------------|:--------------------------|:---------------------------------------------|
+| Extra Spaces               | `\s+`                     | Replaces multiple spaces with a single one.  |
+| Non-ASCII Characters       | `[^\x00-\x7F]+`           | Removes all non-ASCII characters.            |
+| Symbols at Line Edges      | `^W+\|\W+$`               | Removes symbols at the start/end of lines.    |
+
+---
+
+## Usage
+
+### Initialization
+
+You can initialize the **ContentCleaner** using default patterns or provide custom patterns.
+
+```python
+from  RagPUREAI_chuncks_clean import ContentCleaner
+
+# Initialize with default patterns
+cleaner = ContentCleaner()
+```
+
+## Cleaning a Document
+
+To clean the text of a document, use the **ProcessDocument** method. For creating documents, use the `RAGDocument` class.
+
+```python
+from RagPUREAI_extract import RAGDocument
+
+input_data = "This is a test doc with       multiple spaces."
+doc = RAGDocument(page_content=input_data, metadata={})
+
+cleaned_doc = cleaner.ProcessDocument(doc)
+print(cleaned_doc.page_content)
+# Output: "This is a test doc with multiple spaces."
+```
+
+---
+
+## Using Custom Cleaning Patterns
+
+You can add extra regex patterns to further clean your document. These **custom patterns** are applied **after** the default patterns.
+
+### Example
+
+Suppose we want to remove the word **"test"** from the string:
+
+```python
+regex_pattern_to_remove = r"test"
+
+# Apply custom patterns during processing
+cleaned_doc = cleaner.ProcessDocument(doc, [regex_pattern_to_remove])
+print(cleaned_doc.page_content)
+# Output: "This is a  doc with multiple spaces."
+```
+
+

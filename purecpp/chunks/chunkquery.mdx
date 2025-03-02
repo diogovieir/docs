@@ -1,0 +1,123 @@
+---
+title: ChunkQuery
+description: Split text into chunks and filter them based on similarity to a query.
+---
+
+## Installation
+
+To use **ChunkQuery**, you first need to install the `RagPUREAI_chuncks_clean` Python package:
+
+```bash
+pip install RagPUREAI_chuncks_clean
+```
+
+## Input Data
+
+The input data must follow the `LoaderDataStruct` format. You can manually create it or use the output of a data loader. For more details, check the [Data Loaders documentation](../loaders/introduction.mdx).
+
+**Example of input data:**
+```python
+from RagPUREAI_chuncks_clean import LoaderDataStruct
+
+single_input_data = LoaderDataStruct(
+    metadata={"fileIdentifier": "example1"},
+    textContent=[
+        "This is a sample text to demonstrate ChunkDefault.",
+        "It will be split into overlapping chunks."
+    ]
+)
+```
+
+## Initialization
+
+To initialize the **ChunkQuery**, set the `chunk_size`, `overlap`, and provide an `embedding_model`. If using OpenAI embeddings, provide your `openai_api_key`.
+
+| Parameter              | Description                                                                 |
+|------------------------|-----------------------------------------------------------------------------|
+| `chunk_size`          | Maximum size of each chunk (in characters).                                 |
+| `overlap`             | Number of characters shared between consecutive chunks.                     |
+| `embedding_model`     | Embedding model used for similarity calculation (HuggingFace or OpenAI).    |
+| `openai_api_key`      | API key required if using the OpenAI embedding model.                       |
+| `similarity_threshold`| Minimum similarity score for a chunk to be included.                        |
+
+**example:**
+```python
+from RagPUREAI_chuncks_clean import ChunkQuery, EmbeddingModel
+
+# HuggingFace model
+embedding_model = EmbeddingModel(0)
+chunk_query = ChunkQuery(chunk_size=200, overlap=2, embedding_model=embedding_model)
+
+# OpenAI model
+embedding_model = EmbeddingModel(1)
+chunk_query = ChunkQuery(chunk_size=200, overlap=2, embedding_model=embedding_model, openai_api_key="your_openai_api_key")
+```
+
+## Embedding Model
+
+The `embedding_model` parameter specifies which model to use for generating embeddings. The embeddings are used to calculate the similarity between the query and document chunks. Two options are available:
+
+- **HuggingFace (`0`)**: Uses the SentenceTransformer model (`all-MiniLM-L6-v2`).
+- **OpenAI (`1`)**: Uses OpenAI's embedding model (`text-embedding-ada-002`). Requires an `openai_api_key`.
+
+Example:
+
+```python
+from RagPUREAI_chuncks_clean import EmbeddingModel
+
+# HuggingFace model
+embedding_model = EmbeddingModel(0)
+
+# OpenAI model
+embedding_model = EmbeddingModel(1)
+```
+
+## Processing Documents with `ProcessDocuments`
+
+The `ProcessDocuments` method processes multiple input documents and filters the chunks based on their similarity to a query.
+
+### Parameters:
+
+| Parameter              | Description                                                                 |
+|:----------------------|:-----------------------------------------------------------------------------|
+| `items`               | List of `LoaderDataStruct` documents to process.                            |
+| `query`               | The search query used for similarity comparison.                           |
+| `similarity_threshold`| Minimum similarity score required for a chunk to be included in the output. |
+| `max_workers`         | Number of parallel workers for processing multiple documents.              |
+
+### Example with HuggingFace:
+```python
+from RagPUREAI_chuncks_clean import ChunkQuery, EmbeddingModel
+
+embedding_model = EmbeddingModel(0)
+chunk_query = ChunkQuery(chunk_size=200, overlap=2, embedding_model=embedding_model)
+
+documents = chunk_query.ProcessDocuments(
+    items=[input_data_1, input_data_2],
+    query="atomic models",
+    similarity_threshold=0.5,
+    max_workers=4
+)
+
+for doc in documents:
+    print(doc.StringRepr())
+```
+
+### Example with OpenAI:
+```python
+from RagPUREAI_chuncks_clean import ChunkQuery, EmbeddingModel
+
+embedding_model = EmbeddingModel(1)
+chunk_query = ChunkQuery(chunk_size=200, overlap=2, embedding_model=embedding_model, openai_api_key="your_openai_api_key")
+
+documents = chunk_query.ProcessDocuments(
+    items=[input_data],
+    query="atomic models",
+    similarity_threshold=0.5,
+    max_workers=4
+)
+
+for doc in documents:
+    print(doc.StringRepr())
+```
+

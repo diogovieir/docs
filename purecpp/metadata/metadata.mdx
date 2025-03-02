@@ -1,0 +1,81 @@
+---
+title: Metadata Extractor
+description: The **MetadataRegexExtractor** module is designed to extract structured metadata from documents by applying regular expression (regex) patterns. It identifies elements such as proper names, dates, numbers, emails, URLs, and custom patterns.
+---
+
+## Installation
+
+To use the **MetadataRegexExtractor**, you first need to install the `RagPUREAI_extract` Python package.
+
+Before you begin, ensure your environment meets the following requirements:
+
+- **Python 3.10 or newer**.
+- **pip**: Ensure pip is installed and updated to the latest version.
+
+```bash
+pip install RagPUREAI_meta
+```
+
+## Initialization
+
+You can initialize the **MetadataRegexExtractor** without any parameters to use the default extraction patterns:
+
+```python
+from RagPUREAI_meta import MetadataRegexExtractor
+
+# Initialize with default patterns
+metadata_regex_extractor = MetadataRegexExtractor()
+```
+## Default Extraction Patterns
+
+When you initialize the **MetadataRegexExtractor**, it comes with the following default regex patterns:
+
+| Name            | Regex Pattern                                                | Description                  |
+|-----------------|--------------------------------------------------------------|------------------------------|
+| **ProperName** | `[A-Z][a-z]+(?:\s[A-Z][a-z]+)*`                              | Extracts proper names.       |
+| **Date**       | `\b\d{1,2}/\d{1,2}/\d{2,4}\b\|\b\d{4}-\d{2}-\d{2}\b` | Extracts dates.              |
+| **Number**     | `\b\d+\b`                                                  | Extracts numbers.            |
+| **Email**      | `\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b`     | Extracts email addresses.    |
+| **URL**        | `\bhttps?://[^\s]+\b`                                      | Extracts URLs.               |
+
+These patterns help automatically enrich documents with relevant metadata.
+
+## Extract default metadata
+
+To process a document and extract metadata, use the **ProcessDocument** method.
+⚠️ **Note**: The example below manually creates a `Document` object for demonstration purposes. In a real-world scenario, you would typically use the output of a dataloader directly. [See the Dataloader Documentation](../loaders/introduction.mdx)
+
+
+```python
+from RagPUREAI_meta import Document
+
+doc = Document(
+    pageContent=["This is an example text to test the MetadataExtractor class."],
+    metadata=[("id", "doc1"), ("category", "category:1234"), ("url", "https://www.example.com")]
+)
+
+processed_document = metadata_regex_extractor.ProcessDocument(doc)
+
+# Print the processed metadata
+print(processed_document.StringRepr())
+```
+
+---
+
+## Adding Custom Extraction Patterns
+
+You can add custom patterns to extract specific metadata by using the **AddPattern** method.
+
+### Example
+
+Let's add a custom pattern to extract a "Category" field:
+
+```python
+metadata_regex_extractor.AddPattern(
+    "Category", r"category:\s*([a-zA-Z]+);?"
+)
+
+processed_document = metadata_regex_extractor.ProcessDocument(doc)
+
+print(processed_document.StringRepr())
+```

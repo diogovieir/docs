@@ -1,0 +1,77 @@
+---
+title: ChunkDefault
+description: The **ChunkDefault** module splits large pieces of text into manageable chunks, using overlap to maintain context between segments. This is particularly useful in **Retrieval-Augmented Generation (RAG)** pipelines and other text processing tasks where continuity matters.
+---
+
+## Installation
+
+To use **ChunkDefault**, you first need to install the ` RagPUREAI_chuncks_clean` Python package:
+
+```bash
+pip install  RagPUREAI_chuncks_clean
+```
+
+## Input Data
+
+The input data must follow the `LoaderDataStruct` format. You can manually create it or use the output of a data loader. For more details, check the [Data Loaders documentation](../loaders/introduction.mdx).
+**Example of input data:**
+```python
+from  RagPUREAI_chuncks_clean import LoaderDataStruct
+
+single_input_data = LoaderDataStruct(
+    metadata={"fileIdentifier": "example1"},
+    textContent=[
+        "This is a sample text to demonstrate ChunkDefault.",
+        "It will be split into overlapping chunks."
+    ]
+)
+```
+
+## Initialization
+
+To use the **ChunkDefault** module, you first need to create an instance by specifying the `chunk_size` and `overlap`. These parameters define how the text will be split, ensuring that each chunk stays within the defined size and shares context with the following chunk.
+
+| Parameter     | Description                                               |
+|:---------------|:-----------------------------------------------------------|
+| `chunk_size`| Maximum size of each chunk (in characters).                |
+| `overlap`   | Number of characters shared between consecutive chunks.    |
+
+> **Note:** `overlap` must be smaller than `chunk_size`, otherwise an error will be raised.
+
+**example:**
+```python
+from  RagPUREAI_chuncks_clean import ChunkDefault
+
+chunk_default = ChunkDefault(chunk_size=200, overlap=10)
+```
+
+## Processing a Single Document
+
+To split a single document into overlapping chunks, use the `ProcessSingleDocument` method. This will return a list of processed documents (chunks), which you can iterate over to access each piece.
+```python
+from  RagPUREAI_chuncks_clean import ChunkDefault
+
+chunk_default = ChunkDefault(chunk_size=200, overlap=10)
+documents = chunk_default.ProcessSingleDocument(single_input_data)
+
+for doc in documents:
+    print(doc.StringRepr())
+```
+
+## Processing Multiple Documents
+For batch processing, you can use the `ProcessDocuments` method. This method processes multiple documents in parallel.
+
+The `max_workers` parameter controls the number of concurrent threads used during processing
+```python
+from  RagPUREAI_chuncks_clean import ChunkDefault
+
+chunk_default = ChunkDefault(chunk_size=200, overlap=10)
+documents = chunk_default.ProcessDocuments(
+    items=[single_input_data, single_input_data_2],
+    max_workers=5
+)
+
+for doc in documents:
+    print(doc.StringRepr())
+```
+

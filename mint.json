@@ -64,23 +64,28 @@
       ]
     },
     {
-      "group": "Build with PureRAG",
+      "group": "Build with PureCPP",
       "pages": [
         "setup",
         {
-          "group": "Chunks",
+          "group": "Data Loaders",
           "pages": [
-            "chunkdefault",
-            "chunkcount",
-            "chunkquery",
-            "chunksimilarity",
-            "chunksummarization"
+            "purecpp/loaders/introduction",
+            "purecpp/loaders/webloader",
+            "purecpp/loaders/txtloader",
+            "purecpp/loaders/pdfloader",
+            "purecpp/loaders/docxloader"
           ]
         },
+        "purecpp/cleaner/cleanregex",
+        "purecpp/metadata/metadata",
         {
-          "group": "Clean Text",
+          "group": "Chunks",
           "pages": [
-            "cleanregex"
+            "purecpp/chunks/chunkdefault",
+            "purecpp/chunks/chunkcount",
+            "purecpp/chunks/chunkquery",
+            "purecpp/chunks/chunksimilarity"
           ]
         }
       ]
