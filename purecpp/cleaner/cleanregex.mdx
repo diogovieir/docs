@@ -5,7 +5,7 @@ description: This module allows cleaning document content using regex patterns, 
 
 ## Installation
 
-To use the **ContentCleaner**, you first need to install the `RagPUREAI_extract` Python package.
+To use the **ContentCleaner**, you first need to install the `purecpp_extract` Python package.
 
 Before you begin, ensure your environment meets the following requirements:
 
@@ -48,7 +48,7 @@ cleaner = ContentCleaner()
 To clean the text of a document, use the **ProcessDocument** method. For creating documents, use the `RAGDocument` class.
 
 ```python
-from RagPUREAI_extract import RAGDocument
+from purecpp_extract import RAGDocument
 
 input_data = "This is a test doc with       multiple spaces."
 doc = RAGDocument(page_content=input_data, metadata={})

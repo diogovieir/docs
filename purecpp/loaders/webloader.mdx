@@ -8,7 +8,7 @@ description: This data loader allows loading webpages from the internet.
 To use the WebBaseLoader you first need to install the purecpp python package.
 
 ```bash
-pip install RagPUREAI_extract
+pip install purecpp_extract
 ```
 
 ## Initialization
@@ -16,19 +16,19 @@ pip install RagPUREAI_extract
 To start the WebLoader, you can specify the number of workers to load data in parallel.
 
 ```python
-from RagPUREAI_extract import WebLoader
+from purecpp_extract import WebLoader
 web_loader = WebLoader([], 12)
 ```
 
 ## InsertDataToExtract
 The following code demonstrates how to pass a TXT file path to **DataExtractRequestStruct** and use it to load data from a single file.
 
-To begin, create an instance of **DataExtractRequestStruct**.
+To begin, create an instance of **DataExtractRequestStruct** from purecpp_libs 
 
 This struct follows a standard format for loading various file types into data loaders. You can pass an array of **DataExtractRequestStruct** instances to the **InsertDataToExtract** method.
 
 ```python
-from RagPUREAI_extract import DataExtractRequestStruct
+from purecpp_libs import DataExtractRequestStruct
 
 data = DataExtractRequestStruct("https://pt.wikipedia.org/wiki/Brasil")
 web_loader.InsertDataToExtract([data])
@@ -47,7 +47,7 @@ web_loader.KeywordExists("https://pt.wikipedia.org/wiki/Brasil", "Fortaleza")
 Use this method to count the occurrences of a specific word in an HTML document:
 
 ```python
-web_loader.GetKeywordOccurences("https://pt.wikipedia.org/wiki/Brasil", "Fortaleza")
+web_loader.GetKeywordOccurences("Fortaleza")
 ```
 
 ## GetTextContent

@@ -8,7 +8,7 @@ description: This data loader allows loading text files from local storage.
 To use the TXTLoader, you first need to install the `purecpp` Python package.
 
 ```bash
-pip install RagPUREAI_extract
+pip install purecpp_extract
 ```
 
 ## Initialization
@@ -16,7 +16,7 @@ pip install RagPUREAI_extract
 To start the TXTLoader, you can specify the number of workers to load data in parallel.
 
 ```python
-from RagPUREAI_extract import TXTLoader
+from purecpp_extract import TXTLoader
 
 txt_loader = TXTLoader([], 4)  # 4 workers for parallel processing
 ```
@@ -25,14 +25,14 @@ txt_loader = TXTLoader([], 4)  # 4 workers for parallel processing
 
 The following code demonstrates how to pass a TXT file path to **DataExtractRequestStruct** and use it to load data from a local file or directory.
 
-To begin, create an instance of **DataExtractRequestStruct**.
+To begin, create an instance of **DataExtractRequestStruct** from purecpp_libs 
 
 This struct follows a standard format for loading various file types into data loaders. You can pass an array of **DataExtractRequestStruct** instances to the **InsertDataToExtract** method.
 
 ### Loading a Single File
 
 ```python
-from RagPUREAI_extract import DataExtractRequestStruct
+from purecpp_libs import DataExtractRequestStruct
 
 data = DataExtractRequestStruct("/path/to/file.txt")
 txt_loader.InsertDataToExtract([data])
@@ -47,28 +47,23 @@ data = DataExtractRequestStruct("/path/to/directory")
 txt_loader.InsertDataToExtract([data])
 ```
 
-## Built-in Methods
+{/* ## Built-in Methods
 
-Once the text file or directory is loaded into the data loader, you can use built-in functions to extract data efficiently.
-
-> **Note:** If you loaded a directory, these methods will return results for each file within the directory.
-
-### KeywordExists
+Once the text file or directory is loaded into the data loader, you can use built-in functions to extract data efficiently. */}
+{/* ### KeywordExists
 
 Use this method to check whether a keyword exists in a loaded text file:
 
 ```python
-txt_loader.KeywordExists("/path/to/file.txt", "keyword")
+txt_loader.KeywordExists("keyword")
 # txt_loader.KeywordExists("/path/to/directory", "keyword")
-```
+``` */}
 
-### GetKeywordOccurrences
-
-Use this method to count the occurrences of a specific word in a text document:
+## GetKeywordOccurrences
+Use this method to count how many times a specific word appears in a TXT document. If you loaded a directory, the method will return the count for each file in the directory.
 
 ```python
-txt_loader.GetKeywordOccurrences("/path/to/file.txt", "keyword")
-# txt_loader.GetKeywordOccurrences("/path/to/directoy", "keyword")
+txt_loader.GetKeywordOccurrences("keyword")
 ```
 
 ## GetTextContent

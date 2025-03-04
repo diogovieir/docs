@@ -8,7 +8,7 @@ description: This data loader allows loading PDF files from local storage
 To use the PDFLoader, you first need to install the `purecpp` Python package.
 
 ```bash
-pip install RagPUREAI_extract
+pip install purecpp_extract
 ```
 
 ## Initialization
@@ -16,7 +16,7 @@ pip install RagPUREAI_extract
 To start the PDFLoader, you can specify the number of workers to load data in parallel.
 
 ```python
-from RagPUREAI_extract import PDFLoader
+from purecpp_extract import PDFLoader
 
 pdf_loader = PDFLoader([], 4)  # 4 workers for parallel processing
 ```
@@ -25,14 +25,14 @@ pdf_loader = PDFLoader([], 4)  # 4 workers for parallel processing
 
 The following code demonstrates how to pass a PDF file path to **DataExtractRequestStruct** and use it to load data from a local file or directory.
 
-To begin, create an instance of **DataExtractRequestStruct**.
+To begin, create an instance of **DataExtractRequestStruct** from purecpp_libs 
 
 This struct follows a standard format for loading various file types into data loaders. You can pass an array of **DataExtractRequestStruct** instances to the **InsertDataToExtract** method.
 
 ### Loading a Single File
 
 ```python
-from RagPUREAI_extract import DataExtractRequestStruct
+from purecpp_libs import DataExtractRequestStruct
 
 data = DataExtractRequestStruct("/path/to/file.pdf")
 pdf_loader.InsertDataToExtract([data])
@@ -47,7 +47,7 @@ data = DataExtractRequestStruct("/path/to/directory")
 pdf_loader.InsertDataToExtract([data])
 ```
 
-## Built-in Methods
+{/* ## Built-in Methods
 
 Once the PDF file or directory is loaded into the data loader, you can use built-in functions to extract data efficiently.
 
@@ -60,15 +60,14 @@ Use this method to check whether a keyword exists in a loaded PDF file:
 ```python
 pdf_loader.KeywordExists("/path/to/file.pdf", "keyword")
 # pdf_loader.KeywordExists("/path/to/directory", "keyword")
-```
+``` */}
 
-### GetKeywordOccurrences
+## GetKeywordOccurrences
 
-Use this method to count the occurrences of a specific word in a PDF document:
+Use this method to count how many times a specific word appears in a PDF document. If you loaded a directory, the method will return the count for each file in the directory.
 
 ```python
-pdf_loader.GetKeywordOccurrences("/path/to/file.pdf", "keyword")
-# pdf_loader.GetKeywordOccurrences("/path/to/directory", "keyword")
+pdf_loader.GetKeywordOccurrences("keyword")
 ```
 
 ## GetTextContent
