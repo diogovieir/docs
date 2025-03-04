@@ -82,12 +82,14 @@
         {
           "group": "Chunks",
           "pages": [
+            "purecpp/chunks/introduction",
             "purecpp/chunks/chunkdefault",
             "purecpp/chunks/chunkcount",
             "purecpp/chunks/chunkquery",
             "purecpp/chunks/chunksimilarity"
           ]
-        }
+        },
+        "purecpp/embbeding/embbeding"
       ]
     }
   ],

@@ -1,0 +1,33 @@
+---
+title: Introduction - Chunks
+description: Chunking modules split large pieces of text into smaller, manageable segments. Overlapping helps maintain context between chunks, making them essential for **Retrieval-Augmented Generation (RAG)** pipelines and other text-processing tasks.
+---
+<Warning>
+**Coming Soon**  
+This feature is currently under development and will be available soon.
+</Warning>
+
+## **Installation**
+
+Before you begin, ensure your environment meets the following requirements:
+
+  - **Python 3.10 or newer**: PureRAG is compatible with the latest versions of Python.
+  - **pip**: Ensure pip is installed and updated to the latest version.
+
+run:
+```bash
+pip install purecpp_extract
+```
+
+## **Chunking Modules**
+
+The library includes four main chunking modules: **ChunkDefault**, **ChunkCount**, **ChunkQuery**, and **ChunkSimilarity**.
+
+| **Module**           | **Description** |
+|----------------------|----------------|
+| [ChunkDefault](chunkdefault) | Splits large texts into smaller chunks while maintaining context through overlap. |
+| [ChunkCount](chunkcount) | Segments text based on a specific count pattern. |
+| [ChunkQuery](chunkquery) | Filters and retrieves chunks most relevant to a given query. |
+| [ChunkSimilarity](chunksimilarity) | Splits and ranks chunks based on their similarity. |
+
+
