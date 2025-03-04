@@ -76,6 +76,17 @@
             "purecpp/loaders/pdfloader",
             "purecpp/loaders/docxloader"
           ]
+        },
+        "purecpp/cleaner/cleanregex",
+        "purecpp/metadata/metadata",
+        {
+          "group": "Chunks",
+          "pages": [
+            "purecpp/chunks/chunkdefault",
+            "purecpp/chunks/chunkcount",
+            "purecpp/chunks/chunkquery",
+            "purecpp/chunks/chunksimilarity"
+          ]
         }
       ]
     }

@@ -2,9 +2,12 @@
 title: Content Cleaner
 description: This module allows cleaning document content using regex patterns, removing unwanted characters, extra whitespace, or other artifacts before further processing.
 ---
+<Warning>
+**Coming Soon**  
+This feature is currently under development and will be available soon.
+</Warning>
 
 ## Installation
-
 To use the **ContentCleaner**, you first need to install the `purecpp_extract` Python package.
 
 Before you begin, ensure your environment meets the following requirements:
@@ -13,7 +16,7 @@ Before you begin, ensure your environment meets the following requirements:
 - **pip**: Ensure pip is installed and updated to the latest version.
 
 ```bash
-pip install  RagPUREAI_chuncks_clean
+pip install  purecpp_chuncks_clean
 ```
 
 ---
@@ -37,7 +40,7 @@ When you initialize the **ContentCleaner** without passing any patterns, it uses
 You can initialize the **ContentCleaner** using default patterns or provide custom patterns.
 
 ```python
-from  RagPUREAI_chuncks_clean import ContentCleaner
+from  purecpp_chuncks_clean import ContentCleaner
 
 # Initialize with default patterns
 cleaner = ContentCleaner()
@@ -45,10 +48,10 @@ cleaner = ContentCleaner()
 
 ## Cleaning a Document
 
-To clean the text of a document, use the **ProcessDocument** method. For creating documents, use the `RAGDocument` class.
+To clean the text of a document, use the **ProcessDocument** method. For creating documents, use the `RAGDocument` class from purecpp_libs.
 
 ```python
-from purecpp_extract import RAGDocument
+from purecpp_libs import RAGDocument
 
 input_data = "This is a test doc with       multiple spaces."
 doc = RAGDocument(page_content=input_data, metadata={})

@@ -2,13 +2,16 @@
 title: ChunkDefault
 description: The **ChunkDefault** module splits large pieces of text into manageable chunks, using overlap to maintain context between segments. This is particularly useful in **Retrieval-Augmented Generation (RAG)** pipelines and other text processing tasks where continuity matters.
 ---
+<Warning>
+**Coming Soon**  
+This feature is currently under development and will be available soon.
+</Warning>
 
 ## Installation
-
-To use **ChunkDefault**, you first need to install the ` RagPUREAI_chuncks_clean` Python package:
+To use **ChunkDefault**, you first need to install the ` purecpp_chuncks_clean` Python package:
 
 ```bash
-pip install  RagPUREAI_chuncks_clean
+pip install  purecpp_chuncks_clean
 ```
 
 ## Input Data
@@ -16,8 +19,7 @@ pip install  RagPUREAI_chuncks_clean
 The input data must follow the `LoaderDataStruct` format. You can manually create it or use the output of a data loader. For more details, check the [Data Loaders documentation](../loaders/introduction.mdx).
 **Example of input data:**
 ```python
-from  RagPUREAI_chuncks_clean import LoaderDataStruct
-
+from purecpp_libs import LoaderDataStruct
 single_input_data = LoaderDataStruct(
     metadata={"fileIdentifier": "example1"},
     textContent=[
@@ -40,7 +42,7 @@ To use the **ChunkDefault** module, you first need to create an instance by spec
 
 **example:**
 ```python
-from  RagPUREAI_chuncks_clean import ChunkDefault
+from  purecpp_chuncks_clean import ChunkDefault
 
 chunk_default = ChunkDefault(chunk_size=200, overlap=10)
 ```
@@ -49,7 +51,7 @@ chunk_default = ChunkDefault(chunk_size=200, overlap=10)
 
 To split a single document into overlapping chunks, use the `ProcessSingleDocument` method. This will return a list of processed documents (chunks), which you can iterate over to access each piece.
 ```python
-from  RagPUREAI_chuncks_clean import ChunkDefault
+from  purecpp_chuncks_clean import ChunkDefault
 
 chunk_default = ChunkDefault(chunk_size=200, overlap=10)
 documents = chunk_default.ProcessSingleDocument(single_input_data)
@@ -63,7 +65,7 @@ For batch processing, you can use the `ProcessDocuments` method. This method pro
 
 The `max_workers` parameter controls the number of concurrent threads used during processing
 ```python
-from  RagPUREAI_chuncks_clean import ChunkDefault
+from  purecpp_chuncks_clean import ChunkDefault
 
 chunk_default = ChunkDefault(chunk_size=200, overlap=10)
 documents = chunk_default.ProcessDocuments(

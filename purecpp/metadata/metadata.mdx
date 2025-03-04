@@ -2,9 +2,12 @@
 title: Metadata Extractor
 description: The **MetadataRegexExtractor** module is designed to extract structured metadata from documents by applying regular expression (regex) patterns. It identifies elements such as proper names, dates, numbers, emails, URLs, and custom patterns.
 ---
+<Warning>
+**Coming Soon**  
+This feature is currently under development and will be available soon.
+</Warning>
 
 ## Installation
-
 To use the **MetadataRegexExtractor**, you first need to install the `purecpp_extract` Python package.
 
 Before you begin, ensure your environment meets the following requirements:
@@ -13,7 +16,7 @@ Before you begin, ensure your environment meets the following requirements:
 - **pip**: Ensure pip is installed and updated to the latest version.
 
 ```bash
-pip install RagPUREAI_meta
+pip install purecpp_meta
 ```
 
 ## Initialization
@@ -21,7 +24,7 @@ pip install RagPUREAI_meta
 You can initialize the **MetadataRegexExtractor** without any parameters to use the default extraction patterns:
 
 ```python
-from RagPUREAI_meta import MetadataRegexExtractor
+from purecpp_meta import MetadataRegexExtractor
 
 # Initialize with default patterns
 metadata_regex_extractor = MetadataRegexExtractor()
@@ -47,7 +50,7 @@ To process a document and extract metadata, use the **ProcessDocument** method.
 
 
 ```python
-from RagPUREAI_meta import Document
+from purecpp_meta import Document
 
 doc = Document(
     pageContent=["This is an example text to test the MetadataExtractor class."],
