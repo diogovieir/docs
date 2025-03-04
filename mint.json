@@ -25,35 +25,11 @@
     "name": "Go to PureAI",
     "url": "https://www.pureai.com.br/"
   },
-  "tabs": [
-    {
-      "name": "API Reference",
-      "url": "https://your-website.com/blog"
-    },
-    {
-      "name": "Research",
-      "url": "https://your-website.com/blog"
-    },
-    {
-      "name": "Examples",
-      "url": "https://your-website.com/blog"
-    }
-  ],
   "anchors": [
-    {
-      "name": "Blog",
-      "icon": "newspaper",
-      "url": "https://www.pureai.com.br/"
-    },
-    {
-      "name": "Documentation",
-      "icon": "book-open-cover",
-      "url": "https://mintlify.com/docs"
-    },
     {
       "name": "Community",
       "icon": "discord",
-      "url": "https://mintlify.com/community"
+      "url": "https://discord.gg/8eF9v78Ndv"
     }
   ],
   "navigation": [
@@ -94,8 +70,8 @@
     }
   ],
   "footerSocials": {
-    "x": "https://x.com/mintlify",
-    "github": "https://github.com/mintlify",
-    "linkedin": "https://br.linkedin.com/company/pureai-official"
+    "x": "https://x.com/pureaiofficial",
+    "github": "https://github.com/pureai-ecosystem",
+    "linkedin": "https://linkedin.com/company/pureai-official"
   }
 }
