@@ -8,10 +8,10 @@ This feature is currently under development and will be available soon.
 </Warning>
 
 ## Installation
-To use **ChunkCount**, you first need to install the ` purecpp_chuncks_clean` Python package:
+To use **ChunkCount**, you first need to install the ` purecpp_chunks_clean` Python package:
 
 ```bash
-pip install  purecpp_chuncks_clean
+pip install  purecpp_chunks_clean
 ```
 
 ## Input Data
@@ -44,7 +44,7 @@ To initialize the **ChunkCount**, define the `count_unit`, `chunk_size`, and `th
 **example:**
 
 ```python
-from  purecpp_chuncks_clean import ChunkCount
+from  purecpp_chunks_clean import ChunkCount
 
 chunk_count = ChunkCount(count_unit="keyword", chunk_size=500, threshold=2)
 ```
@@ -53,7 +53,7 @@ chunk_count = ChunkCount(count_unit="keyword", chunk_size=500, threshold=2)
 
 To split a single document into chunks, use the `ProcessSingleDocument` method. This will return a list of processed documents (chunks), which you can iterate over to access each piece.
 ```python
-from  purecpp_chuncks_clean import ChunkCount
+from  purecpp_chunks_clean import ChunkCount
 
 chunk_count = ChunkCount(count_unit="keyword", chunk_size=500, threshold=2)
 documents = chunk_count.ProcessSingleDocument(item=input_data)
@@ -69,7 +69,7 @@ For batch processing, you can use the `ProcessDocuments` method. This method pro
 The `max_workers` parameter controls the number of concurrent threads used during processing
 
 ```python
-from  purecpp_chuncks_clean import ChunkCount
+from  purecpp_chunks_clean import ChunkCount
 
 chunk_count = ChunkCount(count_unit="keyword", chunk_size=500, threshold=2)
 documents = chunk_count.ProcessDocuments(

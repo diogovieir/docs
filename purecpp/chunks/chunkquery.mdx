@@ -8,10 +8,10 @@ This feature is currently under development and will be available soon.
 </Warning>
 
 ## Installation
-To use **ChunkQuery**, you first need to install the `purecpp_chuncks_clean` Python package:
+To use **ChunkQuery**, you first need to install the `purecpp_chunks_clean` Python package:
 
 ```bash
-pip install purecpp_chuncks_clean
+pip install purecpp_chunks_clean
 ```
 
 ## Input Data
@@ -45,7 +45,7 @@ To initialize the **ChunkQuery**, set the `chunk_size`, `overlap`, and provide a
 
 **example:**
 ```python
-from purecpp_chuncks_clean import ChunkQuery, EmbeddingModel
+from purecpp_chunks_clean import ChunkQuery, EmbeddingModel
 
 # HuggingFace model
 embedding_model = EmbeddingModel(0)
@@ -66,7 +66,7 @@ The `embedding_model` parameter specifies which model to use for generating embe
 Example:
 
 ```python
-from purecpp_chuncks_clean import EmbeddingModel
+from purecpp_chunks_clean import EmbeddingModel
 
 # HuggingFace model
 embedding_model = EmbeddingModel(0)
@@ -90,7 +90,7 @@ The `ProcessDocuments` method processes multiple input documents and filters the
 
 ### Example with HuggingFace:
 ```python
-from purecpp_chuncks_clean import ChunkQuery, EmbeddingModel
+from purecpp_chunks_clean import ChunkQuery, EmbeddingModel
 
 embedding_model = EmbeddingModel(0)
 chunk_query = ChunkQuery(chunk_size=200, overlap=2, embedding_model=embedding_model)
@@ -108,7 +108,7 @@ for doc in documents:
 
 ### Example with OpenAI:
 ```python
-from purecpp_chuncks_clean import ChunkQuery, EmbeddingModel
+from purecpp_chunks_clean import ChunkQuery, EmbeddingModel
 
 embedding_model = EmbeddingModel(1)
 chunk_query = ChunkQuery(chunk_size=200, overlap=2, embedding_model=embedding_model, openai_api_key="your_openai_api_key")

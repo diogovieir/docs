@@ -8,10 +8,10 @@ This feature is currently under development and will be available soon.
 </Warning>
 
 ## Installation
-To use **ChunkDefault**, you first need to install the ` purecpp_chuncks_clean` Python package:
+To use **ChunkDefault**, you first need to install the ` purecpp_chunks_clean` Python package:
 
 ```bash
-pip install  purecpp_chuncks_clean
+pip install  purecpp_chunks_clean
 ```
 
 ## Input Data
@@ -42,7 +42,7 @@ To use the **ChunkDefault** module, you first need to create an instance by spec
 
 **example:**
 ```python
-from  purecpp_chuncks_clean import ChunkDefault
+from  purecpp_chunks_clean import ChunkDefault
 
 chunk_default = ChunkDefault(chunk_size=200, overlap=10)
 ```
@@ -51,7 +51,7 @@ chunk_default = ChunkDefault(chunk_size=200, overlap=10)
 
 To split a single document into overlapping chunks, use the `ProcessSingleDocument` method. This will return a list of processed documents (chunks), which you can iterate over to access each piece.
 ```python
-from  purecpp_chuncks_clean import ChunkDefault
+from  purecpp_chunks_clean import ChunkDefault
 
 chunk_default = ChunkDefault(chunk_size=200, overlap=10)
 documents = chunk_default.ProcessSingleDocument(single_input_data)
@@ -65,7 +65,7 @@ For batch processing, you can use the `ProcessDocuments` method. This method pro
 
 The `max_workers` parameter controls the number of concurrent threads used during processing
 ```python
-from  purecpp_chuncks_clean import ChunkDefault
+from  purecpp_chunks_clean import ChunkDefault
 
 chunk_default = ChunkDefault(chunk_size=200, overlap=10)
 documents = chunk_default.ProcessDocuments(
