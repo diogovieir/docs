@@ -38,15 +38,15 @@ To initialize the **ChunkCount**, define the `count_unit`, `chunk_size`, and `th
 | Parameter     | Description                                                          |
 |:--------------|:----------------------------------------------------------------------|
 | `count_unit` | The element to count before splitting (word, character, regex).     |
-| `chunk_size` | Maximum size of each chunk (in characters).                         |
-| `threshold`  | Number of times the `count_unit` must appear before splitting.      |
+| `overlap`   | Number of characters shared between consecutive chunks.    |
+| `count_threshold`  | Number of times the `count_unit` must appear before splitting.      |
 
 **example:**
 
 ```python
 from  purecpp_chunks_clean import ChunkCount
 
-chunk_count = ChunkCount(count_unit="keyword", chunk_size=500, threshold=2)
+chunk_count = ChunkCount(count_unit="keyword", chunk_size=500, count_threshold=2)
 ```
 
 ## Processing a Single Document
@@ -55,7 +55,7 @@ To split a single document into chunks, use the `ProcessSingleDocument` method. 
 ```python
 from  purecpp_chunks_clean import ChunkCount
 
-chunk_count = ChunkCount(count_unit="keyword", chunk_size=500, threshold=2)
+chunk_count = ChunkCount(count_unit="keyword", chunk_size=500, count_threshold=2)
 documents = chunk_count.ProcessSingleDocument(item=input_data)
 
 for doc in documents:
