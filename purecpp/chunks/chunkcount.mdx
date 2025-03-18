@@ -11,7 +11,7 @@ This feature is currently under development and will be available soon.
 To use **ChunkCount**, you first need to install the ` purecpp_chunks_clean` Python package:
 
 ```bash
-pip install  purecpp_chunks_clean
+pip install purecpp_chunks_clean
 ```
 
 ## Input Data
@@ -33,7 +33,7 @@ input_data = LoaderDataStruct(
 
 ## Initialization
 
-To initialize the **ChunkCount**, define the `count_unit`, `chunk_size`, and `threshold`.
+To initialize the **ChunkCount**, define the `count_unit`, `overlap`, and `count_threshold`.
 
 | Parameter     | Description                                                          |
 |:--------------|:----------------------------------------------------------------------|
@@ -44,18 +44,18 @@ To initialize the **ChunkCount**, define the `count_unit`, `chunk_size`, and `th
 **example:**
 
 ```python
-from  purecpp_chunks_clean import ChunkCount
+from purecpp_chunks_clean import ChunkCount
 
-chunk_count = ChunkCount(count_unit="keyword", chunk_size=500, count_threshold=2)
+chunk_count = ChunkCount(count_unit="keyword", overlap=500, count_threshold=2)
 ```
 
 ## Processing a Single Document
 
 To split a single document into chunks, use the `ProcessSingleDocument` method. This will return a list of processed documents (chunks), which you can iterate over to access each piece.
 ```python
-from  purecpp_chunks_clean import ChunkCount
+from purecpp_chunks_clean import ChunkCount
 
-chunk_count = ChunkCount(count_unit="keyword", chunk_size=500, count_threshold=2)
+chunk_count = ChunkCount(count_unit="keyword", overlap=500, count_threshold=2)
 documents = chunk_count.ProcessSingleDocument(item=input_data)
 
 for doc in documents:
@@ -69,9 +69,9 @@ For batch processing, you can use the `ProcessDocuments` method. This method pro
 The `max_workers` parameter controls the number of concurrent threads used during processing
 
 ```python
-from  purecpp_chunks_clean import ChunkCount
+from purecpp_chunks_clean import ChunkCount
 
-chunk_count = ChunkCount(count_unit="keyword", chunk_size=500, threshold=2)
+chunk_count = ChunkCount(count_unit="keyword", overlap=500, threshold=2)
 documents = chunk_count.ProcessDocuments(
     items=[input_data_1, input_data_2],
     max_workers=4

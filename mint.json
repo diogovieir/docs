@@ -54,7 +54,6 @@
           ]
         },
         "purecpp/cleaner/cleanregex",
-        "purecpp/metadata/metadata",
         {
           "group": "Chunks",
           "pages": [
@@ -65,6 +64,7 @@
             "purecpp/chunks/chunksimilarity"
           ]
         },
+        "purecpp/metadata/metadata",
         "purecpp/embbeding/embbeding"
       ]
     }
