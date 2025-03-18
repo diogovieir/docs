@@ -75,6 +75,14 @@ embedding_model = EmbeddingModel(0)
 embedding_model = EmbeddingModel(1)
 ```
 
+### Setting the OpenAI API Key
+
+If you are using OpenAI's embedding model, set the `OPENAI_API_KEY` environment variable in the terminal:
+
+```bash
+export OPENAI_API_KEY=<your_key>
+```
+
 ## Processing Documents with `ProcessDocuments`
 
 The `ProcessDocuments` method processes multiple input documents and filters the chunks based on their similarity to a query.
@@ -111,7 +119,7 @@ for doc in documents:
 from purecpp_chunks_clean import ChunkQuery, EmbeddingModel
 
 embedding_model = EmbeddingModel(1)
-chunk_query = ChunkQuery(chunk_size=200, overlap=2, embedding_model=embedding_model, openai_api_key="your_openai_api_key")
+chunk_query = ChunkQuery(chunk_size=200, overlap=2, embedding_model=embedding_model)
 
 documents = chunk_query.ProcessDocuments(
     items=[input_data],
@@ -123,4 +131,3 @@ documents = chunk_query.ProcessDocuments(
 for doc in documents:
     print(doc.StringRepr())
 ```
-

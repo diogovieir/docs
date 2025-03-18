@@ -74,6 +74,14 @@ embedding_model = EmbeddingModel(0)
 embedding_model = EmbeddingModel(1)
 ```
 
+### Setting the OpenAI API Key
+
+If you are using OpenAI's embedding model, set the `OPENAI_API_KEY` environment variable in the terminal:
+
+```bash
+export OPENAI_API_KEY=<your_key>
+```
+
 ## Processing a Single Document with `ProcessSingleDocument`
 
 The `ProcessSingleDocument` method processes a single document and sorts the chunks based on their similarity.
