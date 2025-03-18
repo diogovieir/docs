@@ -30,6 +30,11 @@
       "name": "Community",
       "icon": "discord",
       "url": "https://discord.gg/8eF9v78Ndv"
+    },
+    {
+      "name": "GitHub",
+      "icon": "github",
+      "url": "https://github.com/pureai-ecosystem/purecpp"
     }
   ],
   "navigation": [
