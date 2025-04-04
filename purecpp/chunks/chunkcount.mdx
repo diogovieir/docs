@@ -4,32 +4,15 @@ description: Split text based on a count pattern.
 ---
 
 ## Installation
-To use **ChunkCount**, you first need to install the ` purecpp_chunks_clean` Python package:
+To use **ChunkCount**, you first need to install the `purecpp_chunks_clean` Python package:
 
 ```bash
 pip install purecpp_chunks_clean
 ```
 
-## Input Data
-
-The input data must follow the `LoaderDataStruct` format. You can manually create it or use the output of a data loader. For more details, check the [Data Loaders documentation](../loaders/introduction.mdx).
-
-**Example of input data:**
-```python
-from purecpp_libs import LoaderDataStruct
-
-input_data = LoaderDataStruct(
-    metadata={"fileIdentifier": "example1"},
-    textContent=[
-        "This is a sample text with multiple sections.",
-        "It is used to demonstrate the ChunkCount module."
-    ]
-)
-```
-
 ## Initialization
 
-To initialize the **ChunkCount**, define the `count_unit`, `overlap`, and `count_threshold`.
+To initialize **ChunkCount**, define the `count_unit`, `overlap`, and `count_threshold`.
 
 | Parameter     | Description                                                          |
 |:--------------|:----------------------------------------------------------------------|
@@ -37,7 +20,7 @@ To initialize the **ChunkCount**, define the `count_unit`, `overlap`, and `count
 | `overlap`   | Number of characters shared between consecutive chunks.    |
 | `count_threshold`  | Number of times the `count_unit` must appear before splitting.      |
 
-**example:**
+**Example:**
 
 ```python
 from purecpp_chunks_clean import ChunkCount
@@ -45,35 +28,42 @@ from purecpp_chunks_clean import ChunkCount
 chunk_count = ChunkCount(count_unit="keyword", overlap=500, count_threshold=2)
 ```
 
-## Processing a Single Document
+## Processing Documents
 
-To split a single document into chunks, use the `ProcessSingleDocument` method. This will return a list of processed documents (chunks), which you can iterate over to access each piece.
+To process a list of documents and split them into chunks, use the `ProcessDocuments` method. Each resulting chunk will also be an instance of `Document`.
+
+The `max_workers` parameter controls the number of concurrent threads used during processing.
+
 ```python
 from purecpp_chunks_clean import ChunkCount
 
 chunk_count = ChunkCount(count_unit="keyword", overlap=500, count_threshold=2)
-documents = chunk_count.ProcessSingleDocument(item=input_data)
-
-for doc in documents:
-    print(doc.StringRepr())
-```
-
-## Processing Multiple Documents
-
-For batch processing, you can use the `ProcessDocuments` method. This method processes multiple documents in parallel.
-
-The `max_workers` parameter controls the number of concurrent threads used during processing
-
-```python
-from purecpp_chunks_clean import ChunkCount
-
-chunk_count = ChunkCount(count_unit="keyword", overlap=500, threshold=2)
 documents = chunk_count.ProcessDocuments(
     items=[input_data_1, input_data_2],
     max_workers=4
 )
 
-for doc in documents:
-    print(doc.StringRepr())
+print(documents)
+```
+
+Each input document is processed into multiple chunks, and the output is a list of `Document` instances containing the chunked text data.
+
+## Using with a Data Loader
+
+You can also use **ChunkCount** with a data loader to process text files directly:
+
+```python
+from purecpp_libs import TXTLoader
+from purecpp_chunks_clean import ChunkCount
+
+# Load text file
+txt_loader = TXTLoader("path/to/your/textfile.txt")
+input_data = txt_loader.Load()
+
+# Process documents
+chunk_count = ChunkCount(count_unit="text", overlap=200, count_threshold=1)
+documents = chunk_count.ProcessDocuments(items=input_data)
+
+print(documents)
 ```
 

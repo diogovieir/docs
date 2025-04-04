@@ -10,23 +10,6 @@ To use **ChunkQuery**, you first need to install the `purecpp_chunks_clean` Pyth
 pip install purecpp_chunks_clean
 ```
 
-## Input Data
-
-The input data must follow the `LoaderDataStruct` format. You can manually create it or use the output of a data loader. For more details, check the [Data Loaders documentation](../loaders/introduction.mdx).
-
-**Example of input data:**
-```python
-from purecpp_libs import LoaderDataStruct
-
-single_input_data = LoaderDataStruct(
-    metadata={"fileIdentifier": "example1"},
-    textContent=[
-        "This is a sample text to demonstrate ChunkDefault.",
-        "It will be split into overlapping chunks."
-    ]
-)
-```
-
 ## Initialization
 
 To initialize the **ChunkQuery**, set the `chunk_size`, `overlap`, and provide an `embedding_model`. If using OpenAI embeddings, provide your `openai_api_key`.
