@@ -5,7 +5,7 @@ description: This data loader allows loading webpages from the internet.
 
 ## Installation
 
-To use the WebBaseLoader you first need to install the purecpp python package.
+To use the `WebLoader`, you first need to install the `purecpp_extract` Python package:
 
 ```bash
 pip install purecpp_extract
@@ -13,49 +13,30 @@ pip install purecpp_extract
 
 ## Initialization
 
-To start the WebLoader, you can specify the number of workers to load data in parallel.
+You can initialize the `WebLoader` by providing a single URL.
 
 ```python
 from purecpp_extract import WebLoader
-web_loader = WebLoader([], 12)
+
+# Load a webpage from the internet
+web_loader = WebLoader("https://pt.wikipedia.org/wiki/Brasil")
 ```
 
-## InsertDataToExtract
-The following code demonstrates how to pass a TXT file path to **DataExtractRequestStruct** and use it to load data from a single file.
+## Load
 
-To begin, create an instance of **DataExtractRequestStruct** from purecpp_libs 
+Once initialized, use the `Load()` method to fetch and extract content from the webpage. This method returns a list containing one `Document` object.
 
-This struct follows a standard format for loading various file types into data loaders. You can pass an array of **DataExtractRequestStruct** instances to the **InsertDataToExtract** method.
+Each `Document` contains the following attributes:
+
+- `metadata`: A dictionary with metadata about the document
+- `page_content`: The full text content of the webpage
 
 ```python
-from purecpp_libs import DataExtractRequestStruct
+documents = web_loader.Load()
 
-data = DataExtractRequestStruct("https://pt.wikipedia.org/wiki/Brasil")
-web_loader.InsertDataToExtract([data])
+for doc in documents:
+    print(doc.metadata)
+    print(doc.page_content)
 ```
 
-## Built-in methods
-Once the HTML page is loaded into the data loader, you can use built-in functions to extract data efficiently.
-
-### KeywordExists
-Use this method to check whether a keyword exists in an HTML document:
-```python
-web_loader.KeywordExists("https://pt.wikipedia.org/wiki/Brasil", "Fortaleza")
-```
-
-### GetKeywordOccurences
-Use this method to count the occurrences of a specific word in an HTML document:
-
-```python
-web_loader.GetKeywordOccurences("Fortaleza")
-```
-
-## GetTextContent
-To extract data from a website, use the **GetTextContent** method.
-
-This method returns a **LoaderDataStruct** object, which you can use to create chunks and embed data in other **purecpp** modules.
-
-Before calling this method, ensure you have previously used InsertDataToExtract to load the data.
-```python
-web_loader_content = web_loader.GetTextContent("https://pt.wikipedia.org/wiki/Brasil")
-```
+- Since only a single URL is allowed per instance, the returned list will always contain exactly one `Document`.

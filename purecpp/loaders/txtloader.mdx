@@ -5,7 +5,7 @@ description: This data loader allows loading text files from local storage.
 
 ## Installation
 
-To use the TXTLoader, you first need to install the `purecpp` Python package.
+To use the `TXTLoader`, you first need to install the `purecpp_extract` Python package:
 
 ```bash
 pip install purecpp_extract
@@ -13,74 +13,34 @@ pip install purecpp_extract
 
 ## Initialization
 
-To start the TXTLoader, you can specify the number of workers to load data in parallel.
+You can initialize the `TXTLoader` by providing the path to a `.txt` file or a directory containing `.txt` files.
 
 ```python
 from purecpp_extract import TXTLoader
 
-txt_loader = TXTLoader([], 4)  # 4 workers for parallel processing
+# Load a single TXT file
+txt_loader = TXTLoader("/path/to/file.txt")
+
+# Load all TXT files from a directory
+txt_loader = TXTLoader("/path/to/directory")
 ```
 
-## InsertDataToExtract
+## Load
 
-The following code demonstrates how to pass a TXT file path to **DataExtractRequestStruct** and use it to load data from a local file or directory.
+Once initialized, use the `Load()` method to extract the contents of the files. This method returns a list of `Document` objects.
 
-To begin, create an instance of **DataExtractRequestStruct** from purecpp_libs 
+Each `Document` contains the following attributes:
 
-This struct follows a standard format for loading various file types into data loaders. You can pass an array of **DataExtractRequestStruct** instances to the **InsertDataToExtract** method.
-
-### Loading a Single File
+- `metadata`: A dictionary with metadata about the document
+- `page_content`: The full text content of the document
 
 ```python
-from purecpp_libs import DataExtractRequestStruct
+documents = txt_loader.Load()
 
-data = DataExtractRequestStruct("/path/to/file.txt")
-txt_loader.InsertDataToExtract([data])
+for doc in documents:
+    print(doc.metadata)
+    print(doc.page_content)
 ```
 
-### Loading a Directory
-
-You can also load all text files from a directory by passing the folder path instead of a single file:
-
-```python
-data = DataExtractRequestStruct("/path/to/directory")
-txt_loader.InsertDataToExtract([data])
-```
-
-{/* ## Built-in Methods
-
-Once the text file or directory is loaded into the data loader, you can use built-in functions to extract data efficiently. */}
-{/* ### KeywordExists
-
-Use this method to check whether a keyword exists in a loaded text file:
-
-```python
-txt_loader.KeywordExists("keyword")
-# txt_loader.KeywordExists("/path/to/directory", "keyword")
-``` */}
-
-## GetKeywordOccurrences
-Use this method to count how many times a specific word appears in a TXT document. If you loaded a directory, the method will return the count for each file in the directory.
-
-```python
-txt_loader.GetKeywordOccurences("keyword")
-```
-
-## GetTextContent
-
-To extract the full content of a text file, use the **GetTextContent** method and pass the file identifier (the file name without the **.txt**).
-
-This method returns a **LoaderDataStruct** object, which you can use to process or embed the data in other **purecpp** modules.
-
-Before calling this method, ensure you have previously used **InsertDataToExtract** to load the data.
-
-```python
-txt_loader_content = txt_loader.GetTextContent("/path/to/file")
-```
-
-If you loaded a directory, you must specify the identifier of a file within the directory to extract its content:
-
-```python
-txt_loader_content = txt_loader.GetTextContent("/path/to/directory/file")
-```
-
+- If a single file path was provided during initialization, the returned list will contain one `Document`.
+- If a directory path was provided, the list will contain one `Document` per `.txt` file found in the directory.

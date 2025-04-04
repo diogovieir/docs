@@ -58,7 +58,6 @@
             "purecpp/loaders/docxloader"
           ]
         },
-        "purecpp/cleaner/cleanregex",
         {
           "group": "Chunks",
           "pages": [
@@ -69,7 +68,6 @@
             "purecpp/chunks/chunksimilarity"
           ]
         },
-        "purecpp/metadata/metadata",
         "purecpp/embbeding/embbeding"
       ]
     }

@@ -1,11 +1,11 @@
 ---
 title: PDF Loader
-description: This data loader allows loading PDF files from local storage
+description: This data loader allows loading PDF files from local storage.
 ---
 
 ## Installation
 
-To use the PDFLoader, you first need to install the `purecpp` Python package.
+To use the `PDFLoader`, you first need to install the `purecpp_extract` Python package:
 
 ```bash
 pip install purecpp_extract
@@ -13,78 +13,34 @@ pip install purecpp_extract
 
 ## Initialization
 
-To start the PDFLoader, you can specify the number of workers to load data in parallel.
+You can initialize the `PDFLoader` by providing the path to a `.pdf` file or a directory containing `.pdf` files.
 
 ```python
 from purecpp_extract import PDFLoader
 
-pdf_loader = PDFLoader([], 4)  # 4 workers for parallel processing
+# Load a single PDF file
+pdf_loader = PDFLoader("/path/to/file.pdf")
+
+# Load all PDF files from a directory
+pdf_loader = PDFLoader("/path/to/directory")
 ```
 
-## InsertDataToExtract
+## Load
 
-The following code demonstrates how to pass a PDF file path to **DataExtractRequestStruct** and use it to load data from a local file or directory.
+Once initialized, use the `Load()` method to extract the contents of the files. This method returns a list of `Document` objects.
 
-To begin, create an instance of **DataExtractRequestStruct** from purecpp_libs 
+Each `Document` contains the following attributes:
 
-This struct follows a standard format for loading various file types into data loaders. You can pass an array of **DataExtractRequestStruct** instances to the **InsertDataToExtract** method.
-
-### Loading a Single File
+- `metadata`: A dictionary with metadata about the document
+- `page_content`: The full text content of the document
 
 ```python
-from purecpp_libs import DataExtractRequestStruct
+documents = pdf_loader.Load()
 
-data = DataExtractRequestStruct("/path/to/file.pdf")
-pdf_loader.InsertDataToExtract([data])
+for doc in documents:
+    print(doc.metadata)
+    print(doc.page_content)
 ```
 
-### Loading a Directory
-
-You can also load all PDF files from a directory by passing the folder path instead of a single file:
-
-```python
-data = DataExtractRequestStruct("/path/to/directory")
-pdf_loader.InsertDataToExtract([data])
-```
-
-{/* ## Built-in Methods
-
-Once the PDF file or directory is loaded into the data loader, you can use built-in functions to extract data efficiently.
-
-> **Note:** If you loaded a directory, these methods will return results for each file within the directory.
-
-### KeywordExists
-
-Use this method to check whether a keyword exists in a loaded PDF file:
-
-```python
-pdf_loader.KeywordExists("/path/to/file.pdf", "keyword")
-# pdf_loader.KeywordExists("/path/to/directory", "keyword")
-``` */}
-
-## GetKeywordOccurrences
-
-Use this method to count how many times a specific word appears in a PDF document. If you loaded a directory, the method will return the count for each file in the directory.
-
-```python
-pdf_loader.GetKeywordOccurrences("keyword")
-```
-
-## GetTextContent
-
-To extract the full content of a PDF file, use the **GetTextContent** method and pass the file identifier (the file name without the **.pdf**).
-
-This method returns a **LoaderDataStruct** object, which you can use to process or embed the data in other **purecpp** modules.
-
-Before calling this method, ensure you have previously used **InsertDataToExtract** to load the data.
-
-```python
-pdf_loader_content = pdf_loader.GetTextContent("/path/to/file")
-```
-
-If you loaded a directory, you must specify the identifier of a file within the directory to extract its content:
-
-```python
-pdf_loader_content = pdf_loader.GetTextContent("/path/to/directory/file")
-```
-
+- If a single file path was provided during initialization, the returned list will contain one `Document`.
+- If a directory path was provided, the list will contain one `Document` per `.pdf` file found in the directory.
