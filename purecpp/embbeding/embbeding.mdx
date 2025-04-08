@@ -37,7 +37,7 @@ embedding = EmbeddingOpenAI()
 
 ## Generating Embeddings
 
-The `EmbeddingOpenAI` class is callable and expects two arguments:
+The `EmbeddingOpenAI` class provides a method `GenerateEmbeddings` that expects two arguments:
 
 - `items`: A **list of Documents** (objects with `page_content` and optional `metadata`).
 - `model`: A string representing the OpenAI embedding model you wish to use (e.g., `"text-embedding-ada-002"`).
@@ -60,16 +60,14 @@ input_data = txt_loader.Load()
 
 # Chunk the loaded document
 chunk_default = ChunkDefault(chunk_size=200, overlap=10)
-documents = chunk_default.ProcessDocuments(items=input_data)
+chunked_docs = chunk_default.ProcessDocuments(items=input_data)
 
 # Generate embeddings using a specific model
 embedding = EmbeddingOpenAI()
-embeddings = embedding(documents, model="text-embedding-ada-002")
+embedding_docs = embedding.GenerateEmbeddings(chunked_docs, model="text-embedding-ada-002")
 
 # Each document now includes an `embedding` field
-for doc in embeddings:
-    print(doc.page_content)
-    print(doc.embedding)
+print(embedding_docs)
 ```
 
 For more details on how to chunk documents, refer to the [Chunk documentation](../chunks/introduction.mdx).
