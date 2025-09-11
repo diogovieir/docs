@@ -1,22 +1,107 @@
 ---
-title: Quickstart Quide
-description: Welcome to the Quickstart Guide for **PureCPP**, your all-in-one solution for building **Retrieval-Augmented Generation (RAG)** pipelines with ease and efficiency. This guide will walk you through the steps to get started quickly.
-
+title: 'PureCPP Setup'
+description: 'Installation and environment configuration guide for PureCPP, an independent product from PureAI'
 ---
 
+# PureCPP Setup
 
----
+<Note>
+PureCPP is a completely independent product from PureRouter. You can use PureCPP without needing PureRouter and vice versa.
+</Note>
 
-## Prerequisites
+PureCPP is a high-performance RAG framework developed in C++, offered as a separate and independent product from PureAI. This guide will help you set up your development environment to start using PureCPP.
 
-Before you begin, ensure your environment meets the following requirements:
+## System Requirements
 
-  - **Python 3.9, 3.10, 3.11**:  PureCPP is compatible with the latest versions of Python.
-  - **Linux/WSL support**: The library is fully compatible with Linux-based systems and Windows Subsystem for Linux (WSL).
-  - **pip**: Ensure pip is installed and updated to the latest version.
+Before you begin, ensure your system meets the following requirements:
 
-install the `purecpp` Python package:
+- Operating System: Windows 10/11, macOS 10.15+, or Linux (Ubuntu 20.04+, CentOS 7+)
+- Python 3.9, 3.10, 3.11 or higher
+- pip (Python package manager)
+- 8GB RAM (16GB recommended for processing large documents)
+- Disk space: at least 2GB for the library and dependencies
+
+## Installation
+
+To install PureCPP, use pip:
+
 ```bash
 pip install purecpp
 ```
 
+PureCPP is available as a Python package that provides bindings for the high-performance C++ library.
+
+## Project Configuration
+
+After installation, you can import and use PureCPP in your Python project:
+
+```python
+import purecpp
+from purecpp.loaders import PdfLoader, TxtLoader, WebLoader, DocxLoader
+from purecpp.chunks import DefaultChunker
+from purecpp.embedding import EmbeddingModel
+
+# Usage example
+loader = PdfLoader()
+documents = loader.load("path/to/your/document.pdf")
+
+chunker = DefaultChunker(chunk_size=1000, chunk_overlap=200)
+chunks = chunker.split_documents(documents)
+```
+
+## Verifying Installation
+
+Create a simple Python file to verify everything is working correctly:
+
+```python
+import purecpp
+
+print(f"PureCPP version: {purecpp.__version__}")
+print("Installation successful!")
+```
+
+Run the file:
+
+```bash
+python verify_installation.py
+```
+
+If everything is configured correctly, you will see the PureCPP version printed to the console.
+
+## Configuring Embedding Models
+
+PureCPP supports various embedding models. To use pre-trained models, you can configure them like this:
+
+```python
+from purecpp.embedding import EmbeddingModel
+
+# Download and configure the model (only on first execution)
+embedding_model = EmbeddingModel.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
+
+# Generate embeddings
+texts = ["Example text 1", "Example text 2"]
+embeddings = embedding_model.embed_documents(texts)
+```
+
+The model download is done only once. Files are stored in a local cache directory.
+
+## Next Steps
+
+Now that you have configured your environment, you are ready to start using PureCPP. Check out the [Quickstart Guide](/purecpp/quickstart) to create your first RAG application.
+
+<CardGroup cols={2}>
+  <Card
+    title="Quickstart"
+    icon="rocket"
+    href="/purecpp/quickstart"
+  >
+    Create your first RAG application with PureCPP.
+  </Card>
+  <Card
+    title="Document Loaders"
+    icon="file-import"
+    href="/purecpp/loaders/introduction"
+  >
+    Learn how to load documents from different sources.
+  </Card>
+</CardGroup>

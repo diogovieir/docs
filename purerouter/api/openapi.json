@@ -1,0 +1,382 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "PureRouter Public API",
+    "description": "Public API for PureAI's intelligent LLM routing service",
+    "version": "1.0.0",
+    "contact": {
+      "name": "PureAI Support",
+      "url": "https://pureai.com/support",
+      "email": "support@pureai.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://6ivbmumwp6.execute-api.us-east-1.amazonaws.com",
+      "description": "Production server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Router",
+      "description": "Endpoints for intelligent query routing"
+    },
+    {
+      "name": "Deployments",
+      "description": "Endpoints for accessing specific deployments"
+    }
+  ],
+  "paths": {
+    "/v1/infer": {
+      "post": {
+        "tags": ["Router"],
+        "summary": "Route query to the most suitable model",
+        "description": "Sends a query to be automatically routed to the most suitable model based on the selected profile.",
+        "security": [
+          {
+            "router-key-authorizer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InferRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resposta bem-sucedida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InferResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deployments/{deployment_id}/invoke": {
+      "post": {
+        "tags": ["Deployments"],
+        "summary": "Invocar um deployment específico",
+        "description": "Sends a request to a specific model through its deployment ID.",
+        "security": [
+          {
+            "router-key-authorizer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "deployment_id",
+            "in": "path",
+            "description": "Unique deployment ID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InvokeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resposta bem-sucedida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvokeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Deployment not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "InferRequest": {
+        "type": "object",
+        "required": ["messages", "profile"],
+        "properties": {
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Message"
+            },
+            "description": "Lista de mensagens da conversa"
+          },
+          "profile": {
+            "type": "string",
+            "enum": ["economy", "balanced", "quality"],
+            "description": "Perfil de roteamento a ser utilizado"
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens in response"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Temperature for text generation (0-2)"
+          },
+          "stream": {
+            "type": "boolean",
+            "description": "Se a resposta deve ser transmitida em tempo real"
+          }
+        }
+      },
+      "InferResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique response ID"
+          },
+          "model": {
+            "type": "string",
+            "description": "Modelo utilizado para gerar a resposta"
+          },
+          "choices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "$ref": "#/components/schemas/Message"
+                },
+                "finish_reason": {
+                  "type": "string",
+                  "description": "Reason why generation was completed"
+                }
+              }
+            }
+          },
+          "usage": {
+            "type": "object",
+            "properties": {
+              "prompt_tokens": {
+                "type": "integer",
+                "description": "Number of tokens in prompt"
+              },
+              "completion_tokens": {
+                "type": "integer",
+                "description": "Number of tokens in response"
+              },
+              "total_tokens": {
+                "type": "integer",
+                "description": "Total number of tokens used"
+              }
+            }
+          }
+        }
+      },
+      "Message": {
+        "type": "object",
+        "required": ["role", "content"],
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": ["system", "user", "assistant", "function"],
+            "description": "Papel da mensagem na conversa"
+          },
+          "content": {
+            "type": "string",
+            "description": "Message content"
+          },
+          "name": {
+            "type": "string",
+            "description": "Message author name (used for function messages)"
+          }
+        }
+      },
+      "InvokeRequest": {
+        "type": "object",
+        "required": ["messages"],
+        "properties": {
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Message"
+            },
+            "description": "Lista de mensagens da conversa"
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens in response"
+          },
+          "temperature": {
+            "type": "number",
+            "description": "Temperature for text generation (0-2)"
+          },
+          "stream": {
+            "type": "boolean",
+            "description": "Se a resposta deve ser transmitida em tempo real"
+          }
+        }
+      },
+      "InvokeResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique response ID"
+          },
+          "model": {
+            "type": "string",
+            "description": "Modelo utilizado para gerar a resposta"
+          },
+          "choices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "$ref": "#/components/schemas/Message"
+                },
+                "finish_reason": {
+                  "type": "string",
+                  "description": "Reason why generation was completed"
+                }
+              }
+            }
+          },
+          "usage": {
+            "type": "object",
+            "properties": {
+              "prompt_tokens": {
+                "type": "integer",
+                "description": "Number of tokens in prompt"
+              },
+              "completion_tokens": {
+                "type": "integer",
+                "description": "Number of tokens in response"
+              },
+              "total_tokens": {
+                "type": "integer",
+                "description": "Total number of tokens used"
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "description": "Mensagem de erro"
+              },
+              "type": {
+                "type": "string",
+                "description": "Tipo de erro"
+              },
+              "param": {
+                "type": "string",
+                "description": "Error-related parameter (if applicable)"
+              },
+              "code": {
+                "type": "string",
+                "description": "Error code"
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "router-key-authorizer": {
+        "type": "apiKey",
+        "name": "x-api-key",
+        "in": "header",
+        "description": "API key for authentication"
+      }
+    }
+  }
+}

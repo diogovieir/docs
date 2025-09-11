@@ -1,73 +1,130 @@
 ---
-title: PureAI Solutions
-description: 'Explore  PureCPP and PureCPP – innovative solutions designed to revolutionize Retrieval-Augmented Generation (RAG) workflows.  PureCPP delivers advanced techniques and integrations for RAG pipelines, while PureCPP offers unparalleled speed and on-premises capabilities built with C++.'
+title: 'Welcome to PureAI'
+description: 'Complete platform for AI application development'
 ---
 
 <img
   className="block dark:hidden"
-  src="/images/pin-one.jpg"
-  alt="PureAI Hero Light"
+  src="/images/hero-light.svg"
+  alt="Hero Light"
 />
 <img
   className="hidden dark:block"
-  src="/images/pin-one.jpg"
-  alt="PureAI Hero Dark"
+  src="/images/hero-dark.svg"
+  alt="Hero Dark"
 />
 
-## Modules
+## PureAI Platform
 
-### PureCPP: High-Speed RAG Framework
-
-- **Blazing Fast**: Built in C++ to ensure maximum performance and efficiency for your on-premises RAG solutions.
-- **On-Premises Reliability**: Designed for environments where data privacy and speed are critical.
-- **Customizable and Robust**: Engineered to adapt to your specific use case, ensuring flexibility and scalability in demanding applications.
-
----
-
-## Get Started
-
-**PureCPP** is at the forefront of high-performance computing, designed for efficiency and scalability. To unlock its full potential, follow the guide below to set up and customize your environment. 🚀  
+PureAI offers a complete set of tools for developers who want to create advanced applications with artificial intelligence. Our platform consists of two completely distinct and independent products:
 
 <CardGroup cols={2}>
   <Card
-    title="PureCPP"
-    icon="chart-line"
-    href="/documentation/purecpp/getting-started"
+    title="PureRouter"
+    icon="router"
+    href="/purerouter/overview"
   >
-    Set up the fastest RAG framework for on-premises deployments.
+    Independent product for intelligent LLM routing, optimizing cost, performance, and response quality.
+  </Card>
+  <Card
+    title="PureCPP"
+    icon="code"
+    href="/purecpp/loaders/introduction"
+  >
+    Separate product that offers a high-performance RAG framework in C++ for document processing and information retrieval.
   </Card>
 </CardGroup>
 
-{/* ## Get Started
+## Main Product Features
 
-To dive into the full potential of  PureCPP and PureCPP, follow the guides below to set up and customize your environment. */}
+<AccordionGroup>
+  <Accordion title="PureRouter: Intelligent LLM routing">
+    PureRouter is an independent product that allows directing queries to the most suitable models based on criteria such as cost, performance, and quality. This optimizes resource usage and improves user experience.
+  </Accordion>
+  <Accordion title="PureCPP: High-performance RAG framework">
+    PureCPP is a separate product that offers a complete set of tools for document processing, chunking, embedding, and information retrieval, all with the efficiency of C++.
+  </Accordion>
+</AccordionGroup>
 
----
+## Product Characteristics
 
-## Enhance Your Workflow
+<AccordionGroup>
+  <Accordion title="PureRouter: Cost and quality optimization">
+    PureRouter was specifically designed to manage and optimize the use of different language models, allowing you to balance costs and quality according to your specific needs.
+  </Accordion>
+  <Accordion title="PureCPP: Multiple format processing">
+    PureCPP offers support for various document formats, including PDF, DOCX, TXT, and web content, facilitating integration with different data sources.
+  </Accordion>
+  <Accordion title="Products with independent scalability">
+    Each product has its own architecture designed to scale according to your project's needs, maintaining high performance even with large data volumes. You can use one or both products, depending on your needs.
+  </Accordion>
+</AccordionGroup>
 
-Maximize the potential of PureAI with these additional resources.
+## Get Started Now
+
+<Tabs>
+  <Tab title="Using PureRouter">
+    <Steps>
+      <Step title="Install PureRouter">
+        Follow the [installation guide](/purerouter/installation) to set up PureRouter in your environment.
+      </Step>
+      <Step title="Configure your first routing">
+        Learn to create [routing profiles](/purerouter/guides/routing-profiles) to direct queries to the most suitable models.
+      </Step>
+      <Step title="Deploy your application">
+        Follow our [deployment guide](/purerouter/guides/deployments) to put your application into production.
+      </Step>
+    </Steps>
+  </Tab>
+  
+  <Tab title="Using PureCPP">
+    <Steps>
+      <Step title="Set up the environment for PureCPP">
+        Follow the [setup guide](/setup) to prepare your C++ development environment.
+      </Step>
+      <Step title="Get started with PureCPP">
+        Learn the basic concepts in the [quickstart guide](/purecpp/quickstart).
+      </Step>
+      <Step title="Explore document loaders">
+        Learn about the different options to [load documents](/purecpp/loaders/introduction) in your RAG project.
+      </Step>
+    </Steps>
+  </Tab>
+  
+  <Tab title="Using both products">
+    <Note>
+      PureRouter and PureCPP are completely independent products that can be used separately or together, depending on your needs.
+    </Note>
+    
+    <Steps>
+      <Step title="Decide which product meets your needs">
+        Evaluate whether you need LLM routing (PureRouter), RAG capabilities (PureCPP), or both.
+      </Step>
+      <Step title="Install the products separately">
+        Follow the specific installation guides for each product you decided to use.
+      </Step>
+      <Step title="Integrate as needed">
+        Although they are distinct products, you can integrate them into your workflow as needed.
+      </Step>
+    </Steps>
+  </Tab>
+</Tabs>
+
+## Community and Support
 
 <CardGroup cols={2}>
   <Card
-    title="Customize RAG Flows"
-    icon="gear"
-    href="/documentation/purerag/flows"
+    title="Discord"
+    icon="discord"
+    href="https://discord.gg/8eF9v78Ndv"
   >
-    Explore how to build and adapt RAG flows tailored to your business needs.
+    Join our community to get help and share experiences.
   </Card>
   <Card
-    title="Optimize Performance"
-    icon="chart-line"
-    href="/documentation/purecpp/optimization"
+    title="GitHub"
+    icon="github"
+    href="https://github.com/pureai-ecosystem"
   >
-    Learn tips and techniques to achieve peak performance with PureCPP.
-  </Card>
-  <Card
-    title="Explore Use Cases"
-    icon="lightbulb"
-    href="/documentation/use-cases"
-  >
-    Discover real-world applications and success stories powered by PureAI.
+    Contribute to development and report issues in our repository.
   </Card>
 </CardGroup>

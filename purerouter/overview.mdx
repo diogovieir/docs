@@ -1,0 +1,102 @@
+---
+title: 'PureRouter Overview'
+description: 'Understand the intelligent LLM routing system, an independent product from PureAI'
+---
+
+# PureRouter Overview
+
+<Note>
+PureRouter is a completely independent product from PureCPP. You can use PureRouter without needing PureCPP and vice versa.
+</Note>
+
+PureRouter is an intelligent routing solution for Large Language Models (LLMs), offered as a separate and independent product from PureAI. It allows directing queries to the most suitable models based on various criteria such as cost, performance, and response quality.
+
+## Key Features
+
+<AccordionGroup>
+  <Accordion title="Routing Profiles">
+    PureRouter offers three routing profiles: economy (cost-optimized), balanced (balance between cost and quality), and quality (prioritizes response quality).
+  </Accordion>
+  
+  <Accordion title="Cost Optimization">
+    Reduce API costs by using the economy profile for simple queries, reserving premium models only for complex tasks that truly require them.
+  </Accordion>
+  
+  <Accordion title="Direct Access to Deployments">
+    In addition to automatic routing, you can directly call specific models using their deployment IDs, ideal for use cases that require a particular model.
+  </Accordion>
+  
+  <Accordion title="Simple Python Integration">
+    Intuitive Python API that facilitates integrating PureRouter into your existing applications and workflows.
+  </Accordion>
+  
+  <Accordion title="Multi-Provider Support">
+    Integration with various LLM providers like OpenAI, Anthropic, and others, allowing you to leverage the best of each platform through a single API.
+  </Accordion>
+</AccordionGroup>
+
+## How It Works
+
+<Steps>
+  1. **Platform Registration** - Register on the PureAI platform and configure your LLM provider API keys
+  
+  2. **Profile Selection** - Choose between economy, balanced, or quality profiles according to your needs
+  
+  3. **Query Submission** - Send your query through the PureRouter API using the Python client
+  
+  4. **Automatic Routing** - The system directs the query to the most suitable model based on the chosen profile
+  
+  5. **Response Processing** - The model's response is processed and returned to the user
+</Steps>
+
+## Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Customer Service Applications" icon="headset">
+    Direct simple queries to economic models and scale to more robust models only when necessary.
+  </Card>
+  
+  <Card title="Productivity Assistants" icon="robot">
+    Optimize the balance between speed and quality for different types of productivity tasks.
+  </Card>
+  
+  <Card title="Educational Platforms" icon="graduation-cap">
+    Use specialized models for different disciplines and levels of question complexity.
+  </Card>
+  
+  <Card title="Advanced Research Systems" icon="magnifying-glass">
+    Direct research queries to models with specific capabilities depending on the domain.
+  </Card>
+</CardGroup>
+
+## PureRouter Benefits
+
+- **Cost Reduction**: Save up to 70% on API costs by using cheaper models when appropriate
+- **Better User Experience**: Faster and more accurate responses for each type of query
+- **Scalability**: Easily manage multiple models and providers in a single interface
+- **Flexibility**: Quickly adapt to new models and providers as they emerge
+- **Control**: Maintain full control over which models are used for each type of query
+
+## Next Steps
+
+<CardGroup>
+  <Card title="Installation" icon="download" href="/purerouter/installation">
+    Detailed instructions to install and configure PureRouter
+  </Card>
+  
+  <Card title="Quickstart" icon="rocket" href="/purerouter/quickstart">
+    Set up PureRouter in minutes and start routing queries
+  </Card>
+  
+  <Card title="API Reference" icon="code" href="/purerouter/api/reference">
+    Check the complete API endpoints documentation
+  </Card>
+  
+  <Card title="Routing Profiles" icon="route" href="/purerouter/guides/routing-profiles">
+    Learn more about economy, balanced, and quality profiles
+  </Card>
+  
+  <Card title="Deployments" icon="server" href="/purerouter/guides/deployments">
+    Learn to deploy open source models and use them via API
+  </Card>
+</CardGroup>

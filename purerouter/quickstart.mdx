@@ -1,0 +1,101 @@
+---
+title: 'PureRouter Quickstart'
+description: 'Learn to use the intelligent LLM routing system, an independent product from PureAI'
+---
+
+# PureRouter Quickstart
+
+<Note>
+PureRouter is a completely independent product from PureCPP. You can use PureRouter without needing PureCPP and vice versa.
+</Note>
+
+## Installation
+
+Install PureRouter using pip:
+
+```bash
+pip install purerouter
+```
+
+> **Note:** For detailed installation instructions and requirements, see the [installation page](/purerouter/installation).
+
+## Basic Configuration
+
+Import and configure PureRouter in your Python application:
+
+```python
+# Import PureRouter and necessary types
+from purerouter import PureRouter
+from purerouter.types import InferRequest, InvokeRequest
+
+# Initialize the client with your router API key
+client = PureRouter(router_key="your-api-key-here")
+
+# Now you're ready to use the router for inference
+# or to call specific deployments
+```
+
+> **Note:** You need to obtain a valid API key from the PureAI platform. This key allows access to the different routing profiles and deployments configured in your account.
+
+## Query Routing
+
+There are two main ways to use PureRouter:
+
+### 1. Routing via /v1/infer
+
+You can automatically route queries to the most suitable model using different profiles:
+
+```python
+# Routing using the "economy" profile (cost-optimized)
+resp = client.router.infer(InferRequest(prompt="What is the capital of Brazil?", profile="economy"))
+print(resp.output_text)
+
+# Other available profiles
+# profile="balanced" - Balance between cost and quality
+# profile="quality" - Prioritizes response quality
+```
+
+### 2. Direct call to a specific deployment
+
+You can also directly call a specific model using its deployment ID:
+
+```python
+# Direct call to a specific model by ID
+out = client.deployments.invoke(
+    "ca10db2f-364e-55dc-9d0f-b56e36f1140f",  # Deployment ID
+    InvokeRequest(
+        messages=[{"role": "user", "content": "Hello"}],
+        parameters={"temperature": 0}
+    )
+)
+print(out)
+```
+
+
+## Workflow
+
+<Steps>
+  1. **Sign up for the PureAI platform** - Register and configure your LLM provider API keys
+  2. **Get your router API key** - Generate an API key on the platform to use the service
+  3. **Install the Python library** - Add the purerouter package to your project
+  4. **Choose the routing profile** - Select between economy, balanced, or quality according to your needs
+  5. **Implement routing** - Integrate PureRouter into your application flow
+  6. **Optional: Deploy models** - Deploy open source models and use them directly by ID
+</Steps>
+
+## Next Steps
+
+<CardGroup>
+  <Card title="API Reference" icon="code" href="/purerouter/api/reference">
+    Check the complete API endpoints documentation
+  </Card>
+  <Card title="Routing Profiles" icon="route" href="/purerouter/guides/routing-profiles">
+    Learn more about economy, balanced, and quality profiles
+  </Card>
+  <Card title="Deployments" icon="server" href="/purerouter/guides/deployments">
+    Learn to deploy open source models and use them via API
+  </Card>
+  <Card title="Authentication" icon="lock" href="/purerouter/guides/auth">
+    Understand how to manage your API keys and authentication
+  </Card>
+</CardGroup>

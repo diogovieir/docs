@@ -1,0 +1,187 @@
+---
+title: Public API (PureRouter)
+openapi: ./openapi.json
+---
+
+# PureRouter Public API
+
+The PureRouter API allows you to interact with PureAI's intelligent LLM routing service. This documentation provides details about the public endpoints available for use in your applications.
+
+## Authentication
+
+All endpoints require authentication via API key. Contact support to obtain your access credentials.
+
+```bash
+# Authentication header example
+x-api-key: your_api_key_here
+```
+
+## Public Endpoints
+
+The PureRouter public API offers the following endpoints:
+
+### Router - Intelligent Routing (/v1/infer)
+
+Sends a query to be automatically routed to the most suitable model based on the selected profile.
+
+**Example with curl:**
+
+```bash
+curl -X POST https://api.pureai.com/v1/infer \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: your_api_key_here" \
+  -d '{
+    "messages": [
+      {"role": "system", "content": "You are a helpful assistant."},
+      {"role": "user", "content": "What is the capital of Brazil?"}
+    ],
+    "profile": "balanced",
+    "max_tokens": 100,
+    "temperature": 0.7
+  }'
+```
+
+**Example with Python:**
+
+```python
+import requests
+
+url = "https://api.pureai.com/v1/infer"
+headers = {
+    "Content-Type": "application/json",
+    "x-api-key": "your_api_key_here"
+}
+
+payload = {
+    "messages": [
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "What is the capital of Brazil?"}
+    ],
+    "profile": "balanced",
+    "max_tokens": 100,
+    "temperature": 0.7
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+### Deployments - Invoke Specific Model (/v1/deployments/{deployment_id}/invoke)
+
+Sends a request to a specific model through its deployment ID.
+
+**Example with curl:**
+
+```bash
+curl -X POST https://api.pureai.com/v1/deployments/deployment123/invoke \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: your_api_key_here" \
+  -d '{
+    "messages": [
+      {"role": "system", "content": "You are a finance specialist assistant."},
+      {"role": "user", "content": "Explain what inflation is."}
+    ],
+    "max_tokens": 150,
+    "temperature": 0.5
+  }'
+```
+
+**Example with Python:**
+
+```python
+import requests
+
+deployment_id = "deployment123"
+url = f"https://api.pureai.com/v1/deployments/{deployment_id}/invoke"
+headers = {
+    "Content-Type": "application/json",
+    "x-api-key": "your_api_key_here"
+}
+
+payload = {
+    "messages": [
+        {"role": "system", "content": "You are a finance specialist assistant."},
+        {"role": "user", "content": "Explain what inflation is."}
+    ],
+    "max_tokens": 150,
+    "temperature": 0.5
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+## Response Examples
+
+### Response from /v1/infer endpoint
+
+```json
+{
+  "id": "resp_7a9b3c2d1e",
+  "model": "gpt-4-turbo",
+  "choices": [
+    {
+      "message": {
+        "role": "assistant",
+        "content": "The capital of Brazil is Brasília, located in the Federal District, in the Central-West region of the country. It was inaugurated on April 21, 1960, replacing Rio de Janeiro as the federal capital."
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 25,
+    "completion_tokens": 42,
+    "total_tokens": 67
+  }
+}
+```
+
+### Response from /v1/deployments/{deployment_id}/invoke endpoint
+
+```json
+{
+  "id": "resp_8b2c4d3e5f",
+  "model": "claude-3-sonnet",
+  "choices": [
+    {
+      "message": {
+        "role": "assistant",
+        "content": "Inflation is the generalized and continuous increase in the prices of goods and services in an economy over time. When there is inflation, each unit of currency (like the dollar) buys fewer goods and services than it did previously, reducing the population's purchasing power.\n\nThe main causes of inflation include:\n\n1. Increased demand for products and services (demand inflation)\n2. Increased production costs (cost inflation)\n3. Excessive expansion of the monetary base\n4. Inflationary expectations\n\nInflation is measured by indices like the CPI (Consumer Price Index) in the US, which tracks price variations of a basket of products and services."
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 32,
+    "completion_tokens": 138,
+    "total_tokens": 170
+  }
+}
+```
+
+## Error Handling
+
+The PureRouter API returns standard HTTP status codes to indicate the success or failure of a request. In case of error, the response body will contain detailed information about the problem.
+
+### Common Status Codes
+
+- **200 OK**: The request was successful
+- **400 Bad Request**: The request contains invalid parameters or is malformed
+- **401 Unauthorized**: Authentication failure (invalid or missing API key)
+- **404 Not Found**: The requested resource was not found
+- **500 Internal Server Error**: Internal server error
+
+### Error Response Example
+
+```json
+{
+  "error": {
+    "message": "Invalid or expired API key",
+    "type": "authentication_error",
+    "param": "x-api-key",
+    "code": "invalid_api_key"
+  }
+}
+```
+
+Use the left menu to navigate through the complete details of each endpoint.

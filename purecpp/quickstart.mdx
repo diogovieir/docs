@@ -1,0 +1,94 @@
+---
+title: 'Build with PureCPP'
+description: 'Quickstart Guide - Welcome to the Quickstart Guide for PureCPP, your all-in-one solution for building Retrieval-Augmented Generation (RAG) pipelines with ease and efficiency.'
+---
+
+# Build with PureCPP
+
+## Quickstart Guide
+
+Welcome to the Quickstart Guide for **PureCPP**, your all-in-one solution for building **Retrieval-Augmented Generation (RAG)** pipelines with ease and efficiency. This guide will walk you through the steps to get started quickly.
+
+## Prerequisites
+
+Before you begin, ensure your environment meets the following requirements:
+
+- **Python 3.9, 3.10, 3.11**: PureCPP is compatible with the latest versions of Python.
+- **Linux/WSL support**: The library is fully compatible with Linux-based systems and Windows Subsystem for Linux (WSL).
+- **pip**: Ensure pip is installed and updated to the latest version.
+
+Install the **purecpp** Python package:
+
+```bash
+pip install purecpp
+```
+
+## Introduction - Data Loader
+
+Data loaders convert raw data into the standardized PureAI format, ensuring consistency across different data sources. Each loader follows a unified structure, offering a consistent set of methods and a seamless usage experience.
+
+### Install
+
+Before you begin, ensure your environment meets the following requirements:
+
+- **Python 3.9, 3.10, 3.11**: PureCPP is compatible with the latest versions of Python.
+- **Linux/WSL support**: The library is fully compatible with Linux-based systems and Windows Subsystem for Linux (WSL).
+- **pip**: Ensure pip is installed and updated to the latest version.
+
+Install the **purecpp** Python package:
+
+```bash
+pip install purecpp
+```
+
+### Loaders
+
+The library currently includes four loaders: WebLoader, TXTLoader, DOCXLoader, and PDFLoader.
+
+| Document Loader | Description |
+|:--- |:--- |
+| [WebLoader](/purecpp/loaders/webloader) | Loads and processes HTML web pages. |
+| [TXTLoader](/purecpp/loaders/txtloader) | Loads and processes text (.txt) files. |
+| [PDFLoader](/purecpp/loaders/pdfloader) | Loads and processes text from PDF documents. |
+| [DOCXLoader](/purecpp/loaders/docxloader) | Loads and processes from Microsoft Word (.docx) files. |
+
+## Quickstart Guide
+
+### WEB Loader
+
+Get started with the WebLoader to process HTML web pages:
+
+```python
+from purecpp import WebLoader
+
+# Initialize the WebLoader
+loader = WebLoader()
+
+# Load content from a URL
+url = "https://example.com"
+documents = loader.load(url)
+
+# Process the loaded documents
+for doc in documents:
+    print(f"Title: {doc.metadata['title']}")
+    print(f"Content: {doc.page_content[:200]}...")
+```
+
+## Next Steps
+
+Explore more loaders and advanced features:
+
+<CardGroup cols={2}>
+  <Card title="WebLoader" icon="globe" href="/purecpp/loaders/webloader">
+    Load and process HTML web pages
+  </Card>
+  <Card title="TXTLoader" icon="file-text" href="/purecpp/loaders/txtloader">
+    Process plain text files
+  </Card>
+  <Card title="PDFLoader" icon="file-pdf" href="/purecpp/loaders/pdfloader">
+    Extract content from PDF documents
+  </Card>
+  <Card title="DOCXLoader" icon="file-word" href="/purecpp/loaders/docxloader">
+    Process Microsoft Word documents
+  </Card>
+</CardGroup>

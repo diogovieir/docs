@@ -1,0 +1,161 @@
+---
+title: 'PureRouter Deployments'
+description: 'How to use and manage specific deployments in PureRouter'
+---
+
+# Deployments
+
+<Note>
+PureRouter is a completely independent product from PureCPP. You can use PureRouter without needing PureCPP and vice versa.
+</Note>
+
+In addition to automatic routing through profiles, PureRouter allows you to directly access specific models through their deployment IDs. This is useful when you need a particular model for a specific use case.
+
+## Accessing Deployments
+
+To access a specific deployment, you need its unique ID:
+
+```python
+from purerouter import PureRouter
+from purerouter.types import InvokeRequest
+
+client = PureRouter(router_key="your-api-key-here")
+
+# Direct call to a specific model by ID
+response = client.deployments.invoke(
+    "ca10db2f-364e-55dc-9d0f-b56e36f1140f",  # Deployment ID
+    InvokeRequest(
+        messages=[{"role": "user", "content": "Hello, how can I help?"}],
+        parameters={"temperature": 0.7}
+    )
+)
+print(response)
+```
+
+## Getting Deployment IDs
+
+You can get the deployment IDs available for your account through the PureAI platform or via API:
+
+```python
+# List all available deployments
+deployments = client.deployments.list()
+
+for deployment in deployments:
+    print(f"ID: {deployment.id}")
+    print(f"Name: {deployment.name}")
+    print(f"Model: {deployment.model}")
+    print(f"Status: {deployment.status}")
+    print("---")
+```
+
+## Invocation Parameters
+
+When invoking a specific deployment, you can configure various parameters:
+
+```python
+response = client.deployments.invoke(
+    "deployment-id",
+    InvokeRequest(
+        messages=[
+            {"role": "system", "content": "You are a helpful and friendly assistant."},
+            {"role": "user", "content": "Explain the concept of machine learning."}
+        ],
+        parameters={
+            "temperature": 0.7,  # Controls randomness (0.0 to 1.0)
+            "max_tokens": 500,  # Limits response size
+            "top_p": 0.95,      # Nucleus sampling
+            "frequency_penalty": 0.0,  # Penalty for token repetition
+            "presence_penalty": 0.0    # Penalty for topic repetition
+        }
+    )
+)
+```
+
+## Response Streaming
+
+To get real-time responses (streaming):
+
+```python
+# Streaming response from a specific deployment
+for chunk in client.deployments.invoke_stream(
+    "deployment-id",
+    InvokeRequest(
+        messages=[{"role": "user", "content": "Tell a long story"}],
+        parameters={"temperature": 0.8}
+    )
+):
+    print(chunk.choices[0].delta.content, end="", flush=True)
+```
+
+## Use Cases for Direct Deployments
+
+<AccordionGroup>
+  <Accordion title="Response Consistency">
+    When you need absolute consistency in responses, always using the same model through the deployment ID ensures you'll get predictable results, without variations that can occur with automatic routing.
+  </Accordion>
+  
+  <Accordion title="Specialized Models">
+    If you've deployed a fine-tuned model for a specific task, you can access it directly by ID to leverage its specialized training.
+  </Accordion>
+  
+  <Accordion title="Comparative Testing">
+    To compare the performance of different models on the same task, you can invoke each one directly and evaluate the results.
+  </Accordion>
+  
+  <Accordion title="Regulatory Requirements">
+    In scenarios where there are specific regulatory requirements about which models can be used, direct access ensures compliance.
+  </Accordion>
+</AccordionGroup>
+
+## Practical Example: Fallback System
+
+```python
+def process_query_with_fallback(query):
+    # Try first with the preferred model
+    try:
+        response = client.deployments.invoke(
+            "primary-model-id",
+            InvokeRequest(
+                messages=[{"role": "user", "content": query}],
+                parameters={"temperature": 0.7}
+            )
+        )
+        return response
+    except Exception as e:
+        print(f"Error in primary model: {e}")
+        
+        # Fallback to an alternative model
+        try:
+            response = client.deployments.invoke(
+                "fallback-model-id",
+                InvokeRequest(
+                    messages=[{"role": "user", "content": query}],
+                    parameters={"temperature": 0.7}
+                )
+            )
+            return response
+        except Exception as e:
+            print(f"Error in fallback model: {e}")
+            
+            # Last resort: use automatic routing
+            return client.router.infer(InferRequest(
+                prompt=query,
+                profile="balanced"
+            ))
+```
+
+## Next Steps
+
+<CardGroup>
+  <Card title="Python SDK" icon="python" href="/purerouter/guides/sdk-python">
+    Learn to use the PureRouter Python SDK
+  </Card>
+  
+  <Card title="Routing Profiles" icon="route" href="/purerouter/guides/routing-profiles">
+    Learn more about economy, balanced, and quality profiles
+  </Card>
+  
+  <Card title="API Reference" icon="code" href="/purerouter/api/reference">
+    Check the complete API documentation
+  </Card>
+</CardGroup>

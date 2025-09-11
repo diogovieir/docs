@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "PureCPP",
+  "name": "PureAI",
   "logo": {
     "light": "/logo/all_logo.svg",
     "dark": "/logo/all_logo.svg"
@@ -18,7 +18,7 @@
   "topbarLinks": [
     {
       "name": "Support",
-      "url": "contato@pureai.com.br"
+      "url": "mailto:contato@pureai.com.br"
     }
   ],
   "topbarCtaButton": {
@@ -34,18 +34,41 @@
     {
       "name": "GitHub",
       "icon": "github",
-      "url": "https://github.com/pureai-ecosystem/purecpp"
+      "url": "https://github.com/pureai-ecosystem"
     }
   ],
   "navigation": [
     {
-      "group": "Introduction",
+      "group": "Introdução",
       "pages": [
         "introduction"
       ]
     },
     {
-      "group": "Build with PureCPP",
+      "group": "PureRouter",
+      "pages": [
+        "purerouter/overview",
+        "purerouter/quickstart",
+        "purerouter/installation",
+        {
+          "group": "Guides",
+          "pages": [
+            "purerouter/guides/deployments",
+            "purerouter/guides/routing-profiles",
+            "purerouter/guides/auth",
+            "purerouter/guides/sdk-python"
+          ]
+        },
+        {
+          "group": "API Reference",
+          "pages": [
+            "purerouter/api/reference"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "PureCPP",
       "pages": [
         "setup",
         {
@@ -78,5 +101,10 @@
     "x": "https://x.com/pureaiofficial",
     "github": "https://github.com/pureai-ecosystem",
     "linkedin": "https://linkedin.com/company/pureai-official"
+  },
+  "seo": {
+    "title": "PureAI Documentation",
+    "description": "Official docs for PureRouter and PureCPP by PureAI",
+    "image": "/images/social-card.png"
   }
 }

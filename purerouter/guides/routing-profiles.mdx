@@ -1,0 +1,163 @@
+---
+title: 'PureRouter Routing Profiles'
+description: 'Understand the different routing profiles available in PureRouter'
+---
+
+# Routing Profiles
+
+<Note>
+PureRouter is a completely independent product from PureCPP. You can use PureRouter without needing PureCPP and vice versa.
+</Note>
+
+PureRouter offers three main routing profiles that allow you to balance cost, quality, and speed according to your specific needs.
+
+## Available Profiles
+
+<AccordionGroup>
+  <Accordion title="Economy" icon="piggy-bank">
+    The **Economy** profile is cost-optimized, directing your queries to more economical models that can still provide adequate responses for simple tasks.
+    
+    **Ideal for:**
+    - Simple and direct queries
+    - Basic text processing tasks
+    - Scenarios where budget is a primary concern
+    - Applications with high query volume
+    
+    ```python
+    # Example using the Economy profile
+    response = client.router.infer(InferRequest(
+        prompt="What is the capital of Brazil?",
+        profile="economy"
+    ))
+    ```
+  </Accordion>
+  
+  <Accordion title="Balanced" icon="scale-balanced">
+    The **Balanced** profile offers a balance between cost and quality, being the default option for most use cases.
+    
+    **Ideal for:**
+    - General and everyday use
+    - Medium complexity tasks
+    - When you need reasonable quality responses without excessive costs
+    - Applications with varied needs
+    
+    ```python
+    # Example using the Balanced profile
+    response = client.router.infer(InferRequest(
+        prompt="Explain how photosynthesis works in simple terms.",
+        profile="balanced"
+    ))
+    ```
+  </Accordion>
+  
+  <Accordion title="Quality" icon="gem">
+    The **Quality** profile prioritizes response quality, directing your queries to the most advanced models available.
+    
+    **Ideal for:**
+    - Complex and specialized tasks
+    - Creative content generation
+    - Advanced reasoning and problem solving
+    - When precision and quality are critical
+    
+    ```python
+    # Example using the Quality profile
+    response = client.router.infer(InferRequest(
+        prompt="Write a detailed essay on the ethical implications of artificial intelligence in modern society.",
+        profile="quality"
+    ))
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Profile Comparison
+
+| Feature | Economy | Balanced | Quality |
+|---------|---------|----------|----------|
+| **Cost** | Low | Medium | High |
+| **Quality** | Basic | Good | Excellent |
+| **Supported complexity** | Low | Medium | High |
+| **Creativity** | Limited | Moderate | High |
+| **Reasoning** | Basic | Good | Advanced |
+| **Ideal use** | Simple tasks, high volume | General use | Complex, specialized tasks |
+
+## Choosing the Right Profile
+
+<Steps>
+  1. **Evaluate task complexity** - Simple tasks can use Economy, while complex tasks need Quality
+  
+  2. **Consider your budget** - If cost is a primary concern, start with Economy and scale as needed
+  
+  3. **Test different profiles** - Compare results to find the best balance for your specific use case
+  
+  4. **Analyze query volume** - For high volume, Economy may be more suitable; for low volume critical queries, Quality may be justified
+</Steps>
+
+## Practical Examples
+
+### Example 1: Customer Service Chatbot
+
+```python
+def customer_service_bot(query, importance):
+    # Use Economy for simple FAQ questions
+    if is_faq(query):
+        return client.router.infer(InferRequest(
+            prompt=query,
+            profile="economy"
+        ))
+    
+    # Use Balanced for most queries
+    elif importance == "normal":
+        return client.router.infer(InferRequest(
+            prompt=query,
+            profile="balanced"
+        ))
+    
+    # Use Quality for VIP customers or critical issues
+    elif importance == "high":
+        return client.router.infer(InferRequest(
+            prompt=query,
+            profile="quality"
+        ))
+```
+
+### Example 2: Writing Assistant
+
+```python
+def writing_assistant(task_type, content):
+    if task_type == "grammar_check":
+        # Simple grammar corrections can use Economy
+        return client.router.infer(InferRequest(
+            prompt=f"Correct the grammatical errors in the following text: {content}",
+            profile="economy"
+        ))
+    
+    elif task_type == "rewrite":
+        # Text rewrites use Balanced
+        return client.router.infer(InferRequest(
+            prompt=f"Rewrite the following text to make it clearer and more concise: {content}",
+            profile="balanced"
+        ))
+    
+    elif task_type == "creative_content":
+        # Creative content uses Quality
+        return client.router.infer(InferRequest(
+            prompt=f"Create creative and engaging content about: {content}",
+            profile="quality"
+        ))
+```
+
+## Next Steps
+
+<CardGroup>
+  <Card title="Python SDK" icon="python" href="/purerouter/guides/sdk-python">
+    Learn to use the PureRouter Python SDK
+  </Card>
+  
+  <Card title="Deployments" icon="server" href="/purerouter/guides/deployments">
+    Learn how to use specific deployments when needed
+  </Card>
+  
+  <Card title="API Reference" icon="code" href="/purerouter/api/reference">
+    Check the complete API documentation
+  </Card>
+</CardGroup>
