@@ -1,15 +1,23 @@
 ---
-title: 'PureRouter Deployments'
-description: 'How to use and manage specific deployments in PureRouter'
+title: "PureRouter Deployments"
+description: "How to use and manage specific deployments in PureRouter"
 ---
 
 # Deployments
 
 <Note>
-PureRouter is a completely independent product from PureCPP. You can use PureRouter without needing PureCPP and vice versa.
+  PureRouter is a completely independent product from PureCPP. You can use
+  PureRouter without needing PureCPP and vice versa.
 </Note>
 
 In addition to automatic routing through profiles, PureRouter allows you to directly access specific models through their deployment IDs. This is useful when you need a particular model for a specific use case.
+
+## Before You Start
+
+To use deployments, you will need:
+
+- An **API Key**, which you can [Generate an API Key](/purerouter/console/api-keys)
+- At least one **Deployment**, which you can [create via the Deployments page](/purerouter/console/deployments).
 
 ## Accessing Deployments
 
@@ -93,15 +101,19 @@ for chunk in client.deployments.invoke_stream(
   <Accordion title="Response Consistency">
     When you need absolute consistency in responses, always using the same model through the deployment ID ensures you'll get predictable results, without variations that can occur with automatic routing.
   </Accordion>
-  
-  <Accordion title="Specialized Models">
-    If you've deployed a fine-tuned model for a specific task, you can access it directly by ID to leverage its specialized training.
-  </Accordion>
-  
-  <Accordion title="Comparative Testing">
-    To compare the performance of different models on the same task, you can invoke each one directly and evaluate the results.
-  </Accordion>
-  
+
+{" "}
+<Accordion title="Specialized Models">
+  If you've deployed a fine-tuned model for a specific task, you can access it
+  directly by ID to leverage its specialized training.
+</Accordion>
+
+{" "}
+<Accordion title="Comparative Testing">
+  To compare the performance of different models on the same task, you can
+  invoke each one directly and evaluate the results.
+</Accordion>
+
   <Accordion title="Regulatory Requirements">
     In scenarios where there are specific regulatory requirements about which models can be used, direct access ensures compliance.
   </Accordion>
@@ -123,7 +135,7 @@ def process_query_with_fallback(query):
         return response
     except Exception as e:
         print(f"Error in primary model: {e}")
-        
+
         # Fallback to an alternative model
         try:
             response = client.deployments.invoke(
@@ -136,7 +148,7 @@ def process_query_with_fallback(query):
             return response
         except Exception as e:
             print(f"Error in fallback model: {e}")
-            
+
             # Last resort: use automatic routing
             return client.router.infer(InferRequest(
                 prompt=query,
@@ -150,11 +162,16 @@ def process_query_with_fallback(query):
   <Card title="Python SDK" icon="python" href="/purerouter/guides/sdk-python">
     Learn to use the PureRouter Python SDK
   </Card>
-  
-  <Card title="Routing Profiles" icon="route" href="/purerouter/guides/routing-profiles">
-    Learn more about economy, balanced, and quality profiles
-  </Card>
-  
+
+{" "}
+<Card
+  title="Routing Profiles"
+  icon="route"
+  href="/purerouter/guides/routing-profiles"
+>
+  Learn more about economy, balanced, and quality profiles
+</Card>
+
   <Card title="API Reference" icon="code" href="/purerouter/api/reference">
     Check the complete API documentation
   </Card>
