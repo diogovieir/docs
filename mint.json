@@ -60,6 +60,14 @@
           ]
         },
         {
+          "group": "Console",
+          "pages": [
+            "purerouter/console/integration",
+            "purerouter/console/deployments",
+            "purerouter/console/api-keys"
+          ]
+        },
+        {
           "group": "API Reference",
           "pages": [
             "purerouter/api/reference"

@@ -76,15 +76,15 @@ For enhanced security, it's recommended to rotate your keys periodically:
   <Accordion title="Never Expose Keys in Source Code">
     Never include API keys directly in source code, especially in public repositories. Use environment variables or secret management systems.
   </Accordion>
-  
+
   <Accordion title="Limit Key Scope">
     When possible, create keys with limited permissions for each specific application or service.
   </Accordion>
-  
+
   <Accordion title="Monitor Usage">
     Regularly check API usage logs to detect suspicious activities or unauthorized usage.
   </Accordion>
-  
+
   <Accordion title="Implement Rate Limiting">
     Configure rate limits in your application to prevent accidental or malicious excessive API usage.
   </Accordion>
@@ -121,15 +121,15 @@ load_dotenv()
 def get_purerouter_client():
     # Try to get the key from environment variable
     api_key = os.getenv("PUREROUTER_API_KEY")
-    
+
     if not api_key:
         raise ValueError("PUREROUTER_API_KEY not found in environment variables")
-    
+
     return PureRouter(router_key=api_key)
 
 def process_query_safely(query, max_retries=3):
     retry_count = 0
-    
+
     while retry_count < max_retries:
         try:
             client = get_purerouter_client()
@@ -138,23 +138,23 @@ def process_query_safely(query, max_retries=3):
                 profile="balanced"
             ))
             return response
-            
+
         except AuthenticationError as e:
             print(f"Authentication error: {e}")
             # Here you could implement logic to renew the key
             # or notify administrators
             raise
-            
+
         except RateLimitError as e:
             retry_count += 1
             wait_time = 2 ** retry_count  # Exponential backoff
             print(f"Rate limit reached. Retrying in {wait_time} seconds...")
             time.sleep(wait_time)
-            
+
         except Exception as e:
             print(f"Unexpected error: {e}")
             raise
-    
+
     raise Exception(f"Failed after {max_retries} attempts")
 ```
 
@@ -164,11 +164,11 @@ def process_query_safely(query, max_retries=3):
   <Card title="Python SDK" icon="python" href="/purerouter/guides/sdk-python">
     Learn to use the PureRouter Python SDK
   </Card>
-  
+
   <Card title="Deployments" icon="server" href="/purerouter/guides/deployments">
     Learn how to access specific models via API
   </Card>
-  
+
   <Card title="API Reference" icon="code" href="/purerouter/api/reference">
     Check the complete API documentation
   </Card>
