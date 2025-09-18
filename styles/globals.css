@@ -213,7 +213,115 @@ pre code {
   border-radius: 0;
 }
 
-/* Syntax Highlighting for Dark Mode */
+/* Force Dark Theme for Code Blocks in Light Mode */
+:root:not(.dark):not([data-theme="dark"]) {
+  /* Dark theme colors for code blocks only in light mode */
+  --background-code-dark: #0d1117;
+  --background-inline-code-dark: #161b22;
+  --text-code-dark: #e6edf3;
+  --code-border-dark: #30363d;
+  --code-comment-dark: #7d8590;
+  --code-keyword-dark: #ff7b72;
+  --code-string-dark: #a5d6ff;
+  --code-number-dark: #79c0ff;
+  --code-function-dark: #d2a8ff;
+  --code-variable-dark: #ffa657;
+}
+
+/* Apply dark theme to code blocks in light mode */
+:root:not(.dark):not([data-theme="dark"]) pre {
+  background: var(--background-code-dark) !important;
+  border-color: var(--code-border-dark) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+:root:not(.dark):not([data-theme="dark"]) pre code {
+  color: var(--text-code-dark) !important;
+}
+
+:root:not(.dark):not([data-theme="dark"]) code {
+  background: var(--background-inline-code-dark) !important;
+  color: var(--text-code-dark) !important;
+  border-color: var(--code-border-dark) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Enhanced syntax highlighting for light mode with dark code theme */
+:root:not(.dark):not([data-theme="dark"]) .token.comment,
+:root:not(.dark):not([data-theme="dark"]) .token.prolog,
+:root:not(.dark):not([data-theme="dark"]) .token.doctype,
+:root:not(.dark):not([data-theme="dark"]) .token.cdata {
+  color: var(--code-comment-dark) !important;
+}
+
+:root:not(.dark):not([data-theme="dark"]) .token.punctuation {
+  color: var(--text-code-dark) !important;
+}
+
+:root:not(.dark):not([data-theme="dark"]) .token.property,
+:root:not(.dark):not([data-theme="dark"]) .token.tag,
+:root:not(.dark):not([data-theme="dark"]) .token.boolean,
+:root:not(.dark):not([data-theme="dark"]) .token.number,
+:root:not(.dark):not([data-theme="dark"]) .token.constant,
+:root:not(.dark):not([data-theme="dark"]) .token.symbol,
+:root:not(.dark):not([data-theme="dark"]) .token.deleted {
+  color: var(--code-number-dark) !important;
+}
+
+:root:not(.dark):not([data-theme="dark"]) .token.selector,
+:root:not(.dark):not([data-theme="dark"]) .token.attr-name,
+:root:not(.dark):not([data-theme="dark"]) .token.string,
+:root:not(.dark):not([data-theme="dark"]) .token.char,
+:root:not(.dark):not([data-theme="dark"]) .token.builtin,
+:root:not(.dark):not([data-theme="dark"]) .token.inserted {
+  color: var(--code-string-dark) !important;
+}
+
+:root:not(.dark):not([data-theme="dark"]) .token.operator,
+:root:not(.dark):not([data-theme="dark"]) .token.entity,
+:root:not(.dark):not([data-theme="dark"]) .token.url,
+:root:not(.dark):not([data-theme="dark"]) .language-css .token.string,
+:root:not(.dark):not([data-theme="dark"]) .style .token.string {
+  color: var(--code-variable-dark) !important;
+}
+
+:root:not(.dark):not([data-theme="dark"]) .token.atrule,
+:root:not(.dark):not([data-theme="dark"]) .token.attr-value,
+:root:not(.dark):not([data-theme="dark"]) .token.keyword {
+  color: var(--code-keyword-dark) !important;
+}
+
+:root:not(.dark):not([data-theme="dark"]) .token.function,
+:root:not(.dark):not([data-theme="dark"]) .token.class-name {
+  color: var(--code-function-dark) !important;
+}
+
+:root:not(.dark):not([data-theme="dark"]) .token.regex,
+:root:not(.dark):not([data-theme="dark"]) .token.important,
+:root:not(.dark):not([data-theme="dark"]) .token.variable {
+  color: var(--code-variable-dark) !important;
+}
+
+/* Code block header styling for light mode with dark code */
+:root:not(.dark):not([data-theme="dark"]) .code-block-header {
+  background: var(--background-inline-code-dark) !important;
+  border-bottom-color: var(--code-border-dark) !important;
+  color: var(--text-code-dark) !important;
+}
+
+:root:not(.dark):not([data-theme="dark"]) .copy-button {
+  background: var(--background-code-dark) !important;
+  border-color: var(--code-border-dark) !important;
+  color: var(--text-code-dark) !important;
+}
+
+:root:not(.dark):not([data-theme="dark"]) .copy-button:hover {
+  background: var(--background-inline-code-dark) !important;
+  color: var(--text-code-dark) !important;
+  border-color: #58a6ff !important;
+}
+
+/* Syntax Highlighting for Dark Mode (unchanged) */
 .dark pre code,
 [data-theme="dark"] pre code {
   color: var(--text-code);
@@ -596,7 +704,8 @@ tr:hover {
 /* Responsive Design */
 @media (max-width: 768px) {
   :root {
-    --text-4xl: 2rem;
+    --text-5xl: 2.25rem;
+    --text-4xl: 1.875rem;
     --text-3xl: 1.5rem;
     --text-2xl: 1.25rem;
   }
@@ -613,6 +722,63 @@ tr:hover {
   pre {
     padding: var(--space-4);
     font-size: var(--text-xs);
+  }
+  
+  /* Enhanced mobile code block styling for light mode */
+  :root:not(.dark):not([data-theme="dark"]) pre {
+    border-radius: 8px !important;
+    margin: 1rem 0 !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  
+  :root:not(.dark):not([data-theme="dark"]) code {
+    font-size: 0.8em !important;
+    padding: 0.1rem 0.3rem !important;
+    word-break: break-word !important;
+  }
+  
+  /* Improved contrast for mobile readability */
+  :root:not(.dark):not([data-theme="dark"]) {
+    --text-code-dark: #f0f6fc; /* Higher contrast for mobile */
+    --code-comment-dark: #8b949e; /* Better contrast ratio */
+  }
+}
+
+/* Tablet Responsiveness */
+@media (max-width: 1024px) and (min-width: 769px) {
+  :root:not(.dark):not([data-theme="dark"]) pre {
+    font-size: 0.85rem !important;
+    padding: var(--space-5) !important;
+  }
+  
+  :root:not(.dark):not([data-theme="dark"]) .code-block-header {
+    padding: var(--space-3) var(--space-4) !important;
+    font-size: 0.85rem !important;
+  }
+}
+
+/* High contrast mode support for accessibility */
+@media (prefers-contrast: high) {
+  :root:not(.dark):not([data-theme="dark"]) {
+    --background-code-dark: #000000;
+    --background-inline-code-dark: #1a1a1a;
+    --text-code-dark: #ffffff;
+    --code-border-dark: #404040;
+    --code-keyword-dark: #ff6b6b;
+    --code-string-dark: #51cf66;
+    --code-number-dark: #74c0fc;
+    --code-function-dark: #da77f2;
+    --code-variable-dark: #ffd43b;
+    --code-comment-dark: #adb5bd;
+  }
+  
+  :root:not(.dark):not([data-theme="dark"]) pre {
+    border: 2px solid var(--code-border-dark) !important;
+  }
+  
+  :root:not(.dark):not([data-theme="dark"]) code {
+    border: 1px solid var(--code-border-dark) !important;
   }
 }
 
