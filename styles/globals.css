@@ -402,15 +402,17 @@ html[data-theme="dark"] body svg {
   fill: var(--icon-color) !important;
 }
 
-/* Adicione este novo bloco de código ao seu ficheiro */
-
-span.fixed.inset-0 {
-  background-color: transparent !important;
+html {
+  background-image: radial-gradient(circle at top left, rgba(139, 92, 246, 0.08) 0%, transparent 40%) !important;
+  background-color: #FFFFFF !important; /* Cor de fundo para garantir */
+  background-repeat: no-repeat !important;
+  background-attachment: fixed !important;
 }
 
-/* Aplica o nosso gradiente ao contentor principal da página */
-#__next {
-  background-image: radial-gradient(circle at top left, rgba(139, 92, 246, 0.08) 0%, transparent 40%);
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+/* 2. Força todos os possíveis contentores e sobreposições a serem transparentes. */
+body,
+div#__next,
+div[class*="antialiased"],
+span.fixed.inset-0 {
+  background: transparent !important;
 }
