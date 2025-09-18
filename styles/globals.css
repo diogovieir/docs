@@ -88,6 +88,11 @@
   --transition-fast: 150ms ease;
   --transition-normal: 250ms ease;
   --transition-slow: 350ms ease;
+  
+  /* Icon Colors - Light Mode */
+  --icon-color: #7C3AED;
+  --icon-color-hover: #6D28D9;
+  --icon-color-focus: #5B21B6;
 }
 
 /* Dark Mode - Unsloth Inspired */
@@ -118,6 +123,11 @@
   --color-warning: #F59E0B;
   --color-error: #F87171;
   --color-info: #60A5FA;
+  
+  /* Icon Colors - Dark Mode */
+  --icon-color: #FFFFFF;
+  --icon-color-hover: #F1F5F9;
+  --icon-color-focus: #E2E8F0;
 }
 
 /* Base Styles */
@@ -172,6 +182,46 @@ a {
 a:hover {
   color: var(--color-primary-dark);
   text-decoration: underline;
+}
+
+/* Sistema de ícones SVG adaptativos */
+.icon-container {
+  color: var(--icon-color);
+  transition: color var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-container:hover {
+  color: var(--icon-color-hover);
+}
+
+.icon-container:focus-within {
+  color: var(--icon-color-focus);
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.icon-svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+  flex-shrink: 0;
+}
+
+/* Garantir que Cards herdem as cores corretas */
+.card .icon-container {
+  color: var(--icon-color);
+}
+
+.card:hover .icon-container {
+  color: var(--icon-color-hover);
+}
+
+.card:focus-within .icon-container {
+  color: var(--icon-color-focus);
 }
 
 /* Enhanced code blocks with Unsloth-inspired styling */
