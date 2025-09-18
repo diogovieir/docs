@@ -177,17 +177,22 @@ a:hover {
 /* Enhanced code blocks with Unsloth-inspired styling */
 pre {
   background: var(--background-code) !important;
-  border-radius: 12px !important;
-  border: 1px solid var(--code-border, var(--border-color)) !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+  border-radius: 8px !important;
+  border: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02) !important;
   margin: 1.5rem 0 !important;
   overflow-x: auto !important;
   position: relative !important;
-  padding: var(--space-6);
+  padding: 1.25rem;
   font-family: var(--font-family-mono);
   font-size: var(--text-sm);
   line-height: var(--leading-relaxed);
   color: var(--text-code);
+  transition: box-shadow var(--transition-fast);
+}
+
+pre:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04) !important;
 }
 
 code {
@@ -195,11 +200,11 @@ code {
   font-size: 0.875em;
   background: var(--background-inline-code) !important;
   color: var(--text-code) !important;
-  padding: 0.125rem 0.375rem !important;
-  border-radius: 0.375rem !important;
+  padding: 0.2rem 0.4rem !important;
+  border-radius: 6px !important;
   font-weight: 600 !important;
-  border: 1px solid var(--code-border, var(--border-color)) !important;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+  border: none !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02) !important;
 }
 
 pre code {
@@ -231,8 +236,12 @@ pre code {
 /* Apply dark theme to code blocks in light mode */
 :root:not(.dark):not([data-theme="dark"]) pre {
   background: var(--background-code-dark) !important;
-  border-color: var(--code-border-dark) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+}
+
+:root:not(.dark):not([data-theme="dark"]) pre:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.06) !important;
 }
 
 :root:not(.dark):not([data-theme="dark"]) pre code {
@@ -242,8 +251,8 @@ pre code {
 :root:not(.dark):not([data-theme="dark"]) code {
   background: var(--background-inline-code-dark) !important;
   color: var(--text-code-dark) !important;
-  border-color: var(--code-border-dark) !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  border: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
 }
 
 /* Enhanced syntax highlighting for light mode with dark code theme */
@@ -310,15 +319,18 @@ pre code {
 }
 
 :root:not(.dark):not([data-theme="dark"]) .copy-button {
-  background: var(--background-code-dark) !important;
-  border-color: var(--code-border-dark) !important;
-  color: var(--text-code-dark) !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: none !important;
+  color: var(--text-secondary) !important;
+  backdrop-filter: blur(8px) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
 }
 
 :root:not(.dark):not([data-theme="dark"]) .copy-button:hover {
-  background: var(--background-inline-code-dark) !important;
-  color: var(--text-code-dark) !important;
-  border-color: #58a6ff !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: var(--text-primary) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12) !important;
 }
 
 /* Syntax Highlighting for Dark Mode (unchanged) */
@@ -338,18 +350,23 @@ pre code {
 .code-block {
   position: relative;
   margin-bottom: var(--space-6);
-  border-radius: var(--radius-xl);
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  transition: box-shadow var(--transition-fast);
+}
+
+.code-block:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .code-block-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-3) 1.25rem;
   background: var(--background-tertiary);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
   font-size: var(--text-sm);
   color: var(--text-secondary);
   font-weight: 500;
@@ -360,46 +377,55 @@ pre code {
   border-radius: 0;
   border: none;
   background: var(--background-code);
+  box-shadow: none !important;
 }
 
 .copy-button {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
-  background: var(--background-primary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
+  padding: 0.375rem 0.75rem;
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 6px;
   font-size: var(--text-xs);
   color: var(--text-secondary);
   cursor: pointer;
   transition: all var(--transition-fast);
   font-weight: 500;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .copy-button:hover {
-  background: var(--background-secondary);
+  background: rgba(255, 255, 255, 0.95);
   color: var(--text-primary);
-  border-color: var(--border-color-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.copy-button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 /* Dark mode specific adjustments */
 .dark .code-block-header,
 [data-theme="dark"] .code-block-header {
   background: var(--background-tertiary);
-  border-bottom-color: var(--border-color);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .dark .copy-button,
 [data-theme="dark"] .copy-button {
-  background: var(--background-secondary);
-  border-color: var(--border-color);
+  background: rgba(0, 0, 0, 0.4);
   color: var(--text-secondary);
+  backdrop-filter: blur(8px);
 }
 
 .dark .copy-button:hover,
 [data-theme="dark"] .copy-button:hover {
-  background: var(--background-tertiary);
+  background: rgba(0, 0, 0, 0.6);
   color: var(--text-primary);
 }
 
@@ -726,10 +752,12 @@ tr:hover {
   
   /* Enhanced mobile code block styling for light mode */
   :root:not(.dark):not([data-theme="dark"]) pre {
-    border-radius: 8px !important;
+    border-radius: 6px !important;
     margin: 1rem 0 !important;
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch !important;
+    padding: 1rem !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.03) !important;
   }
   
   :root:not(.dark):not([data-theme="dark"]) code {
@@ -774,11 +802,13 @@ tr:hover {
   }
   
   :root:not(.dark):not([data-theme="dark"]) pre {
-    border: 2px solid var(--code-border-dark) !important;
+    border: 1px solid var(--code-border-dark) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.1) !important;
   }
   
   :root:not(.dark):not([data-theme="dark"]) code {
-    border: 1px solid var(--code-border-dark) !important;
+    border: none !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12) !important;
   }
 }
 
