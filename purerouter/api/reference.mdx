@@ -94,7 +94,7 @@ curl -i -X POST \
     "temperature": 0.8,
     "stream": false
   }' \
-  https://api.purerouter-api.com/v1/deployments/2bd06826-4e42-5105-a270-af36de66daf5/invoke
+  https://api.purerouter-api.com/v1/deployments/{deployment_id}/invoke
 ```
 
 **Example with curl (streaming):**
@@ -134,7 +134,7 @@ curl -i -X POST \
 ```python
 import requests
 
-deployment_id = "2bd06826-4e42-5105-a270-af36de66daf5"
+deployment_id = ""
 url = f"https://api.purerouter-api.com/v1/deployments/{deployment_id}/invoke"
 headers = {
     "Content-Type": "application/json",
