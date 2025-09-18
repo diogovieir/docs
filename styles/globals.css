@@ -404,13 +404,16 @@ html[data-theme="dark"] body svg {
 
 /* Adicione este novo bloco de código ao seu ficheiro */
 
-/* Remove a cor de fundo do span que está a cobrir tudo */
 span.fixed.inset-0 {
+  background-image: none !important;
   background-color: transparent !important;
 }
 
-/* Aplica o nosso gradiente ao contentor principal da página */
-#__next {
+/* * Passo 2: Aplica o nosso gradiente ao elemento <html>,
+ * que é a raiz de toda a página.
+*/
+html {
+  background-color: var(--background-primary); /* Cor sólida como fallback */
   background-image: radial-gradient(circle at top left, rgba(139, 92, 246, 0.08) 0%, transparent 40%);
   background-repeat: no-repeat;
   background-attachment: fixed;
