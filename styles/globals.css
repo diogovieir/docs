@@ -142,28 +142,21 @@
 }
 
 /* Base Styles */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
+
 body {
   font-family: var(--font-family-sans);
   font-size: var(--text-base);
   line-height: var(--leading-normal);
   color: var(--text-primary);
-  
-  /* --- INÍCIO DA ALTERAÇÃO --- */
-
-  /* 1. MANTENHA a cor de fundo como fallback (base) */
   background-color: var(--background-primary);
-
-  /* 2. ADICIONE o gradiente como uma imagem de fundo por cima da cor */
-  background-image: radial-gradient(circle at top left, rgba(139, 92, 246, 0.08) 0%, transparent 40%);
-
-  /* 3. Garanta que o gradiente não se repita */
-  background-repeat: no-repeat;
-  
-  /* 4. (Opcional) Faz o gradiente ficar fixo e não rolar com a página */
-  background-attachment: fixed;
-
-  /* --- FIM DA ALTERAÇÃO --- */
-
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -407,4 +400,12 @@ html.dark body svg,
 html[data-theme="dark"] body svg {
   color: var(--icon-color) !important;
   fill: var(--icon-color) !important;
+}
+
+/* Adicione este novo bloco de código ao seu ficheiro */
+
+#__next {
+  background-image: radial-gradient(circle at top left, rgba(139, 92, 246, 0.08) 0%, transparent 40%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
