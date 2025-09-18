@@ -1,0 +1,148 @@
+---
+title: "Unsloth Card Component"
+---
+
+<style>
+{`
+.unsloth-card {
+  background: var(--background-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  margin-bottom: var(--space-6);
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.unsloth-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+}
+
+.unsloth-card:hover {
+  border-color: var(--border-color-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.unsloth-card-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.unsloth-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: var(--text-lg);
+}
+
+.unsloth-card-title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.unsloth-card-description {
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-4);
+}
+
+.unsloth-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border-color);
+}
+
+.unsloth-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-3);
+  background: rgba(139, 92, 246, 0.1);
+  color: var(--color-primary);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+/* Dark mode adjustments */
+.dark .unsloth-card,
+[data-theme="dark"] .unsloth-card {
+  background: var(--background-secondary);
+  border-color: var(--border-color);
+}
+
+.dark .unsloth-card:hover,
+[data-theme="dark"] .unsloth-card:hover {
+  border-color: var(--border-color-hover);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.dark .unsloth-badge,
+[data-theme="dark"] .unsloth-badge {
+  background: rgba(139, 92, 246, 0.2);
+  color: var(--color-primary);
+  border-color: rgba(139, 92, 246, 0.3);
+}
+`}
+</style>
+
+## Unsloth-Style Card Component
+
+This component provides a modern, Unsloth-inspired card design with proper dark mode support.
+
+### Usage Example
+
+<div className="unsloth-card">
+  <div className="unsloth-card-header">
+    <div className="unsloth-card-icon">🚀</div>
+    <h3 className="unsloth-card-title">PureRouter</h3>
+  </div>
+  <div className="unsloth-card-description">
+    Ultra-fast routing library with zero dependencies and TypeScript support. 
+    Built for modern web applications that demand performance.
+  </div>
+  <div className="unsloth-card-footer">
+    <span className="unsloth-badge">v2.0.0</span>
+    <a href="/purerouter/overview" style={{color: 'var(--color-primary)', textDecoration: 'none', fontWeight: '600'}}>
+      Learn More →
+    </a>
+  </div>
+</div>
+
+<div className="unsloth-card">
+  <div className="unsloth-card-header">
+    <div className="unsloth-card-icon">⚡</div>
+    <h3 className="unsloth-card-title">PureCPP</h3>
+  </div>
+  <div className="unsloth-card-description">
+    High-performance C++ utilities and data structures optimized for speed and memory efficiency.
+    Perfect for performance-critical applications.
+  </div>
+  <div className="unsloth-card-footer">
+    <span className="unsloth-badge">v1.5.2</span>
+    <a href="/purecpp/loaders/introduction" style={{color: 'var(--color-primary)', textDecoration: 'none', fontWeight: '600'}}>
+      Get Started →
+    </a>
+  </div>
+</div>

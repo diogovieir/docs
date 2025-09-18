@@ -1,348 +1,245 @@
-<div className="flex flex-col items-center text-center mb-12 mt-8">
-  <img
-    className="block dark:hidden w-24 h-24 mb-4"
-    src="/logo/light.svg"
-    alt="PureAI Logo"
-  />
-  <img
-    className="hidden dark:block w-24 h-24 mb-4"
-    src="/logo/dark.svg"
-    alt="PureAI Logo"
-  />
-  <h1
-    className="text-6xl font-extrabold tracking-tight mb-4"
-    style={{
-      background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-      WebkitBackgroundClip: "text",
-      WebkitTextFillColor: "transparent",
-    }}
-  >
-    PureAI Docs
-  </h1>
-  <div className="h-1 w-24 bg-gradient-to-r from-purple-500 to-indigo-600 rounded mb-6"></div>
+---
+title: "PureAI - High-Performance AI Tools"
+description: "Discover our complete suite of AI tools optimized for performance and ease of use"
+---
+
+<style>
+{`
+.hero-section {
+  text-align: center;
+  padding: var(--space-12) 0;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), rgba(168, 85, 247, 0.05));
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--space-8);
+  border: 1px solid var(--border-color);
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-4);
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  font-size: var(--text-xl);
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto var(--space-6);
+  line-height: var(--leading-relaxed);
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-6);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: white;
+  text-decoration: none;
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+.hero-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-6);
+  margin: var(--space-8) 0;
+}
+
+.feature-card {
+  background: var(--background-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+}
+
+.feature-card:hover {
+  border-color: var(--border-color-hover);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-xl);
+  margin-bottom: var(--space-4);
+}
+
+.feature-title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-3);
+}
+
+.feature-description {
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-4);
+}
+
+.feature-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  transition: all var(--transition-fast);
+}
+
+.feature-link:hover {
+  color: var(--color-secondary);
+  transform: translateX(4px);
+}
+
+/* Dark mode adjustments */
+.dark .hero-section,
+[data-theme="dark"] .hero-section {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(168, 85, 247, 0.1));
+  border-color: var(--border-color);
+}
+
+.dark .feature-card,
+[data-theme="dark"] .feature-card {
+  background: var(--background-secondary);
+  border-color: var(--border-color);
+}
+
+.dark .feature-card:hover,
+[data-theme="dark"] .feature-card:hover {
+  border-color: var(--border-color-hover);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+  .hero-section {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  }
+}
+
+/* Ícones adaptativos ao tema */
+  img[src*="purecpp-icon.svg"],
+  img[src*="purerouter-icon.svg"] {
+    filter: brightness(0) saturate(100%) invert(42%) sepia(93%) saturate(1352%) hue-rotate(240deg) brightness(119%) contrast(119%);
+  }
+  
+  [data-theme="dark"] img[src*="purecpp-icon.svg"],
+  [data-theme="dark"] img[src*="purerouter-icon.svg"] {
+    filter: brightness(0) saturate(100%) invert(100%);
+  }
+`}
+</style>
+
+<div className="hero-section">
+  <h1 className="hero-title">PureAI</h1>
+  <p className="hero-subtitle">
+    High-performance artificial intelligence tools that combine speed, 
+    precision and ease of use to democratize access to advanced AI technologies.
+  </p>
+  <a href="/purerouter/overview" className="hero-cta">
+    Get Started →
+  </a>
 </div>
 
-<p className="text-xl text-center max-w-3xl mx-auto mb-8 text-slate-600 dark:text-slate-400">
-  Complete official documentation for{" "}
-  <span className="font-semibold text-slate-900 dark:text-white">
-    PureRouter
-  </span>{" "}
-  and{" "}
-  <span className="font-semibold text-slate-900 dark:text-white">PureCPP</span>,
-  two completely distinct and independent products. PureRouter offers
-  intelligent LLM routing, while PureCPP is a high-performance RAG framework in
-  C++.
-</p>
+## Our Products
 
-<div className="flex flex-wrap justify-center gap-4 mb-16">
-  <a
-    href="/purerouter/quickstart"
-    className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-medium shadow-lg shadow-purple-500/20 hover:shadow-purple-500/30 transition-all hover:-translate-y-0.5"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="lucide lucide-rocket"
-    >
-      <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
-      <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
-      <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
-      <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
-    </svg>
-    Get Started with PureRouter
-  </a>
-  <a
+<CardGroup cols={2}>
+  <Card
+    title="PureCPP"
+    icon="/images/purecpp-icon.svg"
     href="/purecpp/quickstart"
-    className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-medium border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-purple-200 dark:hover:border-purple-900 transition-all hover:-translate-y-0.5"
   >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="lucide lucide-zap"
-    >
-      <path d="M13 2H4a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h16a2 2 0 0 0 2-2v-9" />
-      <path d="M13 2v7h7" />
-      <path d="m9 16 3.5-3.5" />
-      <path d="M13 12.5 9.5 16" />
-    </svg>
-    Get Started with PureCPP
-  </a>
-</div>
+    Powerful C++ library for document processing, embedding, and intelligent chunking. 
+    Process PDFs, DOCX, TXT, and web pages with ease.
+  </Card>
+  
+  <Card
+    title="PureRouter"
+    icon="/images/purerouter-icon.svg"
+    href="/purerouter/quickstart"
+  >
+    Intelligent routing system for AI models. Optimize costs and performance 
+    with automatic routing based on complexity.
+  </Card>
+</CardGroup>
 
-<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-  <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md transition-all">
-    <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-600 dark:text-purple-400"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-    </div>
-    <h3 className="text-lg font-semibold mb-2">PureRouter: Intelligent Routing</h3>
-    <p className="text-slate-600 dark:text-slate-400">Independent product that directs queries to the most suitable models based on cost, performance, and quality.</p>
-  </div>
+## Why choose PureAI?
 
-  <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md transition-all">
-    <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center mb-4">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="text-indigo-600 dark:text-indigo-400"
-      >
-        <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
-        <polyline points="14 2 14 8 20 8" />
-        <path d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1" />
-        <path d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1" />
-      </svg>
-    </div>
-    <h3 className="text-lg font-semibold mb-2">PureCPP: RAG Framework in C++</h3>
-    <p className="text-slate-600 dark:text-slate-400">
-      Separate product that offers document processing, chunking, and embedding
-      with the efficiency and performance of C++.
-    </p>
-  </div>
+<AccordionGroup>
+  <Accordion title="🎯 Optimized Performance">
+    All our tools are developed with a focus on maximum performance, 
+    using best optimization practices and efficient algorithms.
+  </Accordion>
+  
+  <Accordion title="🛠️ Ease of Use">
+    Intuitive APIs and comprehensive documentation ensure you can integrate 
+    our solutions quickly into your projects.
+  </Accordion>
+  
+  <Accordion title="🔧 Zero Dependencies">
+    Our products are developed to minimize external dependencies, 
+    reducing bundle size and increasing reliability.
+  </Accordion>
+  
+  <Accordion title="📚 Complete Documentation">
+    Detailed documentation, practical examples and step-by-step guides to 
+    accelerate your development.
+  </Accordion>
+</AccordionGroup>
 
-  <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md transition-all">
-    <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-600 dark:text-blue-400"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" y1="22" x2="12" y2="12"/></svg>
-    </div>
-    <h3 className="text-lg font-semibold mb-2">Multiple Format Support</h3>
-    <p className="text-slate-600 dark:text-slate-400">Both products offer support for different data types, but are completely independent in their implementation and usage.</p>
-  </div>
-</div>
+## Ready to Get Started?
 
-<div className="flex items-center gap-3 mb-8 justify-center">
-  <div className="h-px bg-slate-200 dark:bg-slate-700 flex-grow max-w-xs"></div>
-  <span className="text-slate-500 dark:text-slate-400 text-sm font-medium">
-    INDEPENDENT PRODUCTS
-  </span>
-  <div className="h-px bg-slate-200 dark:bg-slate-700 flex-grow max-w-xs"></div>
-</div>
+Choose your preferred tool and start building high-performance applications today.
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-  <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 p-6 rounded-xl border border-indigo-100 dark:border-indigo-800/30">
-    <div className="flex items-center gap-3 mb-4">
-      <div style={{
-        width: '48px',
-        height: '48px',
-        borderRadius: '12px',
-        background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'white',
-        fontSize: '20px'
-      }}>
-        ⚡
-      </div>
-      <h3 style={{
-        fontSize: '24px',
-        fontWeight: '700',
-        margin: '0',
-        color: 'var(--mint-text-primary)'
-      }}>
-        PureCPP
-      </h3>
-    </div>
-
-    <p
-      style={{
-        color: "var(--mint-text-secondary)",
-        fontSize: "16px",
-        lineHeight: "1.6",
-        margin: "0 0 20px",
-      }}
-    >
-      High-performance RAG framework in C++ with Python bindings. Includes loaders,
-      processing, chunking, metadata, and optimized embedding system.
-    </p>
-
-    <div
-      style={{
-        display: "flex",
-        gap: "8px",
-        flexWrap: "wrap",
-      }}
-    >
-      <span
-        style={{
-          fontSize: "12px",
-          padding: "4px 8px",
-          background: "rgba(118, 75, 162, 0.1)",
-          color: "#764ba2",
-          borderRadius: "6px",
-          fontWeight: "500",
-        }}
-      >
-        C++
-      </span>
-      <span
-        style={{
-          fontSize: "12px",
-          padding: "4px 8px",
-          background: "rgba(118, 75, 162, 0.1)",
-          color: "#764ba2",
-          borderRadius: "6px",
-          fontWeight: "500",
-        }}
-      >
-        RAG
-      </span>
-      <span
-        style={{
-          fontSize: "12px",
-          padding: "4px 8px",
-          background: "rgba(118, 75, 162, 0.1)",
-          color: "#764ba2",
-          borderRadius: "6px",
-          fontWeight: "500",
-        }}
-      >
-        Python
-      </span>
-    </div>
-  </div>
-
-  <div className="bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 p-6 rounded-xl border border-purple-100 dark:border-purple-800/30">
-    <div className="flex items-center gap-3 mb-4">
-      <div style={{
-        width: '48px',
-        height: '48px',
-        borderRadius: '12px',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'white',
-        fontSize: '20px'
-      }}>
-        🔀
-      </div>
-      <h3 style={{
-        fontSize: '24px',
-        fontWeight: '700',
-        margin: '0',
-        color: 'var(--mint-text-primary)'
-      }}>
-        PureRouter
-      </h3>
-    </div>
-
-    <p
-      style={{
-        color: "var(--mint-text-secondary)",
-        fontSize: "16px",
-        lineHeight: "1.6",
-        margin: "0 0 20px",
-      }}
-    >
-      Intelligent routing system for LLMs with profile management optimized for
-      quality, cost, and latency. Includes complete APIs, billing, and SDKs.
-    </p>
-
-    <div
-      style={{
-        display: "flex",
-        gap: "8px",
-        flexWrap: "wrap",
-      }}
-    >
-      <span
-        style={{
-          fontSize: "12px",
-          padding: "4px 8px",
-          background: "rgba(102, 126, 234, 0.1)",
-          color: "#667eea",
-          borderRadius: "6px",
-          fontWeight: "500",
-        }}
-      >
-        Routing
-      </span>
-      <span
-        style={{
-          fontSize: "12px",
-          padding: "4px 8px",
-          background: "rgba(102, 126, 234, 0.1)",
-          color: "#667eea",
-          borderRadius: "6px",
-          fontWeight: "500",
-        }}
-      >
-        APIs
-      </span>
-      <span
-        style={{
-          fontSize: "12px",
-          padding: "4px 8px",
-          background: "rgba(102, 126, 234, 0.1)",
-          color: "#667eea",
-          borderRadius: "6px",
-          fontWeight: "500",
-        }}
-      >
-        SDKs
-      </span>
-    </div>
-  </div>
-</div>
-
-<div className="bg-slate-50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800 py-12 px-6 mt-8">
-  <div className="max-w-6xl mx-auto">
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Resources</h3>
-        <ul className="space-y-2">
-          <li><a href="/purerouter/overview" className="text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">PureRouter Overview</a></li>
-          <li><a href="/purecpp/loaders/introduction" className="text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">PureCPP Introduction</a></li>
-          <li><a href="/purerouter/guides/deployments" className="text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Deployment Guide</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Community</h3>
-        <ul className="space-y-2">
-          <li><a href="https://github.com/pureai-ecosystem" className="text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">GitHub</a></li>
-          <li><a href="https://discord.gg/8eF9v78Ndv" className="text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Discord</a></li>
-          <li><a href="https://twitter.com/pureai" className="text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Twitter</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Support</h3>
-        <ul className="space-y-2">
-          <li><a href="mailto:contato@pureai.com.br" className="text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Contact</a></li>
-          <li><a href="https://www.pureai.com.br/" className="text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Official Website</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <div className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
-      <div className="flex items-center gap-2">
-        <img src="/logo/all_logo.svg" alt="PureAI Logo" className="w-8 h-8" />
-        <span className="text-slate-600 dark:text-slate-400 font-medium">PureAI</span>
-      </div>
-      <div className="text-slate-500 dark:text-slate-500 text-sm">
-        © {new Date().getFullYear()} PureAI. All rights reserved.
-      </div>
-    </div>
-
-  </div>
-</div>
+<CardGroup cols={2}>
+  <Card
+    title="Get Started with PureCPP"
+    icon="/images/purecpp-icon.svg"
+    href="/purecpp/quickstart"
+    color="#8b5cf6"
+  >
+    Start processing documents with our powerful C++ library
+  </Card>
+  
+  <Card
+    title="Get Started with PureRouter"
+    icon="/images/purerouter-icon.svg"
+    href="/purerouter/quickstart"
+    color="#4f46e5"
+  >
+    Begin optimizing your AI model routing today
+  </Card>
+</CardGroup>

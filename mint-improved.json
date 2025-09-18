@@ -1,0 +1,206 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "PureAI",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg",
+    "href": "https://www.pureai.com.br"
+  },
+  "favicon": "/logo/all_logo.svg",
+  "colors": {
+    "primary": "#8B5CF6",
+    "light": "#A78BFA", 
+    "dark": "#7C3AED",
+    "background": {
+      "light": "#FAFAFA",
+      "dark": "#0A0A0A"
+    },
+    "anchors": {
+      "from": "#8B5CF6",
+      "to": "#06B6D4"
+    }
+  },
+  "topbar": {
+    "style": "gradient"
+  },
+  "topbarLinks": [
+    {
+      "name": "Community",
+      "url": "https://discord.gg/8eF9v78Ndv"
+    },
+    {
+      "name": "Support",
+      "url": "mailto:contato@pureai.com.br"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Get Started",
+    "url": "https://www.pureai.com.br/",
+    "style": "pill"
+  },
+  "tabs": [
+    {
+      "name": "🚀 Getting Started",
+      "url": "introduction"
+    },
+    {
+      "name": "🔀 PureRouter",
+      "url": "purerouter"
+    },
+    {
+      "name": "⚡ PureCPP", 
+      "url": "purecpp"
+    },
+    {
+      "name": "📚 API Reference",
+      "url": "api"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "🏠 Home",
+      "icon": "house",
+      "url": "https://www.pureai.com.br/"
+    },
+    {
+      "name": "💬 Discord",
+      "icon": "discord",
+      "url": "https://discord.gg/8eF9v78Ndv"
+    },
+    {
+      "name": "🐙 GitHub",
+      "icon": "github", 
+      "url": "https://github.com/pureai-ecosystem"
+    },
+    {
+      "name": "📧 Support",
+      "icon": "envelope",
+      "url": "mailto:contato@pureai.com.br"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "🚀 Getting Started",
+      "pages": [
+        "introduction",
+        "quickstart"
+      ]
+    },
+    {
+      "group": "🔀 PureRouter",
+      "pages": [
+        "purerouter/overview",
+        "purerouter/quickstart", 
+        "purerouter/installation",
+        {
+          "group": "📖 Guides",
+          "icon": "book-open",
+          "pages": [
+            "purerouter/guides/deployments",
+            "purerouter/guides/routing-profiles", 
+            "purerouter/guides/auth",
+            "purerouter/guides/sdk-python"
+          ]
+        },
+        {
+          "group": "🖥️ Console",
+          "icon": "computer",
+          "pages": [
+            "purerouter/console/integration",
+            "purerouter/console/deployments",
+            "purerouter/console/api-keys"
+          ]
+        },
+        {
+          "group": "📚 API Reference",
+          "icon": "code",
+          "pages": [
+            "purerouter/api/reference"
+          ]
+        }
+      ]
+    },
+    {
+      "group": "⚡ PureCPP",
+      "pages": [
+        "setup",
+        "purecpp/quickstart",
+        {
+          "group": "📥 Data Loaders",
+          "icon": "download",
+          "pages": [
+            "purecpp/loaders/introduction",
+            "purecpp/loaders/webloader",
+            "purecpp/loaders/txtloader", 
+            "purecpp/loaders/pdfloader",
+            "purecpp/loaders/docxloader"
+          ]
+        },
+        {
+          "group": "🔧 Processing",
+          "icon": "wrench",
+          "pages": [
+            "purecpp/cleaner/cleanregex",
+            {
+              "group": "📦 Chunks",
+              "pages": [
+                "purecpp/chunks/introduction",
+                "purecpp/chunks/chunkdefault",
+                "purecpp/chunks/chunkcount",
+                "purecpp/chunks/chunkquery", 
+                "purecpp/chunks/chunksimilarity"
+              ]
+            },
+            "purecpp/metadata/metadata",
+            "purecpp/embbeding/embbeding"
+          ]
+        }
+      ]
+    }
+  ],
+  "footerSocials": {
+    "website": "https://www.pureai.com.br",
+    "x": "https://x.com/pureaiofficial",
+    "github": "https://github.com/pureai-ecosystem",
+    "linkedin": "https://linkedin.com/company/pureai-official",
+    "discord": "https://discord.gg/8eF9v78Ndv"
+  },
+  "feedback": {
+    "thumbsRating": true,
+    "suggestEdit": true,
+    "raiseIssue": true
+  },
+  "search": {
+    "prompt": "Search PureAI docs..."
+  },
+  "seo": {
+    "title": "PureAI Documentation - Intelligent LLM Routing & High-Performance RAG",
+    "description": "Complete documentation for PureRouter (intelligent LLM routing) and PureCPP (high-performance RAG framework in C++). Two independent products by PureAI.",
+    "image": "/images/social-card.png",
+    "keywords": ["LLM routing", "RAG framework", "C++", "Python", "AI", "machine learning", "documentation"]
+  },
+  "analytics": {
+    "gtag": "G-XXXXXXXXXX",
+    "hotjar": "XXXXXXX"
+  },
+  "integrations": {
+    "intercom": "XXXXXXXX"
+  },
+  "api": {
+    "baseUrl": "https://api.pureai.com.br",
+    "auth": {
+      "method": "bearer"
+    }
+  },
+  "openapi": [
+    {
+      "url": "https://api.pureai.com.br/openapi.json",
+      "name": "PureRouter API"
+    }
+  ],
+  "modeToggle": {
+    "default": "light",
+    "isHidden": false
+  },
+  "backgroundImage": "/images/background-gradient.svg"
+}

@@ -1,0 +1,669 @@
+---
+title: "API Reference"
+description: "Complete API documentation for PureRouter with interactive examples and detailed responses."
+mode: "wide"
+---
+
+<div className="api-header">
+  <div className="api-header-content">
+    <div className="api-badge">
+      <span className="badge-text">v2.1.0</span>
+    </div>
+    <h1>PureRouter API Reference</h1>
+    <p className="api-description">
+      Complete REST API documentation with interactive examples, authentication guides, 
+      and detailed response schemas.
+    </p>
+    
+    <div className="api-quick-links">
+      <a href="#authentication" className="quick-link">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zM3 6V3a5 5 0 0 1 10 0v3a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/>
+        </svg>
+        Authentication
+      </a>
+      <a href="#endpoints" className="quick-link">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z"/>
+        </svg>
+        Endpoints
+      </a>
+      <a href="#errors" className="quick-link">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+        </svg>
+        Error Codes
+      </a>
+      <a href="#sdks" className="quick-link">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M5 4a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zM3.5 6a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zM5 8a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H5zm-2.5 2a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9z"/>
+        </svg>
+        SDKs
+      </a>
+    </div>
+  </div>
+</div>
+
+<div className="api-content">
+  <div className="api-sidebar">
+    <div className="sidebar-section">
+      <h3>Getting Started</h3>
+      <ul>
+        <li><a href="#authentication">Authentication</a></li>
+        <li><a href="#base-url">Base URL</a></li>
+        <li><a href="#rate-limits">Rate Limits</a></li>
+      </ul>
+    </div>
+    
+    <div className="sidebar-section">
+      <h3>Routing</h3>
+      <ul>
+        <li><a href="#create-route">Create Route</a></li>
+        <li><a href="#list-routes">List Routes</a></li>
+        <li><a href="#get-route">Get Route</a></li>
+        <li><a href="#update-route">Update Route</a></li>
+        <li><a href="#delete-route">Delete Route</a></li>
+      </ul>
+    </div>
+    
+    <div className="sidebar-section">
+      <h3>Analytics</h3>
+      <ul>
+        <li><a href="#get-metrics">Get Metrics</a></li>
+        <li><a href="#cost-analysis">Cost Analysis</a></li>
+        <li><a href="#performance">Performance</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div className="api-main">
+    <section id="authentication" className="api-section">
+      <h2>Authentication</h2>
+      <p>
+        PureRouter API uses API keys for authentication. Include your API key in the 
+        <code>Authorization</code> header of all requests.
+      </p>
+      
+      <div className="callout callout-info">
+        <div className="callout-title">🔑 API Key Required</div>
+        <p>You can generate API keys from your <a href="/console/api-keys">PureRouter Console</a>.</p>
+      </div>
+
+      <div className="code-example">
+        <div className="code-tabs">
+          <button className="tab active" data-tab="curl">cURL</button>
+          <button className="tab" data-tab="python">Python</button>
+          <button className="tab" data-tab="javascript">JavaScript</button>
+        </div>
+        
+        <div className="code-content" data-content="curl">
+          <div className="code-block">
+            <div className="code-block-header">
+              <span>Authentication Example</span>
+              <button className="copy-button">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                </svg>
+                Copy
+              </button>
+            </div>
+            <pre><code>curl -X GET "https://api.pureai.com.br/v1/routes" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json"</code></pre>
+          </div>
+        </div>
+        
+        <div className="code-content hidden" data-content="python">
+          <div className="code-block">
+            <div className="code-block-header">
+              <span>Python SDK</span>
+              <button className="copy-button">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                </svg>
+                Copy
+              </button>
+            </div>
+            <pre><code>from purerouter import PureRouter
+
+client = PureRouter(api_key="YOUR_API_KEY")
+routes = client.routes.list()</code></pre>
+          </div>
+        </div>
+        
+        <div className="code-content hidden" data-content="javascript">
+          <div className="code-block">
+            <div className="code-block-header">
+              <span>JavaScript SDK</span>
+              <button className="copy-button">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                </svg>
+                Copy
+              </button>
+            </div>
+            <pre><code>import { PureRouter } from '@pureai/router';
+
+const client = new PureRouter({ apiKey: 'YOUR_API_KEY' });
+const routes = await client.routes.list();</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="create-route" className="api-section">
+      <div className="endpoint-header">
+        <div className="method-badge post">POST</div>
+        <h2>/v1/routes</h2>
+        <p>Create a new routing configuration</p>
+      </div>
+
+      <div className="endpoint-content">
+        <div className="endpoint-description">
+          <p>
+            Creates a new route that defines how requests should be distributed across 
+            different LLM providers based on your specified criteria.
+          </p>
+        </div>
+
+        <div className="parameters-section">
+          <h3>Request Body</h3>
+          <div className="parameter-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Parameter</th>
+                  <th>Type</th>
+                  <th>Required</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>name</code></td>
+                  <td>string</td>
+                  <td><span className="badge badge-success">Required</span></td>
+                  <td>A unique name for your route</td>
+                </tr>
+                <tr>
+                  <td><code>providers</code></td>
+                  <td>array</td>
+                  <td><span className="badge badge-success">Required</span></td>
+                  <td>List of LLM providers to route between</td>
+                </tr>
+                <tr>
+                  <td><code>strategy</code></td>
+                  <td>string</td>
+                  <td><span className="badge">Optional</span></td>
+                  <td>Routing strategy: <code>cost</code>, <code>performance</code>, <code>quality</code></td>
+                </tr>
+                <tr>
+                  <td><code>fallback</code></td>
+                  <td>object</td>
+                  <td><span className="badge">Optional</span></td>
+                  <td>Fallback configuration for failed requests</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="example-section">
+          <h3>Example Request</h3>
+          <div className="code-block">
+            <div className="code-block-header">
+              <span>POST /v1/routes</span>
+              <button className="copy-button">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                </svg>
+                Copy
+              </button>
+            </div>
+            <pre><code>{
+  "name": "production-chat",
+  "providers": [
+    {
+      "name": "openai",
+      "model": "gpt-4",
+      "weight": 0.7,
+      "max_tokens": 2048
+    },
+    {
+      "name": "anthropic",
+      "model": "claude-3-sonnet",
+      "weight": 0.3,
+      "max_tokens": 2048
+    }
+  ],
+  "strategy": "cost",
+  "fallback": {
+    "provider": "openai",
+    "model": "gpt-3.5-turbo"
+  }
+}</code></pre>
+          </div>
+        </div>
+
+        <div className="response-section">
+          <h3>Response</h3>
+          <div className="response-status">
+            <span className="status-code success">201 Created</span>
+          </div>
+          
+          <div className="code-block">
+            <div className="code-block-header">
+              <span>Response Body</span>
+              <button className="copy-button">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                </svg>
+                Copy
+              </button>
+            </div>
+            <pre><code>{
+  "id": "route_abc123",
+  "name": "production-chat",
+  "status": "active",
+  "created_at": "2024-01-15T10:30:00Z",
+  "updated_at": "2024-01-15T10:30:00Z",
+  "providers": [
+    {
+      "name": "openai",
+      "model": "gpt-4",
+      "weight": 0.7,
+      "max_tokens": 2048,
+      "status": "active"
+    },
+    {
+      "name": "anthropic", 
+      "model": "claude-3-sonnet",
+      "weight": 0.3,
+      "max_tokens": 2048,
+      "status": "active"
+    }
+  ],
+  "strategy": "cost",
+  "fallback": {
+    "provider": "openai",
+    "model": "gpt-3.5-turbo"
+  },
+  "metrics": {
+    "total_requests": 0,
+    "avg_latency": 0,
+    "cost_savings": 0
+  }
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="errors" className="api-section">
+      <h2>Error Codes</h2>
+      <p>PureRouter uses conventional HTTP response codes to indicate success or failure.</p>
+      
+      <div className="error-codes">
+        <div className="error-code">
+          <div className="error-status">
+            <span className="status-code success">200</span>
+            <span className="status-text">OK</span>
+          </div>
+          <p>Everything worked as expected.</p>
+        </div>
+        
+        <div className="error-code">
+          <div className="error-status">
+            <span className="status-code client-error">400</span>
+            <span className="status-text">Bad Request</span>
+          </div>
+          <p>The request was unacceptable, often due to missing a required parameter.</p>
+        </div>
+        
+        <div className="error-code">
+          <div className="error-status">
+            <span className="status-code client-error">401</span>
+            <span className="status-text">Unauthorized</span>
+          </div>
+          <p>No valid API key provided.</p>
+        </div>
+        
+        <div className="error-code">
+          <div className="error-status">
+            <span className="status-code client-error">404</span>
+            <span className="status-text">Not Found</span>
+          </div>
+          <p>The requested resource doesn't exist.</p>
+        </div>
+        
+        <div className="error-code">
+          <div className="error-status">
+            <span className="status-code server-error">500</span>
+            <span className="status-text">Server Error</span>
+          </div>
+          <p>Something went wrong on PureRouter's end.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<style jsx>{`
+  .api-header {
+    background: linear-gradient(135deg, #8B5CF6 0%, #06B6D4 100%);
+    color: white;
+    padding: 4rem 0;
+    margin-bottom: 3rem;
+  }
+
+  .api-header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .api-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .badge-text {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .api-header h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+  }
+
+  .api-description {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+    max-width: 600px;
+  }
+
+  .api-quick-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .quick-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.5rem;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .quick-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .api-content {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .api-sidebar {
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+  }
+
+  .sidebar-section {
+    margin-bottom: 2rem;
+  }
+
+  .sidebar-section h3 {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+  }
+
+  .sidebar-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .sidebar-section li {
+    margin-bottom: 0.25rem;
+  }
+
+  .sidebar-section a {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+  }
+
+  .sidebar-section a:hover {
+    background: var(--background-secondary);
+    color: var(--text-primary);
+  }
+
+  .api-section {
+    margin-bottom: 4rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .api-section:last-child {
+    border-bottom: none;
+  }
+
+  .endpoint-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .method-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .method-badge.post {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22C55E;
+  }
+
+  .method-badge.get {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3B82F6;
+  }
+
+  .method-badge.put {
+    background: rgba(245, 158, 11, 0.1);
+    color: #F59E0B;
+  }
+
+  .method-badge.delete {
+    background: rgba(239, 68, 68, 0.1);
+    color: #EF4444;
+  }
+
+  .endpoint-header h2 {
+    font-family: var(--font-family-mono);
+    font-size: 1.5rem;
+    margin: 0;
+  }
+
+  .endpoint-header p {
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .code-example {
+    margin: 2rem 0;
+  }
+
+  .code-tabs {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .tab {
+    padding: 0.75rem 1rem;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+  }
+
+  .tab.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+  }
+
+  .tab:hover {
+    color: var(--text-primary);
+  }
+
+  .code-content {
+    margin-top: 0;
+  }
+
+  .code-content.hidden {
+    display: none;
+  }
+
+  .parameters-section {
+    margin: 2rem 0;
+  }
+
+  .parameter-table table {
+    font-size: 0.875rem;
+  }
+
+  .parameter-table code {
+    font-size: 0.8em;
+  }
+
+  .response-section {
+    margin: 2rem 0;
+  }
+
+  .response-status {
+    margin-bottom: 1rem;
+  }
+
+  .status-code {
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: var(--font-family-mono);
+  }
+
+  .status-code.success {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22C55E;
+  }
+
+  .status-code.client-error {
+    background: rgba(245, 158, 11, 0.1);
+    color: #F59E0B;
+  }
+
+  .status-code.server-error {
+    background: rgba(239, 68, 68, 0.1);
+    color: #EF4444;
+  }
+
+  .error-codes {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .error-code {
+    padding: 1.5rem;
+    background: var(--background-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+  }
+
+  .error-status {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .status-text {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .error-code p {
+    margin: 0;
+    color: var(--text-secondary);
+  }
+
+  @media (max-width: 768px) {
+    .api-content {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .api-sidebar {
+      position: static;
+      order: 2;
+    }
+
+    .api-header h1 {
+      font-size: 2rem;
+    }
+
+    .api-quick-links {
+      flex-direction: column;
+    }
+
+    .endpoint-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }
+`}</style>

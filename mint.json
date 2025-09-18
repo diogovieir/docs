@@ -6,13 +6,22 @@
     "dark": "/logo/all_logo.svg"
   },
   "favicon": "/logo/all_logo.svg",
+  "theme": "prism",
+  "modeToggle": {
+    "default": "light",
+    "isHidden": false
+  },
   "colors": {
-    "primary": "#9A3BE2",
-    "light": "#9439DA",
-    "dark": "#8131BE",
+    "primary": "#8B5CF6",
+    "light": "#FAFAFA",
+    "dark": "#0A0A0B",
+    "background": {
+      "light": "#FFFFFF",
+      "dark": "#0A0A0B"
+    },
     "anchors": {
-      "from": "#9A3BE2",
-      "to": "#8131BE"
+      "from": "#8B5CF6",
+      "to": "#A855F7"
     }
   },
   "topbarLinks": [
