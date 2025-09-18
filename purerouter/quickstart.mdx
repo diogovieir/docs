@@ -1,6 +1,6 @@
 ---
 title: 'PureRouter Quickstart'
-description: 'Learn to use the intelligent LLM routing system, an independent product from PureAI'
+description: 'Learn to use the intelligent LLM routing system with sync, async, and streaming examples'
 ---
 
 # PureRouter Quickstart
@@ -21,56 +21,275 @@ pip install purerouter
 
 ## Basic Configuration
 
-Import and configure PureRouter in your Python application:
+PureRouter supports both synchronous and asynchronous operations. Choose the approach that best fits your application:
 
 ```python
-# Import PureRouter and necessary types
+# Synchronous client
 from purerouter import PureRouter
 from purerouter.types import InferRequest, InvokeRequest
 
-# Initialize the client with your router API key
-client = PureRouter(router_key="your-api-key-here")
+client = PureRouter(
+    router_key="your-api-key-here",
+    base_url="https://api.purerouter-api.com",
+    timeout=300.0
+)
 
-# Now you're ready to use the router for inference
-# or to call specific deployments
+# Asynchronous client
+from purerouter import AsyncPureRouter
+
+async_client = AsyncPureRouter(
+    router_key="your-api-key-here", 
+    base_url="https://api.purerouter-api.com",
+    timeout=300.0
+)
 ```
 
 > **Note:** You need to obtain a valid API key from the PureAI platform. This key allows access to the different routing profiles and deployments configured in your account.
 
-## Query Routing
+## Synchronous Examples
 
-There are two main ways to use PureRouter:
+### Router Inference (Sync)
 
-### 1. Routing via /v1/infer
-
-You can automatically route queries to the most suitable model using different profiles:
+Use automatic routing to select the best model for your query:
 
 ```python
-# Routing using the "economy" profile (cost-optimized)
-resp = client.router.infer(InferRequest(prompt="What is the capital of Brazil?", profile="economy"))
-print(resp.output_text)
+from purerouter import PureRouter
+from purerouter.types import InferRequest
 
-# Other available profiles
-# profile="balanced" - Balance between cost and quality
-# profile="quality" - Prioritizes response quality
-```
-
-### 2. Direct call to a specific deployment
-
-You can also directly call a specific model using its deployment ID:
-
-```python
-# Direct call to a specific model by ID
-out = client.deployments.invoke(
-    "ca10db2f-364e-55dc-9d0f-b56e36f1140f",  # Deployment ID
-    InvokeRequest(
-        messages=[{"role": "user", "content": "Hello"}],
-        parameters={"temperature": 0}
+def main():
+    client = PureRouter(
+        router_key="sk_...",
+        base_url="https://api.purerouter-api.com",
+        timeout=300.0
     )
-)
-print(out)
+
+    req = InferRequest(
+        prompt="Summarize machine learning in 3 sentences.",
+        profile="economy",  # Options: economy, balanced, quality
+        stream=False
+    )
+
+    response = client.router.infer(req)
+    print("--- RESPONSE ---")
+    print(f"output: {response.output_text}")
+    print(f"provider: {response.provider}")
+    print(f"model_id: {response.model_id}")
+    print(f"latency: {response.latency_ms} ms")
+    print(f"usage: {response.usage}")
+    print(f"profile: {response.profile}")
+
+if __name__ == "__main__":
+    main()
 ```
 
+### Direct Deployment Call (Sync)
+
+Call a specific model directly using its deployment ID:
+
+```python
+from purerouter import PureRouter
+from purerouter.types import InvokeRequest
+
+def main():
+    client = PureRouter(
+        router_key="sk_...",
+        base_url="https://api.purerouter-api.com",
+        timeout=300.0
+    )
+    deployment_id = "2bd06826-4e42-5105-a270-af36de66daf5"
+
+    req = InvokeRequest(
+        prompt="Tell a brief story about PureAI.",
+        max_tokens=250,
+        temperature=0.8
+    )
+
+    result = client.deployments.invoke(deployment_id, req)
+    text = result["choices"][0]["text"]
+    print(text)
+
+if __name__ == "__main__":
+    main()
+```
+
+## Asynchronous Examples
+
+### Router Inference (Async)
+
+For high-performance applications, use async operations:
+
+```python
+import asyncio
+from purerouter import AsyncPureRouter
+from purerouter.types import InferRequest
+
+async def main():
+    client = AsyncPureRouter(
+        router_key="sk_...",
+        base_url="https://api.purerouter-api.com",
+        timeout=300.0
+    )
+
+    req = InferRequest(
+        prompt="Summarize machine learning in 3 sentences.",
+        profile="economy",
+        stream=False
+    )
+
+    response = await client.router.ainfer(req)
+    print("--- RESPONSE ---")
+    print(f"output: {response.output_text}")
+    print(f"provider: {response.provider}")
+    print(f"model_id: {response.model_id}")
+    print(f"latency: {response.latency_ms} ms")
+    print(f"usage: {response.usage}")
+    print(f"profile: {response.profile}")
+
+asyncio.run(main())
+```
+
+### Direct Deployment Call (Async)
+
+```python
+import asyncio
+from purerouter import AsyncPureRouter
+from purerouter.types import InvokeRequest
+
+async def main():
+    client = AsyncPureRouter(
+        router_key="sk_...",
+        base_url="https://api.purerouter-api.com",
+        timeout=300.0
+    )
+    deployment_id = "2bd06826-4e42-5105-a270-af36de66daf5"
+
+    req = InvokeRequest(
+        prompt="Tell a brief story about PureAI.",
+        max_tokens=250,
+        temperature=0.8,
+        stream=False
+    )
+
+    result = await client.deployments.ainvoke(deployment_id, req)
+    text = result["choices"][0]["text"]
+    print(text)
+
+asyncio.run(main())
+```
+
+## Streaming Examples
+
+### Router Streaming
+
+Get real-time responses as they're generated:
+
+```python
+import asyncio
+import json
+import sys
+from purerouter import AsyncPureRouter
+from purerouter.types import InferRequest
+
+async def main():
+    client = AsyncPureRouter(
+        router_key="sk_...",
+        base_url="https://api.purerouter-api.com",
+        timeout=300.0
+    )
+
+    req = InferRequest(
+        prompt="Tell a long, detailed story about a dragon who learned Python.",
+        profile="economy",
+        stream=True
+    )
+
+    print("\n--- STREAM START ---\n")
+    async for ev in client.router.astream(req):
+        line = ev.data.strip()
+        if not line:
+            continue
+        try:
+            obj = json.loads(line)
+        except json.JSONDecodeError:
+            sys.stdout.write(line)
+            sys.stdout.flush()
+            continue
+
+        if obj.get("event") == "start":
+            continue
+        elif obj.get("event") == "end":
+            print("\n\n--- STREAM END ---")
+            print(f"latency: {obj.get('latency_ms')} ms")
+            print(f"usage: {obj.get('usage')}")
+            print(f"cost: {obj.get('cost_usd')}")
+            break
+        elif "token" in obj:
+            sys.stdout.write(obj["token"])
+            sys.stdout.flush()
+
+asyncio.run(main())
+```
+
+### Deployment Streaming
+
+Stream responses from a specific deployment:
+
+```python
+import asyncio
+import json
+import sys
+from purerouter import AsyncPureRouter
+from purerouter.types import InvokeRequest
+
+async def main():
+    client = AsyncPureRouter(
+        router_key="sk_...",
+        base_url="https://api.purerouter-api.com",
+        timeout=300.0
+    )
+    deployment_id = "2bd06826-4e42-5105-a270-af36de66daf5"
+
+    req = InvokeRequest(
+        prompt="Hi.",
+        max_tokens=250,
+        temperature=0.8,
+        stream=True
+    )
+
+    final = []
+    async for ev in client.deployments.astream(deployment_id, req):
+        line = (ev.data or "").strip()
+        if not line or line == "[DONE]":
+            continue
+
+        if line.startswith("data:"):
+            line = line[len("data:"):].strip()
+
+        try:
+            obj = json.loads(line)
+        except json.JSONDecodeError:
+            sys.stdout.write(line)
+            sys.stdout.flush()
+            final.append(line)
+            continue
+
+        choices = obj.get("choices") or []
+        if choices and isinstance(choices[0], dict) and "text" in choices[0]:
+            tok = choices[0]["text"] or ""
+            sys.stdout.write(tok)
+            sys.stdout.flush()
+            final.append(tok)
+
+asyncio.run(main())
+```
+
+## Routing Profiles
+
+Choose the profile that best fits your needs:
+
+- **`economy`** - Cost-optimized routing, uses cheaper models when possible
+- **`balanced`** - Balance between cost and quality 
+- **`quality`** - Prioritizes response quality over cost
 
 ## Workflow
 
@@ -78,9 +297,10 @@ print(out)
   1. **Sign up for the PureAI platform** - Register and configure your LLM provider API keys
   2. **Get your router API key** - Generate an API key on the platform to use the service
   3. **Install the Python library** - Add the purerouter package to your project
-  4. **Choose the routing profile** - Select between economy, balanced, or quality according to your needs
-  5. **Implement routing** - Integrate PureRouter into your application flow
-  6. **Optional: Deploy models** - Deploy open source models and use them directly by ID
+  4. **Choose your approach** - Select sync/async and streaming based on your needs
+  5. **Choose the routing profile** - Select between economy, balanced, or quality
+  6. **Implement routing** - Integrate PureRouter into your application flow
+  7. **Optional: Deploy models** - Deploy open source models and use them directly by ID
 </Steps>
 
 ## Next Steps

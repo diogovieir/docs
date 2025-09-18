@@ -40,7 +40,7 @@ After selecting a model, configure the **instance type**, including GPU and memo
 
 ### 3. Configuration
 
-Fine-tune your model behavior with the following parameters:
+ model behavior with the following parameters:
 
 - **Temperature**: Controls randomness of responses. Lower = more deterministic, higher = more creative.
 - **Max Tokens**: Maximum length of the model’s output.
@@ -64,6 +64,18 @@ Once all steps are complete, click **Create Deployment**.
 Your deployment will be provisioned, and you will receive a **Deployment ID**.
 
 This Deployment ID is required to connect to the deployment via the API.
+
+## Deployment ID
+
+After creating a deployment, you will receive a unique ID that identifies your specific model. This is the ID you will use to communicate directly with the deployment through the API.
+
+![Deployment ID](../../images/id_deployments.png)
+
+The Deployment ID is essential for:
+- Making direct calls to the specific model
+- Ensuring response consistency
+- Accessing specialized or fine-tuned models
+- Implementing fallback systems
 
 ## Next Steps
 

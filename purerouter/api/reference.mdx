@@ -9,11 +9,11 @@ The PureRouter API allows you to interact with PureAI's intelligent LLM routing 
 
 ## Authentication
 
-All endpoints require authentication via API key. Contact support to obtain your access credentials.
+All endpoints require authentication via API key using the `x-router-key` header:
 
 ```bash
 # Authentication header example
-x-api-key: your_api_key_here
+x-router-key: sk_your_router_key_here
 ```
 
 ## Public Endpoints
@@ -27,18 +27,32 @@ Sends a query to be automatically routed to the most suitable model based on the
 **Example with curl:**
 
 ```bash
-curl -X POST https://api.pureai.com/v1/infer \
+curl -i -X POST \
   -H "Content-Type: application/json" \
-  -H "x-api-key: your_api_key_here" \
+  -H "x-router-key: sk_your_router_key_here" \
   -d '{
-    "messages": [
-      {"role": "system", "content": "You are a helpful assistant."},
-      {"role": "user", "content": "What is the capital of Brazil?"}
-    ],
+    "prompt": "Tell a long and detailed story about a dragon that learned to program in Python.",
     "profile": "balanced",
-    "max_tokens": 100,
-    "temperature": 0.7
-  }'
+    "max_tokens": 500,
+    "temperature": 0.7,
+    "stream": false
+  }' \
+  https://api.purerouter-api.com/v1/infer
+```
+
+**Example with curl (streaming):**
+
+```bash
+curl -i -X POST \
+  --no-buffer \
+  -H "Content-Type: application/json" \
+  -H "x-router-key: sk_your_router_key_here" \
+  -d '{
+    "prompt": "Tell a long and detailed story about a dragon that learned to program in Python.",
+    "profile": "economy",
+    "stream": true
+  }' \
+  https://api.purerouter-api.com/v1/infer
 ```
 
 **Example with Python:**
@@ -46,20 +60,18 @@ curl -X POST https://api.pureai.com/v1/infer \
 ```python
 import requests
 
-url = "https://api.pureai.com/v1/infer"
+url = "https://api.purerouter-api.com/v1/infer"
 headers = {
     "Content-Type": "application/json",
-    "x-api-key": "your_api_key_here"
+    "x-router-key": "sk_your_router_key_here"
 }
 
 payload = {
-    "messages": [
-        {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": "What is the capital of Brazil?"}
-    ],
+    "prompt": "Tell a long and detailed story about a dragon that learned to program in Python.",
     "profile": "balanced",
-    "max_tokens": 100,
-    "temperature": 0.7
+    "max_tokens": 500,
+    "temperature": 0.7,
+    "stream": False
 }
 
 response = requests.post(url, json=payload, headers=headers)
@@ -73,17 +85,48 @@ Sends a request to a specific model through its deployment ID.
 **Example with curl:**
 
 ```bash
-curl -X POST https://api.pureai.com/v1/deployments/deployment123/invoke \
+curl -i -X POST \
   -H "Content-Type: application/json" \
-  -H "x-api-key: your_api_key_here" \
+  -H "x-router-key: sk_your_router_key_here" \
   -d '{
-    "messages": [
-      {"role": "system", "content": "You are a finance specialist assistant."},
-      {"role": "user", "content": "Explain what inflation is."}
-    ],
-    "max_tokens": 150,
-    "temperature": 0.5
-  }'
+    "prompt": "Tell a brief story about PureAI.",
+    "max_tokens": 250,
+    "temperature": 0.8,
+    "stream": false
+  }' \
+  https://api.purerouter-api.com/v1/deployments/2bd06826-4e42-5105-a270-af36de66daf5/invoke
+```
+
+**Example with curl (streaming):**
+
+```bash
+curl -i -X POST \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -H "x-router-key: sk_your_router_key_here" \
+  -d '{
+    "prompt": "Tell a brief story about PureAI.",
+    "max_tokens": 250,
+    "temperature": 0.8,
+    "stream": true
+  }' \
+  https://api.purerouter-api.com/v1/deployments/{deployment_id}/invoke
+```
+
+**Example with curl (alternative format):**
+
+```bash
+curl -i -X POST \
+  -H "Content-Type: application/json" \
+  -H "x-router-key: sk_your_router_key_here" \
+  -d '{
+    "inputs": "Tell a brief story about PureAI.",
+    "parameters": {
+      "max_new_tokens": 250,
+      "temperature": 0.8
+    }
+  }' \
+  https://api.purerouter-api.com/v1/deployments/{deployment_id}/invoke
 ```
 
 **Example with Python:**
@@ -91,25 +134,75 @@ curl -X POST https://api.pureai.com/v1/deployments/deployment123/invoke \
 ```python
 import requests
 
-deployment_id = "deployment123"
-url = f"https://api.pureai.com/v1/deployments/{deployment_id}/invoke"
+deployment_id = "2bd06826-4e42-5105-a270-af36de66daf5"
+url = f"https://api.purerouter-api.com/v1/deployments/{deployment_id}/invoke"
 headers = {
     "Content-Type": "application/json",
-    "x-api-key": "your_api_key_here"
+    "x-router-key": "sk_your_router_key_here"
 }
 
 payload = {
-    "messages": [
-        {"role": "system", "content": "You are a finance specialist assistant."},
-        {"role": "user", "content": "Explain what inflation is."}
-    ],
-    "max_tokens": 150,
-    "temperature": 0.5
+    "prompt": "Tell a brief story about PureAI.",
+    "max_tokens": 250,
+    "temperature": 0.8,
+    "stream": False
 }
 
 response = requests.post(url, json=payload, headers=headers)
 print(response.json())
 ```
+
+**Example with Python (alternative format):**
+
+```python
+import requests
+
+deployment_id = ""
+url = f"https://api.purerouter-api.com/v1/deployments/{deployment_id}/invoke"
+headers = {
+    "Content-Type": "application/json",
+    "x-router-key": "sk_your_router_key_here"
+}
+
+payload = {
+    "inputs": "Tell a brief story about PureAI.",
+    "parameters": {
+        "max_new_tokens": 250,
+        "temperature": 0.8
+    }
+}
+
+response = requests.post(url, json=payload, headers=headers)
+print(response.json())
+```
+
+## Request Parameters
+
+### Common Parameters
+
+- **`prompt`** (string, required): The input text prompt for the model
+- **`max_tokens`** (integer, optional): Maximum number of tokens to generate
+- **`temperature`** (float, optional): Controls randomness (0.0 to 1.0). Lower = more deterministic, higher = more creative
+- **`top_p`** (float, optional): Nucleus sampling threshold (0.0 to 1.0)
+- **`stream`** (boolean, optional): Whether to stream the response. Default: false
+
+### Router-specific Parameters (/v1/infer)
+
+- **`profile`** (string, optional): Routing profile. Options: "economy", "balanced", "quality". Default: "balanced"
+
+### Deployment-specific Parameters (/v1/deployments/{deployment_id}/invoke)
+
+- **`deployment_id`** (string, required): The unique identifier of the deployment to invoke
+
+#### Alternative Format for Deployments
+
+Some deployments also support an alternative request format:
+
+- **`inputs`** (string, required): The input text prompt for the model (alternative to `prompt`)
+- **`parameters`** (object, optional): Configuration parameters wrapped in a parameters object
+  - **`max_new_tokens`** (integer, optional): Maximum number of new tokens to generate (alternative to `max_tokens`)
+  - **`temperature`** (float, optional): Controls randomness (0.0 to 1.0)
+  - **`top_p`** (float, optional): Nucleus sampling threshold (0.0 to 1.0)
 
 ## Response Examples
 
@@ -121,18 +214,19 @@ print(response.json())
   "model": "gpt-4-turbo",
   "choices": [
     {
-      "message": {
-        "role": "assistant",
-        "content": "The capital of Brazil is Brasília, located in the Federal District, in the Central-West region of the country. It was inaugurated on April 21, 1960, replacing Rio de Janeiro as the federal capital."
-      },
+      "text": "Once upon a time, in a mystical land far beyond the mountains, there lived a dragon named Pyrex who was unlike any other dragon in the realm. While his fellow dragons spent their days hoarding gold and breathing fire, Pyrex was fascinated by the strange glowing rectangles that humans carried around...",
       "finish_reason": "stop"
     }
   ],
   "usage": {
     "prompt_tokens": 25,
-    "completion_tokens": 42,
-    "total_tokens": 67
-  }
+    "completion_tokens": 142,
+    "total_tokens": 167
+  },
+  "provider": "openai",
+  "model_id": "gpt-4-turbo",
+  "latency_ms": 1250,
+  "profile": "balanced"
 }
 ```
 
@@ -141,23 +235,44 @@ print(response.json())
 ```json
 {
   "id": "resp_8b2c4d3e5f",
-  "model": "claude-3-sonnet",
+  "model": "llama-3.1-8b",
   "choices": [
     {
-      "message": {
-        "role": "assistant",
-        "content": "Inflation is the generalized and continuous increase in the prices of goods and services in an economy over time. When there is inflation, each unit of currency (like the dollar) buys fewer goods and services than it did previously, reducing the population's purchasing power.\n\nThe main causes of inflation include:\n\n1. Increased demand for products and services (demand inflation)\n2. Increased production costs (cost inflation)\n3. Excessive expansion of the monetary base\n4. Inflationary expectations\n\nInflation is measured by indices like the CPI (Consumer Price Index) in the US, which tracks price variations of a basket of products and services."
-      },
+      "text": "PureAI was born from a simple yet powerful vision: to democratize access to artificial intelligence and make it accessible to everyone, regardless of their technical background. Founded by a team of passionate engineers and researchers, PureAI started as a small project in a garage but quickly grew into a revolutionary platform that would change how people interact with AI technology.",
       "finish_reason": "stop"
     }
   ],
   "usage": {
-    "prompt_tokens": 32,
-    "completion_tokens": 138,
-    "total_tokens": 170
+    "prompt_tokens": 12,
+    "completion_tokens": 68,
+    "total_tokens": 80
   }
 }
 ```
+
+### Streaming Response Format
+
+When `stream: true` is set, responses are sent as Server-Sent Events (SSE):
+
+```
+data: {"choices": [{"text": "Once"}]}
+
+data: {"choices": [{"text": " upon"}]}
+
+data: {"choices": [{"text": " a"}]}
+
+data: {"choices": [{"text": " time"}]}
+
+data: [DONE]
+```
+
+## Routing Profiles
+
+Choose the profile that best fits your needs:
+
+- **`economy`** - Cost-optimized routing, uses cheaper models when possible
+- **`balanced`** - Balance between cost and quality (default)
+- **`quality`** - Prioritizes response quality over cost
 
 ## Error Handling
 
@@ -167,8 +282,8 @@ The PureRouter API returns standard HTTP status codes to indicate the success or
 
 - **200 OK**: The request was successful
 - **400 Bad Request**: The request contains invalid parameters or is malformed
-- **401 Unauthorized**: Authentication failure (invalid or missing API key)
-- **404 Not Found**: The requested resource was not found
+- **401 Unauthorized**: Authentication failure (invalid or missing router key)
+- **404 Not Found**: The requested resource was not found (e.g., deployment not found)
 - **500 Internal Server Error**: Internal server error
 
 ### Error Response Example
@@ -176,12 +291,22 @@ The PureRouter API returns standard HTTP status codes to indicate the success or
 ```json
 {
   "error": {
-    "message": "Invalid or expired API key",
+    "message": "Invalid or expired router key",
     "type": "authentication_error",
-    "param": "x-api-key",
-    "code": "invalid_api_key"
+    "param": "x-router-key",
+    "code": "invalid_router_key"
   }
 }
+```
+
+## Rate Limits
+
+API requests are subject to rate limiting based on your subscription plan. Rate limit information is included in response headers:
+
+```
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 999
+X-RateLimit-Reset: 1640995200
 ```
 
 Use the left menu to navigate through the complete details of each endpoint.
