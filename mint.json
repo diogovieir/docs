@@ -21,18 +21,14 @@
     }
   },
   "colors": {
-    "primary": "#8B5CF6",
-    "light": "#FAFAFA",
-    "dark": "#0A0A0B",
-    "background": {
-      "light": "#FFFFFF",
-      "dark": "#0A0A0B"
-    },
-    "anchors": {
-      "from": "#8B5CF6",
-      "to": "#A855F7"
-    }
-  },
+  "primary": "#8B5CF6",
+  "light": "#FAFAFA",
+  "dark": "#0A0A0B",
+  "anchors": {
+    "from": "#8B5CF6",
+    "to": "#A855F7"
+  }
+},
   "topbarLinks": [
     {
       "name": "Support",
