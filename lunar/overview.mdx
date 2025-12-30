@@ -24,30 +24,6 @@ Lunar is a Python SDK that provides a simple, OpenAI-compatible interface to acc
   </Card>
 </CardGroup>
 
-## Architecture
-
-```
-┌─────────────────────────────────────────────────┐
-│                  Your Application               │
-├─────────────────────────────────────────────────┤
-│                   Lunar SDK                     │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────┐ │
-│  │    Chat     │  │ Completions │  │  Evals  │ │
-│  └─────────────┘  └─────────────┘  └─────────┘ │
-├─────────────────────────────────────────────────┤
-│                  PureAI API                     │
-├─────────────────────────────────────────────────┤
-│   OpenAI   │  Anthropic  │  Groq  │  Together  │
-└─────────────────────────────────────────────────┘
-```
-
-## API Endpoints
-
-| Environment | Base URL |
-|-------------|----------|
-| Production | `https://api.pureai-api.com` |
-| Development | `https://dev-api.pureai-api.com` |
-
 ## Clients
 
 The SDK provides two client classes:
