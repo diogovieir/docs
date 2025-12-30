@@ -3,112 +3,133 @@ title: 'Welcome to PureAI'
 description: 'Complete platform for AI application development'
 ---
 
-{/* <img
-  className="block dark:hidden"
-  src="/images/hero-light.svg"
-  alt="Hero Light"
-/>
-<img
-  className="hidden dark:block"
-  src="/images/hero-dark.svg"
-  alt="Hero Dark"
-/> */}
-
 ## PureAI Platform
 
-PureAI offers a complete set of tools for developers who want to create advanced applications with artificial intelligence. Our platform consists of two completely distinct and independent products:
+PureAI offers a complete set of tools for developers who want to create advanced applications with artificial intelligence. Our platform provides:
 
-<CardGroup cols={2}>
+<CardGroup cols={3}>
   <Card
-    title="PureRouter"
-    icon="router"
-    href="/purerouter/overview"
+    title="Lunar SDK"
+    icon="code"
+    href="/lunar/overview"
   >
-    Independent product for intelligent LLM routing, optimizing cost, performance, and response quality.
+    Python SDK for LLM inference with intelligent fallbacks, cost tracking, and built-in evaluations.
+  </Card>
+  <Card
+    title="GPU Instances"
+    icon="server"
+    href="/pricing/instance-tiers"
+  >
+    Deploy and run open-source models on powerful GPU instances, from L4 to H200.
   </Card>
   <Card
     title="PureCPP"
-    icon="code"
+    icon="bolt"
     href="/purecpp/loaders/introduction"
   >
-    Separate product that offers a high-performance RAG framework in C++ for document processing and information retrieval.
+    High-performance RAG framework in C++ for document processing and information retrieval.
   </Card>
 </CardGroup>
 
-## Main Product Features
+## Platform Features
 
 <AccordionGroup>
-  <Accordion title="PureRouter: Intelligent LLM routing">
-    PureRouter is an independent product that allows directing queries to the most suitable models based on criteria such as cost, performance, and quality. This optimizes resource usage and improves user experience.
+  <Accordion title="Lunar SDK: OpenAI-Compatible LLM Access">
+    Access multiple LLM providers through a single API. Features automatic fallbacks, per-request cost tracking, and a comprehensive evaluation framework with 15+ built-in scorers.
   </Accordion>
-  <Accordion title="PureCPP: High-performance RAG framework">
-    PureCPP is a separate product that offers a complete set of tools for document processing, chunking, embedding, and information retrieval, all with the efficiency of C++.
+  <Accordion title="GPU Instances: Deploy Any Model">
+    Run open-source models like LLaMA, Qwen, DeepSeek, and more on dedicated GPU instances. Choose from 6 tiers ranging from entry-level L4 GPUs to enterprise H200 clusters.
+  </Accordion>
+  <Accordion title="PureCPP: High-Performance Document Processing">
+    Process documents at scale with C++ performance. Support for PDF, DOCX, TXT, and web content. Advanced chunking strategies and embedding generation.
   </Accordion>
 </AccordionGroup>
 
-## Product Characteristics
-
-<AccordionGroup>
-  <Accordion title="PureRouter: Cost and quality optimization">
-    PureRouter was specifically designed to manage and optimize the use of different language models, allowing you to balance costs and quality according to your specific needs.
-  </Accordion>
-  <Accordion title="PureCPP: Multiple format processing">
-    PureCPP offers support for various document formats, including PDF, DOCX, TXT, and web content, facilitating integration with different data sources.
-  </Accordion>
-  <Accordion title="Products with independent scalability">
-    Each product has its own architecture designed to scale according to your project's needs, maintaining high performance even with large data volumes. You can use one or both products, depending on your needs.
-  </Accordion>
-</AccordionGroup>
-
-## Get Started Now
+## Get Started
 
 <Tabs>
-  <Tab title="Using PureRouter">
+  <Tab title="Lunar SDK">
     <Steps>
-      <Step title="Install PureRouter">
-        Follow the [installation guide](/purerouter/installation) to set up PureRouter in your environment.
+      <Step title="Install the SDK">
+        ```bash
+        pip install lunar
+        ```
       </Step>
-      <Step title="Configure your first routing">
-        Learn to create [routing profiles](/purerouter/guides/routing-profiles) to direct queries to the most suitable models.
+      <Step title="Set your API key">
+        ```bash
+        export LUNAR_API_KEY="your-api-key"
+        ```
       </Step>
-      <Step title="Deploy your application">
-        Follow our [deployment guide](/purerouter/guides/deployments) to put your application into production.
+      <Step title="Make your first request">
+        ```python
+        from lunar import Lunar
+
+        client = Lunar()
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": "Hello!"}]
+        )
+        print(response.choices[0].message.content)
+        ```
       </Step>
     </Steps>
+
+    <Card title="Full Quickstart Guide" icon="rocket" href="/lunar/quickstart">
+      Learn more about the Lunar SDK
+    </Card>
   </Tab>
 
-  <Tab title="Using PureCPP">
+  <Tab title="GPU Instances">
     <Steps>
-      <Step title="Set up the environment for PureCPP">
+      <Step title="Choose your model">
+        Browse 30+ pre-configured models from LLaMA, Qwen, DeepSeek, and more.
+      </Step>
+      <Step title="Select an instance tier">
+        Choose from XS (~$0.20/h) to XXL (~$30/h) based on your model size.
+      </Step>
+      <Step title="Deploy and use">
+        Deploy with one click and access via the Lunar SDK or REST API.
+      </Step>
+    </Steps>
+
+    <Card title="View Instance Tiers" icon="server" href="/pricing/instance-tiers">
+      See all GPU options and pricing
+    </Card>
+  </Tab>
+
+  <Tab title="PureCPP">
+    <Steps>
+      <Step title="Set up the environment">
         Follow the [setup guide](/setup) to prepare your C++ development environment.
       </Step>
-      <Step title="Get started with PureCPP">
+      <Step title="Get started">
         Learn the basic concepts in the [quickstart guide](/purecpp/quickstart).
       </Step>
-      <Step title="Explore document loaders">
-        Learn about the different options to [load documents](/purecpp/loaders/introduction) in your RAG project.
+      <Step title="Load documents">
+        Learn about [document loaders](/purecpp/loaders/introduction) for your RAG project.
       </Step>
     </Steps>
-  </Tab>
 
-  <Tab title="Using both products">
-    <Note>
-      PureRouter and PureCPP are completely independent products that can be used separately or together, depending on your needs.
-    </Note>
-
-    <Steps>
-      <Step title="Decide which product meets your needs">
-        Evaluate whether you need LLM routing (PureRouter), RAG capabilities (PureCPP), or both.
-      </Step>
-      <Step title="Install the products separately">
-        Follow the specific installation guides for each product you decided to use.
-      </Step>
-      <Step title="Integrate as needed">
-        Although they are distinct products, you can integrate them into your workflow as needed.
-      </Step>
-    </Steps>
+    <Card title="PureCPP Quickstart" icon="bolt" href="/purecpp/quickstart">
+      Get started with PureCPP
+    </Card>
   </Tab>
 </Tabs>
+
+## Pricing
+
+| Tier | GPU | VRAM | Price | Best For |
+|------|-----|------|-------|----------|
+| XS | 1x L4 | 24GB | ~$0.20/h | 7B-13B models |
+| S | 1x L40S | 48GB | ~$0.60/h | 13B-34B models |
+| M | 4x A10G | 96GB | ~$1.80/h | 70B INT4 |
+| L | 4x L40S | 192GB | ~$3.50/h | 70B FP16 |
+| XL | 8x A100 | 320-640GB | ~$12/h | 180B models |
+| XXL | 8x H100/H200 | 640-1128GB | ~$20-30/h | 405B models |
+
+<Card title="Full Pricing Details" icon="credit-card" href="/pricing/overview">
+  View complete pricing information
+</Card>
 
 ## Community and Support
 
@@ -125,6 +146,6 @@ PureAI offers a complete set of tools for developers who want to create advanced
     icon="github"
     href="https://github.com/pureai-ecosystem"
   >
-    Contribute to development and report issues in our repository.
+    Contribute to development and report issues.
   </Card>
 </CardGroup>

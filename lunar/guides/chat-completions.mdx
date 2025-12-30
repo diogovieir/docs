@@ -1,0 +1,154 @@
+---
+title: 'Chat Completions'
+description: 'Create chat completions with the Lunar SDK'
+---
+
+# Chat Completions
+
+The Chat Completions API generates responses based on a conversation history. It supports multi-turn conversations with system, user, and assistant messages.
+
+## Basic Usage
+
+```python
+from lunar import Lunar
+
+client = Lunar()
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "user", "content": "What is the capital of France?"}
+    ]
+)
+
+print(response.choices[0].message.content)
+# Output: The capital of France is Paris.
+```
+
+## Message Roles
+
+| Role | Description |
+|------|-------------|
+| `system` | Sets the behavior and context for the assistant |
+| `user` | Represents the human user's input |
+| `assistant` | Represents previous assistant responses |
+
+### Multi-turn Conversation
+
+```python
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "system", "content": "You are a helpful math tutor."},
+        {"role": "user", "content": "What is 2 + 2?"},
+        {"role": "assistant", "content": "2 + 2 equals 4."},
+        {"role": "user", "content": "And what is that multiplied by 3?"}
+    ]
+)
+
+print(response.choices[0].message.content)
+# Output: 4 multiplied by 3 equals 12.
+```
+
+## Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `model` | `str` | Required | Model identifier (e.g., `gpt-4o-mini`) |
+| `messages` | `list` | Required | List of message objects |
+| `max_tokens` | `int` | Model default | Maximum tokens to generate |
+| `temperature` | `float` | `1.0` | Randomness (0.0 to 2.0) |
+| `top_p` | `float` | `1.0` | Nucleus sampling parameter |
+| `stop` | `list[str]` | `None` | Stop sequences |
+| `fallbacks` | `list[str]` | `None` | Fallback models |
+
+### Example with Parameters
+
+```python
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "system", "content": "Be concise."},
+        {"role": "user", "content": "Explain quantum computing."}
+    ],
+    max_tokens=100,
+    temperature=0.7,
+    top_p=0.9
+)
+```
+
+## Response Structure
+
+```python
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Hello!"}]
+)
+
+# Response fields
+print(response.id)                           # "chatcmpl-abc123"
+print(response.model)                        # "gpt-4o-mini"
+print(response.choices[0].message.role)      # "assistant"
+print(response.choices[0].message.content)   # "Hello! How can I help?"
+print(response.choices[0].finish_reason)     # "stop"
+
+# Usage and cost
+print(response.usage.prompt_tokens)          # 8
+print(response.usage.completion_tokens)      # 7
+print(response.usage.total_tokens)           # 15
+print(response.usage.total_cost_usd)         # 0.000045
+```
+
+## Using ChatMessage Objects
+
+You can also use `ChatMessage` objects instead of dictionaries:
+
+```python
+from lunar.types import ChatMessage
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        ChatMessage(role="system", content="You are helpful."),
+        ChatMessage(role="user", content="Hello!")
+    ]
+)
+```
+
+## Force Specific Provider
+
+Use the `provider/model` syntax to force a specific provider:
+
+```python
+# Force OpenAI provider
+response = client.chat.completions.create(
+    model="openai/gpt-4o-mini",
+    messages=[{"role": "user", "content": "Hello!"}]
+)
+
+# Force Anthropic provider
+response = client.chat.completions.create(
+    model="anthropic/claude-3-haiku",
+    messages=[{"role": "user", "content": "Hello!"}]
+)
+```
+
+## Available Models
+
+Common models include:
+
+| Model | Provider | Description |
+|-------|----------|-------------|
+| `gpt-4o-mini` | OpenAI | Fast, efficient model |
+| `gpt-4o` | OpenAI | Most capable GPT-4 |
+| `claude-3-haiku` | Anthropic | Fast Claude model |
+| `claude-3-5-sonnet` | Anthropic | Balanced Claude model |
+| `llama-3.1-8b` | Various | Open-source Llama |
+
+List all available models:
+
+```python
+models = client.models.list()
+for model in models.data:
+    print(f"{model.id} (by {model.owned_by})")
+```

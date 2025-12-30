@@ -1,0 +1,585 @@
+---
+title: 'Models & Providers'
+description: 'List available models and providers, and force specific providers'
+---
+
+# Models & Providers
+
+The Lunar SDK provides access to models from multiple providers. You can list available models, check provider status, and force specific providers for your requests.
+
+## Listing Models
+
+```python
+from lunar import Lunar
+
+client = Lunar()
+
+models = client.models.list()
+
+for model in models.data:
+    print(f"{model.id} (owned by: {model.owned_by})")
+```
+
+Output:
+
+```
+gpt-4o-mini (owned by: openai)
+gpt-4o (owned by: openai)
+claude-3-haiku (owned by: anthropic)
+claude-3-5-sonnet (owned by: anthropic)
+llama-3.1-8b (owned by: meta)
+...
+```
+
+## Model Object
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | `str` | Model identifier |
+| `object` | `str` | Always `"model"` |
+| `created` | `int` | Unix timestamp |
+| `owned_by` | `str` | Provider/owner name |
+
+## Listing Providers
+
+See which providers are available for a specific model:
+
+```python
+providers = client.providers.list(model="gpt-4o-mini")
+
+for provider in providers.providers:
+    print(f"{provider.id}: {provider.type} (enabled: {provider.enabled})")
+```
+
+Output:
+
+```
+openai: primary (enabled: True)
+groq: backup (enabled: True)
+```
+
+## Provider Object
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | `str` | Provider identifier |
+| `type` | `str` | Provider type (`primary`, `backup`) |
+| `enabled` | `bool` | Whether the provider is enabled |
+| `params` | `dict` | Provider-specific parameters |
+
+## Force Specific Provider
+
+Use the `provider/model` syntax to route requests to a specific provider:
+
+```python
+# Force OpenAI
+response = client.chat.completions.create(
+    model="openai/gpt-4o-mini",
+    messages=[{"role": "user", "content": "Hello!"}]
+)
+
+# Force Anthropic
+response = client.chat.completions.create(
+    model="anthropic/claude-3-haiku",
+    messages=[{"role": "user", "content": "Hello!"}]
+)
+
+# Force Groq
+response = client.chat.completions.create(
+    model="groq/llama-3.1-8b",
+    messages=[{"role": "user", "content": "Hello!"}]
+)
+```
+
+## When to Force Providers
+
+| Scenario | Recommendation |
+|----------|----------------|
+| General use | Let the API choose (no prefix) |
+| Testing specific provider | Use provider prefix |
+| Compliance requirements | Use provider prefix |
+| Comparing providers | Use provider prefix |
+
+## Common Providers
+
+| Provider | Prefix | Highlights |
+|----------|--------|------------|
+| OpenAI | `openai/` | GPT-4o, GPT-5, o1, o3 reasoning models |
+| Anthropic | `anthropic/` | Claude 3, Claude 4, Claude 4.5 series |
+| Google | `google/` | Gemini 2.0, 2.5, 3 series |
+| Mistral | `mistral/` | Mistral, Magistral, Codestral |
+| DeepSeek | `deepseek/` | Chat and reasoning models |
+| Perplexity | `perplexity/` | Sonar search models |
+| Groq | `groq/` | Ultra-fast inference (Llama, Qwen) |
+| Cerebras | `cerebras/` | Fast inference (Llama, Qwen) |
+| Cohere | `cohere/` | Command R models |
+| AWS Bedrock | `bedrock/` | Nova, Llama, Mistral |
+
+## Async Usage
+
+```python
+from lunar import AsyncLunar
+
+async def list_models():
+    async with AsyncLunar() as client:
+        models = await client.models.list()
+        for model in models.data:
+            print(model.id)
+
+async def list_providers():
+    async with AsyncLunar() as client:
+        providers = await client.providers.list(model="gpt-4o-mini")
+        for provider in providers.providers:
+            print(provider.id)
+```
+
+## Finding the Right Model
+
+```python
+def find_models_by_owner(client, owner: str):
+    """Find all models from a specific provider."""
+    models = client.models.list()
+    return [m for m in models.data if m.owned_by == owner]
+
+# Get all OpenAI models
+openai_models = find_models_by_owner(client, "openai")
+for model in openai_models:
+    print(model.id)
+```
+
+## Model Selection Guidelines
+
+| Need | Recommended Models |
+|------|-------------------|
+| Low cost | `gpt-4o-mini`, `claude-3-haiku`, `llama-3.1-8b` |
+| Fast responses | `claude-3-haiku`, `gpt-4o-mini` |
+| Complex reasoning | `gpt-4o`, `claude-3-7-sonnet`, `o3` |
+| Code generation | `gpt-4o`, `claude-sonnet-4`, `codestral-latest` |
+| Large context | `claude-3-7-sonnet` (200K), `gpt-4o` (128K), `gemini-2.5-pro` (1M) |
+| Research | `sonar-deep-research`, `o3-deep-research` |
+
+## Custom Deployments
+
+Deploy your own models on PureAI's GPU infrastructure. When you create a deployment, a unique model ID is generated that you can use directly with the Lunar SDK.
+
+<Note>
+PureAI supports all text generation models compatible with vLLM. Deploy any open-source model from Hugging Face or your own fine-tuned models.
+</Note>
+
+### How It Works
+
+1. Create a deployment on the PureAI Console
+2. Select your model and GPU tier
+3. Get your unique model ID (e.g., `DeepSeek-R1-Distill-Llama-8B`)
+4. Use `pureai/{model-id}` in your requests
+
+```python
+from lunar import Lunar
+
+client = Lunar()
+
+# Use your deployed model
+response = client.chat.completions.create(
+    model="pureai/DeepSeek-R1-Distill-Llama-8B",
+    messages=[{"role": "user", "content": "Hello!"}]
+)
+```
+
+### GPU Tiers & Pricing
+
+<AccordionGroup>
+
+<Accordion title="GPU XS - Small Models (7B-13B)" icon="microchip">
+
+**GPU XS (g6.xlarge)**
+| Spec | Value |
+|------|-------|
+| GPU | NVIDIA L4 |
+| VRAM | 24GB |
+| vCPUs | 4 |
+| RAM | 16GB |
+| Storage | 250GB NVMe |
+| Network | 10 Gbps |
+| Spot Price | ~$0.20/h |
+| Model Size | 7B - 13B |
+
+**GPU XS 2x (g6.2xlarge)**
+| Spec | Value |
+|------|-------|
+| GPU | NVIDIA L4 |
+| VRAM | 24GB |
+| vCPUs | 8 |
+| RAM | 32GB |
+| Storage | 450GB NVMe |
+| Network | 15 Gbps |
+| Spot Price | ~$0.35/h |
+| Model Size | 7B - 13B |
+
+</Accordion>
+
+<Accordion title="GPU S - Medium Models (13B-34B)" icon="microchip">
+
+**GPU S (g6e.xlarge)**
+| Spec | Value |
+|------|-------|
+| GPU | NVIDIA L40S |
+| VRAM | 48GB |
+| vCPUs | 4 |
+| RAM | 16GB |
+| Storage | 250GB NVMe |
+| Network | 10 Gbps |
+| Spot Price | ~$0.60/h |
+| Model Size | 13B - 34B |
+
+**GPU S 2x (g6e.2xlarge)**
+| Spec | Value |
+|------|-------|
+| GPU | NVIDIA L40S |
+| VRAM | 48GB |
+| vCPUs | 8 |
+| RAM | 32GB |
+| Storage | 450GB NVMe |
+| Network | 15 Gbps |
+| Spot Price | ~$1.00/h |
+| Model Size | 13B - 34B |
+
+</Accordion>
+
+<Accordion title="GPU M - Large Models INT4 (30B-70B)" icon="server">
+
+**GPU M (g5.12xlarge)**
+| Spec | Value |
+|------|-------|
+| GPU | 4x NVIDIA A10G |
+| VRAM | 96GB |
+| vCPUs | 48 |
+| RAM | 192GB |
+| Storage | 3.8TB NVMe |
+| Network | 40 Gbps |
+| Spot Price | ~$1.80/h |
+| Model Size | 30B - 70B INT4 |
+
+**GPU M 2x (g5.24xlarge)**
+| Spec | Value |
+|------|-------|
+| GPU | 4x NVIDIA A10G |
+| VRAM | 96GB |
+| vCPUs | 96 |
+| RAM | 384GB |
+| Storage | 3.8TB NVMe |
+| Network | 50 Gbps |
+| Spot Price | ~$3.00/h |
+| Model Size | 30B - 70B INT4 |
+
+**GPU M 4x (g5.48xlarge)**
+| Spec | Value |
+|------|-------|
+| GPU | 8x NVIDIA A10G |
+| VRAM | 192GB |
+| vCPUs | 192 |
+| RAM | 768GB |
+| Storage | 7.6TB NVMe |
+| Network | 100 Gbps |
+| Spot Price | ~$5.00/h |
+| Model Size | 30B - 70B INT4 |
+
+</Accordion>
+
+<Accordion title="GPU L - Large Models FP16 (70B)" icon="server">
+
+**GPU L (g6e.12xlarge)**
+| Spec | Value |
+|------|-------|
+| GPU | 4x NVIDIA L40S |
+| VRAM | 192GB |
+| vCPUs | 48 |
+| RAM | 384GB |
+| Storage | 3.8TB NVMe |
+| Network | 40 Gbps |
+| Spot Price | ~$3.50/h |
+| Model Size | 70B FP16 |
+
+**GPU L 2x (g6e.24xlarge)**
+| Spec | Value |
+|------|-------|
+| GPU | 4x NVIDIA L40S |
+| VRAM | 192GB |
+| vCPUs | 96 |
+| RAM | 768GB |
+| Storage | 3.8TB NVMe |
+| Network | 50 Gbps |
+| Spot Price | ~$6.00/h |
+| Model Size | 70B FP16 |
+
+**GPU L 4x (g6e.48xlarge)**
+| Spec | Value |
+|------|-------|
+| GPU | 8x NVIDIA L40S |
+| VRAM | 384GB |
+| vCPUs | 192 |
+| RAM | 1536GB |
+| Storage | 7.6TB NVMe |
+| Network | 100 Gbps |
+| Spot Price | ~$10.00/h |
+| Model Size | 70B FP16 |
+
+</Accordion>
+
+<Accordion title="GPU XL - Extra Large Models (70B-180B)" icon="database">
+
+**GPU XL (p4d.24xlarge)**
+| Spec | Value |
+|------|-------|
+| GPU | 8x NVIDIA A100 (40GB) |
+| VRAM | 320GB |
+| vCPUs | 96 |
+| RAM | 1152GB |
+| Storage | 8TB NVMe |
+| Network | 400 Gbps EFA |
+| Spot Price | ~$12.00/h |
+| Model Size | 70B - 180B |
+
+**GPU XL 80GB (p4de.24xlarge)**
+| Spec | Value |
+|------|-------|
+| GPU | 8x NVIDIA A100 (80GB) |
+| VRAM | 640GB |
+| vCPUs | 96 |
+| RAM | 1152GB |
+| Storage | 8TB NVMe |
+| Network | 400 Gbps EFA |
+| Spot Price | ~$18.00/h |
+| Model Size | 70B - 180B+ |
+
+</Accordion>
+
+<Accordion title="GPU XXL - Frontier Models (405B)" icon="rocket">
+
+**GPU XXL H100 (p5.48xlarge)**
+| Spec | Value |
+|------|-------|
+| GPU | 8x NVIDIA H100 (80GB) |
+| VRAM | 640GB |
+| vCPUs | 192 |
+| RAM | 2048GB |
+| Storage | 8TB NVMe |
+| Network | 3200 Gbps EFA v2 |
+| Spot Price | ~$20.00/h |
+| Model Size | 405B FP8 |
+
+**GPU XXL H200 (p5e.48xlarge)**
+| Spec | Value |
+|------|-------|
+| GPU | 8x NVIDIA H200 (141GB) |
+| VRAM | 1128GB |
+| vCPUs | 192 |
+| RAM | 2048GB |
+| Storage | 8TB NVMe |
+| Network | 3200 Gbps EFA v2 |
+| Spot Price | ~$30.00/h |
+| Model Size | 405B FP16 |
+
+</Accordion>
+
+</AccordionGroup>
+
+### Tier Selection Guide
+
+| Model Size | Recommended Tier | Example Models |
+|------------|------------------|----------------|
+| 7B - 13B | GPU XS | Llama 3.1 8B, Mistral 7B, Qwen 7B |
+| 13B - 34B | GPU S | CodeLlama 34B, Mixtral 8x7B |
+| 30B - 70B INT4 | GPU M | Llama 3.1 70B (INT4), DeepSeek 67B |
+| 70B FP16 | GPU L | Llama 3.1 70B (FP16), Qwen 72B |
+| 70B - 180B | GPU XL | Falcon 180B, DBRX |
+| 405B | GPU XXL | Llama 3.1 405B |
+
+---
+
+## Available Models
+
+<AccordionGroup>
+
+<Accordion title="OpenAI" icon="microchip">
+
+**GPT-4o Series**
+- `gpt-4o` - Latest multimodal flagship model
+- `gpt-4o-mini` - Fast and cost-effective
+- `gpt-4o-2024-05-13` - Specific dated version
+- `gpt-4o-search-preview` - With web search
+- `gpt-4o-mini-search-preview` - Mini with web search
+
+**GPT-4.1 Series**
+- `gpt-4.1` - Enhanced GPT-4
+- `gpt-4.1-mini` - Smaller variant
+- `gpt-4.1-nano` - Fastest variant
+
+**GPT-5 Series**
+- `gpt-5` - Next generation model
+- `gpt-5-pro` - Professional tier
+- `gpt-5-mini` - Smaller variant
+- `gpt-5-nano` - Fastest variant
+- `gpt-5-chat-latest` - Latest chat version
+- `gpt-5-codex` - Code specialized
+- `gpt-5-search-api` - With search capabilities
+
+**o1 Reasoning Series**
+- `o1` - Advanced reasoning model
+- `o1-mini` - Smaller reasoning model
+- `o1-pro` - Professional reasoning
+
+**o3 Reasoning Series**
+- `o3` - Latest reasoning model
+- `o3-mini` - Smaller variant
+- `o3-deep-research` - Deep research capabilities
+
+**o4 Series**
+- `o4-mini` - Compact reasoning
+- `o4-mini-deep-research` - With deep research
+
+**Code Models**
+- `codex-mini-latest` - Code generation
+
+</Accordion>
+
+<Accordion title="Anthropic" icon="brain">
+
+**Claude 4.5 Series**
+- `claude-opus-4-5` - Most capable, complex tasks
+- `claude-sonnet-4-5` - Balanced performance
+- `claude-haiku-4-5` - Fast and efficient
+
+**Claude 4 Series**
+- `claude-opus-4` - High capability
+- `claude-opus-4-1` - Updated variant
+- `claude-sonnet-4` - Balanced model
+
+**Claude 3.7 Series**
+- `claude-3-7-sonnet` - Latest Sonnet (200K context)
+
+**Claude 3.5 Series**
+- `claude-3-5-haiku` - Fast responses
+
+**Claude 3 Series**
+- `claude-3-opus` - Most capable v3
+- `claude-3-haiku` - Fast and affordable
+
+</Accordion>
+
+<Accordion title="Google (Gemini)" icon="google">
+
+**Gemini 3 Preview**
+- `gemini-3-pro-preview` - Next gen professional
+- `gemini-3-flash-preview` - Next gen fast
+
+**Gemini 2.5 Series**
+- `gemini-2.5-pro` - Professional tier (1M context)
+- `gemini-2.5-flash` - Fast responses
+- `gemini-2.5-flash-lite` - Lightweight version
+
+**Gemini 2.0 Series**
+- `gemini-2.0-flash` - Fast multimodal
+- `gemini-2.0-flash-lite` - Lightweight version
+
+</Accordion>
+
+<Accordion title="Mistral" icon="wind">
+
+**Core Models**
+- `mistral-large-latest` - Most capable
+- `mistral-medium-latest` - Balanced
+- `mistral-small-latest` - Fast and efficient
+
+**Magistral Series**
+- `magistral-medium-latest` - Reasoning medium
+- `magistral-small-latest` - Reasoning small
+
+**Code Models**
+- `codestral-latest` - Code specialized
+
+**Open Models**
+- `open-mistral-nemo` - Open source variant
+
+</Accordion>
+
+<Accordion title="DeepSeek" icon="magnifying-glass">
+
+- `deepseek-chat` - General chat model
+- `deepseek-reasoner` - Advanced reasoning
+
+</Accordion>
+
+<Accordion title="Perplexity (Sonar)" icon="globe">
+
+- `sonar` - Base search model
+- `sonar-pro` - Enhanced search
+- `sonar-reasoning` - With reasoning
+- `sonar-reasoning-pro` - Pro reasoning
+- `sonar-deep-research` - In-depth research
+
+</Accordion>
+
+<Accordion title="Groq" icon="bolt">
+
+**Llama Models**
+- `groq-llama-3.1-8b-instant` - Ultra fast 8B
+- `groq-llama-3.3-70b-versatile` - Versatile 70B
+- `groq-llama-4-scout` - Scout model
+- `groq-llama-4-maverick` - Maverick model
+
+**Qwen Models**
+- `groq-qwen3-32b` - Qwen 32B
+
+**GPT-OSS Models**
+- `groq-gpt-oss-20b` - Open source 20B
+- `groq-gpt-oss-120b` - Open source 120B
+
+**Other Models**
+- `groq-kimi-k2-instruct` - Kimi K2
+
+</Accordion>
+
+<Accordion title="Cerebras" icon="microchip-ai">
+
+**Llama Models**
+- `cerebras-llama-3.1-8b` - Fast 8B
+- `cerebras-llama-3.3-70b` - Fast 70B
+
+**Qwen Models**
+- `cerebras-qwen-3-32b` - Qwen 32B
+- `cerebras-qwen-3-235b` - Qwen 235B
+
+**Other Models**
+- `cerebras-gpt-oss-120b` - GPT OSS 120B
+- `cerebras-zai-glm-4.6` - ZAI GLM
+
+</Accordion>
+
+<Accordion title="Cohere" icon="comments">
+
+- `cohere-command-r` - Command R base
+- `cohere-command-r-plus` - Enhanced Command R
+- `cohere-command-r7b` - Lightweight 7B
+
+</Accordion>
+
+<Accordion title="AWS Bedrock" icon="aws">
+
+**Amazon Nova**
+- `amazon-nova-micro` - Smallest, fastest
+- `amazon-nova-lite` - Lightweight
+- `amazon-nova-pro` - Professional
+- `amazon-nova-premier` - Most capable
+
+**Llama on Bedrock**
+- `llama-3-1-8b` - Llama 3.1 8B
+- `llama-3-1-70b` - Llama 3.1 70B
+- `llama-3-3-70b` - Llama 3.3 70B
+
+**Mistral on Bedrock**
+- `mistral-large-bedrock` - Mistral Large
+- `mixtral-8x7b` - Mixtral MoE
+
+</Accordion>
+
+</AccordionGroup>

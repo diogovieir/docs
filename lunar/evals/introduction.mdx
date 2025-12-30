@@ -1,0 +1,112 @@
+---
+title: 'Evaluations Introduction'
+description: 'Test and measure the quality of your LLM outputs'
+---
+
+# Evaluations
+
+The Lunar SDK includes a built-in evaluation framework to test and measure the quality of your LLM outputs. Evaluations help you understand how well your models perform and identify areas for improvement.
+
+## Why Evaluate?
+
+- **Quality Assurance**: Verify outputs meet your requirements
+- **Model Comparison**: Compare different models objectively
+- **Regression Testing**: Detect quality degradation over time
+- **Prompt Optimization**: Measure impact of prompt changes
+
+## Key Concepts
+
+### Dataset
+
+A collection of test cases, each with an `input` and optionally an `expected` output:
+
+```python
+dataset = [
+    {"input": "What is 2+2?", "expected": "4"},
+    {"input": "Capital of France?", "expected": "Paris"},
+    {"input": "What color is the sky?", "expected": "blue"},
+]
+```
+
+### Task
+
+A function that takes an input and returns an output (typically by calling an LLM):
+
+```python
+def task(input_text):
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": input_text}]
+    )
+    return response.choices[0].message.content
+```
+
+### Scorers
+
+Functions that evaluate the output and return a score (0.0 to 1.0):
+
+```python
+from lunar.evals import exactMatch, contains
+
+# Built-in scorer
+scorer = exactMatch  # Returns 1.0 if output == expected, else 0.0
+```
+
+## Quick Example
+
+```python
+from lunar import Lunar
+from lunar.evals import exactMatch, contains
+
+client = Lunar()
+
+result = client.evals.run(
+    name="QA Test",
+    dataset=[
+        {"input": "What is 2+2?", "expected": "4"},
+        {"input": "Capital of France?", "expected": "Paris"},
+    ],
+    task=lambda x: client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": x}]
+    ).choices[0].message.content,
+    scorers=[exactMatch, contains],
+)
+
+# View results
+print(f"Success rate: {result.summary.success_rate:.1%}")
+for scorer_name, summary in result.summary.scores.items():
+    print(f"{scorer_name}: mean={summary.mean:.2f}, std={summary.std_dev:.2f}")
+```
+
+## Scorer Types
+
+| Type | Description | Example |
+|------|-------------|---------|
+| Built-in | Pre-instantiated scorers | `exactMatch`, `jsonValid` |
+| Factory | Parameterized scorers | `regex(pattern)`, `llmJudge(...)` |
+| Custom | Your own scoring logic | `@Scorer` decorator |
+
+## Evaluation Flow
+
+1. **Dataset** - Provide your test cases with inputs and expected outputs
+2. **Task** - Your function calls the LLM with each input
+3. **Scorers** - Each output is evaluated by one or more scorers
+4. **Results** - Get aggregated scores and detailed per-case results
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Running Evals" icon="play" href="/lunar/evals/running-evals">
+    Learn how to run evaluations
+  </Card>
+  <Card title="Built-in Scorers" icon="list-check" href="/lunar/evals/built-in-scorers">
+    Explore pre-built scorers
+  </Card>
+  <Card title="Factory Scorers" icon="wrench" href="/lunar/evals/factory-scorers">
+    Parameterized scorers
+  </Card>
+  <Card title="LLM Judge" icon="scale-balanced" href="/lunar/evals/llm-judge">
+    AI-powered evaluation
+  </Card>
+</CardGroup>

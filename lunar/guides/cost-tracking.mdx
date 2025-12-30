@@ -1,0 +1,186 @@
+---
+title: 'Cost Tracking'
+description: 'Monitor per-request costs and token usage'
+---
+
+# Cost Tracking
+
+Every response from the Lunar SDK includes detailed usage and cost information. This allows you to monitor spending and optimize your usage in real-time.
+
+## Usage Object
+
+```python
+from lunar import Lunar
+
+client = Lunar()
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "What is 2+2?"}]
+)
+
+usage = response.usage
+```
+
+## Available Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `prompt_tokens` | `int` | Tokens in the input/prompt |
+| `completion_tokens` | `int` | Tokens in the generated output |
+| `total_tokens` | `int` | Total tokens used |
+| `input_cost_usd` | `float` | Cost for input tokens (USD) |
+| `output_cost_usd` | `float` | Cost for output tokens (USD) |
+| `cache_input_cost_usd` | `float` | Cost for cached tokens (if applicable) |
+| `total_cost_usd` | `float` | Total request cost (USD) |
+| `latency_ms` | `float` | Total request latency (milliseconds) |
+| `ttft_ms` | `float` | Time to first token (milliseconds) |
+
+## Accessing Cost Data
+
+```python
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Explain quantum computing in one paragraph."}]
+)
+
+# Token counts
+print(f"Input tokens:  {response.usage.prompt_tokens}")
+print(f"Output tokens: {response.usage.completion_tokens}")
+print(f"Total tokens:  {response.usage.total_tokens}")
+
+# Cost breakdown
+print(f"Input cost:  ${response.usage.input_cost_usd:.6f}")
+print(f"Output cost: ${response.usage.output_cost_usd:.6f}")
+print(f"Total cost:  ${response.usage.total_cost_usd:.6f}")
+
+# Performance metrics
+print(f"Latency:     {response.usage.latency_ms:.1f}ms")
+print(f"TTFT:        {response.usage.ttft_ms:.1f}ms")
+```
+
+Example output:
+
+```
+Input tokens:  12
+Output tokens: 87
+Total tokens:  99
+Input cost:  $0.000018
+Output cost: $0.000131
+Total cost:  $0.000149
+Latency:     1245.3ms
+TTFT:        312.5ms
+```
+
+## Tracking Total Spend
+
+Track cumulative costs across multiple requests:
+
+```python
+class CostTracker:
+    def __init__(self):
+        self.total_cost = 0.0
+        self.total_tokens = 0
+        self.request_count = 0
+
+    def track(self, response):
+        if response.usage:
+            self.total_cost += response.usage.total_cost_usd or 0
+            self.total_tokens += response.usage.total_tokens
+            self.request_count += 1
+
+    def summary(self):
+        return {
+            "total_cost_usd": self.total_cost,
+            "total_tokens": self.total_tokens,
+            "requests": self.request_count,
+            "avg_cost_per_request": self.total_cost / self.request_count if self.request_count > 0 else 0
+        }
+
+# Usage
+tracker = CostTracker()
+
+for question in questions:
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": question}]
+    )
+    tracker.track(response)
+
+print(tracker.summary())
+# {'total_cost_usd': 0.0234, 'total_tokens': 1523, 'requests': 10, 'avg_cost_per_request': 0.00234}
+```
+
+## Budget Monitoring
+
+Set a budget limit and monitor usage:
+
+```python
+class BudgetMonitor:
+    def __init__(self, budget_usd: float):
+        self.budget = budget_usd
+        self.spent = 0.0
+
+    def can_proceed(self) -> bool:
+        return self.spent < self.budget
+
+    def record(self, response):
+        if response.usage and response.usage.total_cost_usd:
+            self.spent += response.usage.total_cost_usd
+
+    @property
+    def remaining(self) -> float:
+        return max(0, self.budget - self.spent)
+
+# Usage
+monitor = BudgetMonitor(budget_usd=1.00)  # $1 budget
+
+while monitor.can_proceed():
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": next_question}]
+    )
+    monitor.record(response)
+    print(f"Remaining budget: ${monitor.remaining:.4f}")
+```
+
+## Cost Optimization Tips
+
+### 1. Choose the Right Model
+
+| Model | Cost Level | Best For |
+|-------|------------|----------|
+| `gpt-4o-mini` | Low | Simple tasks |
+| `claude-3-haiku` | Low | Fast responses |
+| `llama-3.1-8b` | Very Low | High volume |
+| `gpt-4o` | High | Complex reasoning |
+
+### 2. Optimize Prompts
+
+```python
+# Expensive: Long system prompts repeated every request
+messages=[
+    {"role": "system", "content": "You are a helpful assistant that..."}, # 500 tokens
+    {"role": "user", "content": "Hi"}
+]
+
+# Better: Concise system prompts
+messages=[
+    {"role": "system", "content": "Be concise."},  # 3 tokens
+    {"role": "user", "content": "Hi"}
+]
+```
+
+### 3. Limit Output Length
+
+```python
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Summarize this article."}],
+    max_tokens=100  # Limit output cost
+)
+```
+
+### 4. Use Caching (When Available)
+
+Some models support prompt caching, which reduces input costs for repeated prompts. Check `cache_input_cost_usd` to see cached token costs.

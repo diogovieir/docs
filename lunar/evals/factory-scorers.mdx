@@ -1,0 +1,242 @@
+---
+title: 'Factory Scorers'
+description: 'Parameterized scorers that you configure for your needs'
+---
+
+# Factory Scorers
+
+Factory scorers are functions that return configured scorer instances. They allow you to customize scoring behavior.
+
+```python
+from lunar.evals import regex, jsonSchema, lengthInRange
+```
+
+## Available Factory Scorers
+
+### regex(pattern, flags)
+
+Match output against a regular expression pattern.
+
+```python
+from lunar.evals import regex
+import re
+
+# Basic pattern
+email_pattern = regex(r"[\w.-]+@[\w.-]+\.\w+")
+
+# With flags
+case_insensitive = regex(r"hello", re.IGNORECASE)
+
+# Usage
+result = client.evals.run(
+    name="Email Validation",
+    dataset=[
+        {"input": "Give me an email", "expected": None},
+    ],
+    task=task,
+    scorers=[email_pattern],
+)
+
+# Scores:
+# "Contact: john@example.com" → 1.0
+# "No email here" → 0.0
+```
+
+### jsonSchema(schema)
+
+Validate JSON output against a JSON Schema.
+
+```python
+from lunar.evals import jsonSchema
+
+# Define schema
+user_schema = jsonSchema({
+    "type": "object",
+    "properties": {
+        "name": {"type": "string"},
+        "age": {"type": "integer"},
+    },
+    "required": ["name", "age"]
+})
+
+# Usage
+result = client.evals.run(
+    name="Schema Validation",
+    dataset=[
+        {"input": "Generate a user JSON", "expected": None},
+    ],
+    task=task,
+    scorers=[user_schema],
+)
+
+# Scores:
+# '{"name": "John", "age": 30}' → 1.0
+# '{"name": "John"}' → 0.0 (missing required field)
+# 'not json' → 0.0
+```
+
+<Note>
+Requires `jsonschema` package: `pip install jsonschema`
+</Note>
+
+### lengthInRange(min_len, max_len)
+
+Check if output length is within a range.
+
+```python
+from lunar.evals import lengthInRange
+
+# 50-200 characters
+medium_length = lengthInRange(50, 200)
+
+# At least 100 characters
+minimum_length = lengthInRange(min_len=100)
+
+# At most 500 characters
+maximum_length = lengthInRange(max_len=500)
+
+# Usage
+result = client.evals.run(
+    name="Length Check",
+    dataset=dataset,
+    task=task,
+    scorers=[medium_length],
+)
+
+# Scores:
+# "Short" (5 chars) → 0.0
+# "A medium length response..." (75 chars) → 1.0
+# "Very long response..." (250 chars) → 0.0
+```
+
+### wordCount(min_words, max_words)
+
+Check if word count is within a range.
+
+```python
+from lunar.evals import wordCount
+
+# 10-50 words
+medium_word_count = wordCount(10, 50)
+
+# At least 20 words
+minimum_words = wordCount(min_words=20)
+
+# Usage
+result = client.evals.run(
+    name="Word Count Check",
+    dataset=dataset,
+    task=task,
+    scorers=[medium_word_count],
+)
+
+# Scores:
+# "Hello world" (2 words) → 0.0
+# "A longer response with many words..." (25 words) → 1.0
+```
+
+### numericInRange(min_val, max_val)
+
+Check if numeric output is within a range.
+
+```python
+from lunar.evals import numericInRange
+
+# Score between 1 and 10
+valid_score = numericInRange(1, 10)
+
+# Positive numbers only
+positive = numericInRange(min_val=0)
+
+# Usage
+result = client.evals.run(
+    name="Numeric Range",
+    dataset=[
+        {"input": "Rate this 1-10", "expected": None},
+    ],
+    task=task,
+    scorers=[valid_score],
+)
+
+# Scores:
+# "7" → 1.0
+# "15" → 0.0 (out of range)
+# "not a number" → 0.0
+```
+
+### semanticSimilarity(threshold)
+
+Compare semantic similarity using embeddings.
+
+```python
+from lunar.evals import semanticSimilarity
+
+# Default threshold (0.8)
+similar = semanticSimilarity()
+
+# Custom threshold
+very_similar = semanticSimilarity(threshold=0.9)
+
+# Usage
+result = client.evals.run(
+    name="Semantic Check",
+    dataset=[
+        {"input": "Describe a dog", "expected": "A furry pet that barks"},
+    ],
+    task=task,
+    scorers=[similar],
+)
+
+# Scores based on embedding similarity:
+# "A loyal canine companion" vs "A furry pet that barks" → ~0.85
+```
+
+<Note>
+Requires `sentence-transformers`: `pip install sentence-transformers`
+</Note>
+
+## Combining Factory Scorers
+
+```python
+from lunar.evals import (
+    jsonSchema,
+    lengthInRange,
+    regex,
+)
+
+# Define scorers
+api_schema = jsonSchema({
+    "type": "object",
+    "properties": {
+        "status": {"type": "string"},
+        "data": {"type": "object"},
+    },
+    "required": ["status"]
+})
+
+reasonable_length = lengthInRange(20, 1000)
+has_status = regex(r'"status"\s*:\s*"(success|error)"')
+
+# Run evaluation
+result = client.evals.run(
+    name="API Response Test",
+    dataset=api_dataset,
+    task=api_task,
+    scorers=[api_schema, reasonable_length, has_status],
+)
+
+# Check results
+print(f"Valid schema: {result.summary.scores['jsonSchema'].mean:.1%}")
+print(f"Good length: {result.summary.scores['lengthInRange:20-1000'].mean:.1%}")
+```
+
+## Summary Table
+
+| Factory | Parameters | Use Case |
+|---------|------------|----------|
+| `regex` | `pattern`, `flags` | Pattern matching |
+| `jsonSchema` | `schema` | JSON validation |
+| `lengthInRange` | `min_len`, `max_len` | Length constraints |
+| `wordCount` | `min_words`, `max_words` | Word count constraints |
+| `numericInRange` | `min_val`, `max_val` | Numeric bounds |
+| `semanticSimilarity` | `threshold` | Meaning comparison |

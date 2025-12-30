@@ -21,14 +21,14 @@
     }
   },
   "colors": {
-  "primary": "#8B5CF6",
-  "light": "#FAFAFA",
-  "dark": "#0A0A0B",
-  "anchors": {
-    "from": "#8B5CF6",
-    "to": "#A855F7"
-  }
-},
+    "primary": "#8B5CF6",
+    "light": "#FAFAFA",
+    "dark": "#0A0A0B",
+    "anchors": {
+      "from": "#8B5CF6",
+      "to": "#A855F7"
+    }
+  },
   "topbarLinks": [
     {
       "name": "Support",
@@ -53,40 +53,56 @@
   ],
   "navigation": [
     {
-      "group": "introduction",
+      "group": "Getting Started",
       "pages": [
         "introduction"
       ]
     },
     {
-      "group": "PureRouter",
+      "group": "Lunar SDK",
       "pages": [
-        "purerouter/overview",
-        "purerouter/quickstart",
-        "purerouter/installation",
+        "lunar/overview",
+        "lunar/quickstart",
+        "lunar/installation",
         {
           "group": "Guides",
           "pages": [
-            "purerouter/guides/deployments",
-            "purerouter/guides/routing-profiles",
-            "purerouter/guides/auth",
-            "purerouter/guides/sdk-python"
+            "lunar/guides/authentication",
+            "lunar/guides/chat-completions",
+            "lunar/guides/text-completions",
+            "lunar/guides/fallbacks",
+            "lunar/guides/cost-tracking",
+            "lunar/guides/models-providers",
+            "lunar/guides/streaming",
+            "lunar/guides/async-usage"
           ]
         },
         {
-          "group": "Console",
+          "group": "Evaluations",
           "pages": [
-            "purerouter/console/integration",
-            "purerouter/console/deployments",
-            "purerouter/console/api-keys"
+            "lunar/evals/introduction",
+            "lunar/evals/running-evals",
+            "lunar/evals/built-in-scorers",
+            "lunar/evals/factory-scorers",
+            "lunar/evals/custom-scorers",
+            "lunar/evals/llm-judge"
           ]
         },
         {
           "group": "API Reference",
           "pages": [
-            "purerouter/api/reference"
+            "lunar/api/reference",
+            "lunar/api/exceptions"
           ]
         }
+      ]
+    },
+    {
+      "group": "Pricing",
+      "pages": [
+        "pricing/overview",
+        "pricing/instance-tiers",
+        "pricing/billing"
       ]
     },
     {
@@ -118,7 +134,6 @@
         "purecpp/embbeding/embbeding"
       ]
     }
-    
   ],
   "footerSocials": {
     "x": "https://x.com/pureaiofficial",
@@ -127,7 +142,7 @@
   },
   "seo": {
     "title": "PureAI Documentation",
-    "description": "Official docs for PureRouter and PureCPP by PureAI",
+    "description": "Official docs for Lunar SDK, GPU Instances, and PureCPP by PureAI",
     "image": "/images/social-card.png"
   }
 }

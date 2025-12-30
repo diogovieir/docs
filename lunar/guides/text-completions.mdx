@@ -1,0 +1,134 @@
+---
+title: 'Text Completions'
+description: 'Create text completions with the Lunar SDK'
+---
+
+# Text Completions
+
+The Text Completions API generates text based on a prompt. Unlike Chat Completions, it doesn't use a message-based format - just a simple text prompt.
+
+## Basic Usage
+
+```python
+from lunar import Lunar
+
+client = Lunar()
+
+response = client.completions.create(
+    model="gpt-4o-mini",
+    prompt="The capital of France is"
+)
+
+print(response.choices[0].text)
+# Output: Paris, which is also the largest city in France.
+```
+
+## When to Use Text Completions
+
+| Use Case | API |
+|----------|-----|
+| Conversational AI | Chat Completions |
+| Text continuation | Text Completions |
+| Code completion | Text Completions |
+| Fill-in-the-blank | Text Completions |
+
+## Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `model` | `str` | Required | Model identifier |
+| `prompt` | `str` | Required | Text prompt to complete |
+| `max_tokens` | `int` | Model default | Maximum tokens to generate |
+| `temperature` | `float` | `1.0` | Randomness (0.0 to 2.0) |
+| `top_p` | `float` | `1.0` | Nucleus sampling |
+| `stop` | `list[str]` | `None` | Stop sequences |
+| `fallbacks` | `list[str]` | `None` | Fallback models |
+
+### Example with Parameters
+
+```python
+response = client.completions.create(
+    model="gpt-4o-mini",
+    prompt="Write a haiku about programming:",
+    max_tokens=50,
+    temperature=0.8,
+    stop=["\n\n"]
+)
+
+print(response.choices[0].text)
+```
+
+## Response Structure
+
+```python
+response = client.completions.create(
+    model="gpt-4o-mini",
+    prompt="Hello, my name is"
+)
+
+# Response fields
+print(response.id)                      # "cmpl-abc123"
+print(response.model)                   # "gpt-4o-mini"
+print(response.choices[0].text)         # " Claude, and I'm an AI assistant."
+print(response.choices[0].finish_reason) # "stop"
+
+# Usage and cost
+print(response.usage.prompt_tokens)     # 5
+print(response.usage.completion_tokens) # 10
+print(response.usage.total_cost_usd)    # 0.000030
+```
+
+## Stop Sequences
+
+Use stop sequences to control where generation ends:
+
+```python
+response = client.completions.create(
+    model="gpt-4o-mini",
+    prompt="List three fruits: 1.",
+    max_tokens=100,
+    stop=["4."]  # Stop before a fourth item
+)
+
+print(response.choices[0].text)
+# Output: Apple 2. Banana 3. Orange
+```
+
+## Multiple Stop Sequences
+
+```python
+response = client.completions.create(
+    model="gpt-4o-mini",
+    prompt="Write a sentence:",
+    stop=[".", "!", "?"]  # Stop at any sentence-ending punctuation
+)
+```
+
+## With Fallbacks
+
+```python
+response = client.completions.create(
+    model="gpt-4o-mini",
+    prompt="Complete this code: def hello():",
+    fallbacks=["claude-3-haiku", "llama-3.1-8b"],
+    max_tokens=50
+)
+```
+
+## Async Usage
+
+```python
+from lunar import AsyncLunar
+
+async def main():
+    async with AsyncLunar() as client:
+        response = await client.completions.create(
+            model="gpt-4o-mini",
+            prompt="The meaning of life is"
+        )
+        print(response.choices[0].text)
+```
+
+<Note>
+Not all models support text completions. Some models are chat-only. If you get a `ChatNotSupportedError`, the model requires the chat completions endpoint. Use `client.chat.completions.create()` instead.
+</Note>

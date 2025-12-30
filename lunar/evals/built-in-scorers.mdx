@@ -1,0 +1,222 @@
+---
+title: 'Built-in Scorers'
+description: 'Pre-instantiated scorers for common evaluation tasks'
+---
+
+# Built-in Scorers
+
+The Lunar SDK provides pre-instantiated scorers ready to use. Import and use them directly without configuration.
+
+```python
+from lunar.evals import exactMatch, contains, jsonValid
+```
+
+## String Matching
+
+### exactMatch
+
+Returns 1.0 if output exactly matches expected (after trimming whitespace).
+
+```python
+from lunar.evals import exactMatch
+
+# Usage
+result = client.evals.run(
+    name="Exact Match Test",
+    dataset=[
+        {"input": "What is 2+2?", "expected": "4"},
+    ],
+    task=task,
+    scorers=[exactMatch],
+)
+
+# Scores:
+# "4" vs "4" → 1.0
+# "4" vs "4 " → 1.0 (whitespace trimmed)
+# "4" vs "Four" → 0.0
+```
+
+### exactMatchIgnoreCase
+
+Case-insensitive exact match.
+
+```python
+from lunar.evals import exactMatchIgnoreCase
+
+# Scores:
+# "Paris" vs "paris" → 1.0
+# "PARIS" vs "Paris" → 1.0
+# "Paris" vs "London" → 0.0
+```
+
+### contains
+
+Returns 1.0 if expected string is contained in output.
+
+```python
+from lunar.evals import contains
+
+# Scores:
+# "The answer is 4" vs "4" → 1.0
+# "Paris is the capital" vs "Paris" → 1.0
+# "Hello world" vs "foo" → 0.0
+```
+
+### containsIgnoreCase
+
+Case-insensitive contains check.
+
+```python
+from lunar.evals import containsIgnoreCase
+
+# Scores:
+# "The answer is FOUR" vs "four" → 1.0
+# "PARIS is beautiful" vs "paris" → 1.0
+```
+
+### startsWith
+
+Returns 1.0 if output starts with expected.
+
+```python
+from lunar.evals import startsWith
+
+# Scores:
+# "Hello, how are you?" vs "Hello" → 1.0
+# "Hi there" vs "Hello" → 0.0
+```
+
+### endsWith
+
+Returns 1.0 if output ends with expected.
+
+```python
+from lunar.evals import endsWith
+
+# Scores:
+# "The answer is 42" vs "42" → 1.0
+# "42 is the answer" vs "42" → 0.0
+```
+
+## Format Validation
+
+### jsonValid
+
+Returns 1.0 if output is valid JSON.
+
+```python
+from lunar.evals import jsonValid
+
+# Scores:
+# '{"name": "John"}' → 1.0
+# '[1, 2, 3]' → 1.0
+# 'not json' → 0.0
+# '{"broken": }' → 0.0
+```
+
+### notEmpty
+
+Returns 1.0 if output is not empty (after trimming).
+
+```python
+from lunar.evals import notEmpty
+
+# Scores:
+# "Hello" → 1.0
+# "   text   " → 1.0
+# "" → 0.0
+# "   " → 0.0
+```
+
+### isNumeric
+
+Returns 1.0 if output is a valid number.
+
+```python
+from lunar.evals import isNumeric
+
+# Scores:
+# "42" → 1.0
+# "3.14" → 1.0
+# "-100" → 1.0
+# "1e10" → 1.0
+# "not a number" → 0.0
+```
+
+## Usage Example
+
+```python
+from lunar import Lunar
+from lunar.evals import (
+    exactMatch,
+    exactMatchIgnoreCase,
+    contains,
+    containsIgnoreCase,
+    startsWith,
+    endsWith,
+    jsonValid,
+    notEmpty,
+    isNumeric,
+)
+
+client = Lunar()
+
+# Test different scorers
+dataset = [
+    {"input": "What is 2+2?", "expected": "4"},
+    {"input": "Generate valid JSON", "expected": None},
+    {"input": "Say hello", "expected": "Hello"},
+]
+
+result = client.evals.run(
+    name="Built-in Scorers Test",
+    dataset=dataset,
+    task=lambda x: client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": x}]
+    ).choices[0].message.content,
+    scorers=[
+        exactMatch,
+        contains,
+        jsonValid,
+        notEmpty,
+    ],
+)
+
+# Check results
+for scorer_name, summary in result.summary.scores.items():
+    print(f"{scorer_name}: {summary.mean:.2f}")
+```
+
+## Combining Scorers
+
+Use multiple scorers for comprehensive evaluation:
+
+```python
+result = client.evals.run(
+    name="Comprehensive Test",
+    dataset=[
+        {"input": "Return JSON with name field", "expected": "name"},
+    ],
+    task=task,
+    scorers=[
+        jsonValid,      # Is it valid JSON?
+        contains,       # Does it contain "name"?
+        notEmpty,       # Is there output?
+    ],
+)
+
+# A response like '{"name": "John"}' would score:
+# jsonValid: 1.0
+# contains: 1.0
+# notEmpty: 1.0
+```
+
+## Score Interpretation
+
+| Score | Meaning |
+|-------|---------|
+| 1.0 | Full match / passed |
+| 0.0 | No match / failed |
+
+Built-in scorers return binary results (1.0 or 0.0). For graded scores, use factory scorers or custom scorers.

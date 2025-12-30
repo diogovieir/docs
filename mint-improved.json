@@ -180,7 +180,7 @@
     "keywords": ["LLM routing", "RAG framework", "C++", "Python", "AI", "machine learning", "documentation"]
   },
   "analytics": {
-    "gtag": "G-XXXXXXXXXX",
+    "ga4": "G-XXXXXXXXXX",
     "hotjar": "XXXXXXX"
   },
   "integrations": {

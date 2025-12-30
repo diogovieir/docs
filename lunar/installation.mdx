@@ -1,0 +1,134 @@
+---
+title: 'Installation'
+description: 'Complete installation and configuration guide for Lunar SDK'
+---
+
+# Installation
+
+## Requirements
+
+- Python 3.10+ (recommended) — also supports 3.9, 3.11, 3.12
+- pip package manager
+
+## Install
+
+```bash
+pip install lunar
+```
+
+## Configuration
+
+### Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `LUNAR_API_KEY` | API key for authentication | Yes |
+
+Set your API key:
+
+```bash
+export LUNAR_API_KEY="your-api-key"
+```
+
+### Client Initialization
+
+**Basic usage with environment variable:**
+
+```python
+from lunar import Lunar
+
+client = Lunar()  # Uses LUNAR_API_KEY from environment
+```
+
+**With explicit API key:**
+
+```python
+client = Lunar(api_key="your-api-key")
+```
+
+**Full configuration:**
+
+```python
+client = Lunar(
+    api_key="your-api-key",
+    timeout=60.0,                 # Request timeout in seconds
+    num_retries=2,                # Retry attempts for failed requests
+    max_connections=100,          # Max concurrent connections
+    fallbacks={                   # Global fallback configuration
+        "gpt-4o-mini": ["claude-3-haiku", "llama-3.1-8b"],
+        "gpt-4": ["claude-3-opus"]
+    }
+)
+```
+
+### Configuration Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `api_key` | `str` | `None` | API key for authentication |
+| `base_url` | `str` | `None` | Custom API URL |
+| `timeout` | `float` | `60.0` | Request timeout in seconds |
+| `num_retries` | `int` | `2` | Number of retry attempts |
+| `max_connections` | `int` | `100` | Maximum concurrent connections |
+| `fallbacks` | `dict` | `None` | Model fallback configuration |
+
+### Using Context Manager
+
+The client supports context managers for automatic resource cleanup:
+
+**Synchronous:**
+
+```python
+from lunar import Lunar
+
+with Lunar(api_key="your-api-key") as client:
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": "Hello!"}]
+    )
+# Resources automatically cleaned up
+```
+
+**Asynchronous:**
+
+```python
+from lunar import AsyncLunar
+
+async with AsyncLunar(api_key="your-api-key") as client:
+    response = await client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": "Hello!"}]
+    )
+# Resources automatically cleaned up
+```
+
+## Verify Installation
+
+Run this script to verify your installation:
+
+```python
+from lunar import Lunar
+
+try:
+    client = Lunar()
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": "Say 'Hello from Lunar!'"}],
+        max_tokens=20
+    )
+    print("Success:", response.choices[0].message.content)
+    print(f"Cost: ${response.usage.total_cost_usd}")
+except Exception as e:
+    print(f"Error: {e}")
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Authentication" icon="key" href="/lunar/guides/authentication">
+    Learn more about API Key authentication
+  </Card>
+  <Card title="Chat Completions" icon="message" href="/lunar/guides/chat-completions">
+    Make chat completion requests
+  </Card>
+</CardGroup>

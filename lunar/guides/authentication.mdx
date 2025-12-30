@@ -1,0 +1,93 @@
+---
+title: 'Authentication'
+description: 'Configure API Key authentication for Lunar SDK'
+---
+
+# Authentication
+
+Lunar SDK uses API Key authentication. You can provide your API key via environment variable or pass it directly to the client.
+
+## Using Environment Variable
+
+Set the `LUNAR_API_KEY` environment variable:
+
+```bash
+export LUNAR_API_KEY="your-api-key"
+```
+
+Then initialize the client without arguments:
+
+```python
+from lunar import Lunar
+
+client = Lunar()  # Automatically uses LUNAR_API_KEY
+```
+
+## Passing Directly
+
+Pass the API key to the client constructor:
+
+```python
+from lunar import Lunar
+
+client = Lunar(api_key="your-api-key")
+```
+
+## Authentication Header
+
+The SDK automatically sets the authentication header:
+
+| Header | Format |
+|--------|--------|
+| `x-api-key` | `{your-api-key}` |
+
+## Error Handling
+
+```python
+from lunar import Lunar, AuthenticationError
+
+try:
+    client = Lunar()  # No credentials
+except AuthenticationError as e:
+    print(f"Authentication failed: {e}")
+    # "Authentication required. Either pass api_key parameter or set
+    #  LUNAR_API_KEY environment variable."
+```
+
+## Getting Your API Key
+
+1. Log in to the PureAI Console
+2. Navigate to **API Keys** section
+3. Click **Create New Key**
+4. Copy and securely store your key
+
+<Note>
+Keep your API key secure. Never commit it to version control or expose it in client-side code.
+</Note>
+
+## Best Practices
+
+### Use Environment Variables in Production
+
+```bash
+# .env file (don't commit this!)
+LUNAR_API_KEY=your-api-key
+```
+
+```python
+# Your code
+from lunar import Lunar
+
+client = Lunar()  # Reads from environment
+```
+
+### Rotate Keys Regularly
+
+- Create new keys periodically
+- Revoke old keys after rotation
+- Use separate keys for development and production
+
+### Limit Key Permissions
+
+- Use the minimum required permissions
+- Create separate keys for different applications

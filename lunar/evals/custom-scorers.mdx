@@ -1,0 +1,273 @@
+---
+title: 'Custom Scorers'
+description: 'Create your own scoring functions'
+---
+
+# Custom Scorers
+
+When built-in scorers don't meet your needs, create custom scorers using the `@Scorer` decorator or by extending `BaseScorer`.
+
+## Using the @Scorer Decorator
+
+The simplest way to create a custom scorer:
+
+```python
+from lunar.evals import Scorer
+
+@Scorer
+def has_greeting(output: str, expected: str = None) -> float:
+    """Check if output contains a greeting."""
+    greetings = ["hello", "hi", "hey", "greetings"]
+    output_lower = output.lower()
+    return 1.0 if any(g in output_lower for g in greetings) else 0.0
+```
+
+### Function Signature
+
+Your function can accept these parameters:
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `output` | `str` | The task output to evaluate |
+| `expected` | `str` | Expected value (optional) |
+| `input` | `str` or `dict` | Original input (optional) |
+
+Return a `float` between 0.0 and 1.0.
+
+### Examples
+
+**Check for specific content:**
+
+```python
+@Scorer
+def mentions_python(output: str) -> float:
+    return 1.0 if "python" in output.lower() else 0.0
+```
+
+**Compare with expected:**
+
+```python
+@Scorer
+def fuzzy_match(output: str, expected: str = None) -> float:
+    if expected is None:
+        return 0.0
+
+    output_words = set(output.lower().split())
+    expected_words = set(expected.lower().split())
+
+    if not expected_words:
+        return 0.0
+
+    overlap = len(output_words & expected_words)
+    return overlap / len(expected_words)
+```
+
+**Use input context:**
+
+```python
+@Scorer
+def answers_question(output: str, input: str = None) -> float:
+    if input is None:
+        return 0.0
+
+    # Check if output addresses key terms from input
+    input_words = set(input.lower().split())
+    output_lower = output.lower()
+
+    key_terms = [w for w in input_words if len(w) > 4]
+    if not key_terms:
+        return 1.0
+
+    mentioned = sum(1 for term in key_terms if term in output_lower)
+    return mentioned / len(key_terms)
+```
+
+## Decorator with Options
+
+```python
+@Scorer(name="custom_name", requirements=["numpy>=1.0"])
+def numpy_scorer(output: str, expected: str = None) -> float:
+    import numpy as np
+    # Use numpy for scoring
+    return float(np.random.random())  # Example
+```
+
+## Extending BaseScorer
+
+For more control, extend `BaseScorer`:
+
+```python
+from lunar.evals import BaseScorer
+from typing import Any, Dict, Optional, Union
+
+class SentimentScorer(BaseScorer):
+    """Score based on sentiment analysis."""
+
+    def __init__(self, positive_weight: float = 1.0):
+        super().__init__(
+            name="sentiment",
+            requirements=["textblob>=0.17"],
+        )
+        self.positive_weight = positive_weight
+
+    def score(
+        self,
+        output: str,
+        expected: Optional[str] = None,
+        input: Optional[Union[str, Dict[str, Any]]] = None,
+        **kwargs: Any,
+    ) -> float:
+        from textblob import TextBlob
+
+        blob = TextBlob(output)
+        # Normalize sentiment from [-1, 1] to [0, 1]
+        sentiment = (blob.sentiment.polarity + 1) / 2
+        return sentiment * self.positive_weight
+```
+
+Usage:
+
+```python
+sentiment = SentimentScorer(positive_weight=1.0)
+
+result = client.evals.run(
+    name="Sentiment Test",
+    dataset=dataset,
+    task=task,
+    scorers=[sentiment],
+)
+```
+
+## Async Custom Scorers
+
+For scorers that need async operations:
+
+```python
+from lunar.evals import AsyncBaseScorer
+
+class APIScorer(AsyncBaseScorer):
+    """Score using an external API."""
+
+    def __init__(self, api_url: str):
+        super().__init__(name="api_scorer")
+        self.api_url = api_url
+
+    async def score(
+        self,
+        output: str,
+        expected: Optional[str] = None,
+        input: Optional[Union[str, Dict[str, Any]]] = None,
+        **kwargs: Any,
+    ) -> float:
+        import aiohttp
+
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                self.api_url,
+                json={"output": output, "expected": expected}
+            ) as response:
+                data = await response.json()
+                return data["score"]
+```
+
+Or with decorator:
+
+```python
+@Scorer
+async def async_scorer(output: str) -> float:
+    import asyncio
+    await asyncio.sleep(0.1)  # Simulate async work
+    return 1.0 if len(output) > 10 else 0.0
+```
+
+## Practical Examples
+
+### Code Quality Scorer
+
+```python
+@Scorer
+def code_quality(output: str) -> float:
+    score = 0.0
+    checks = [
+        ("def " in output or "class " in output, 0.25),  # Has functions/classes
+        ("return " in output, 0.25),                      # Has return statements
+        ('"""' in output or "'''" in output, 0.25),       # Has docstrings
+        (len(output.split("\n")) > 3, 0.25),              # Multiple lines
+    ]
+
+    for condition, weight in checks:
+        if condition:
+            score += weight
+
+    return score
+```
+
+### Response Quality Scorer
+
+```python
+@Scorer
+def response_quality(output: str, input: str = None) -> float:
+    score = 0.0
+
+    # Length check (not too short)
+    if len(output) > 50:
+        score += 0.25
+
+    # Has structure (sentences)
+    if ". " in output or "? " in output:
+        score += 0.25
+
+    # Addresses the input
+    if input and any(word in output.lower() for word in input.lower().split()[:3]):
+        score += 0.25
+
+    # Professional tone (no excessive caps)
+    caps_ratio = sum(1 for c in output if c.isupper()) / max(len(output), 1)
+    if caps_ratio < 0.3:
+        score += 0.25
+
+    return score
+```
+
+### Factual Accuracy Scorer
+
+```python
+@Scorer
+def factual_accuracy(output: str, expected: str = None) -> float:
+    if expected is None:
+        return 0.5  # Can't verify without expected
+
+    # Extract key facts from expected
+    expected_facts = set(expected.lower().split(","))
+    output_lower = output.lower()
+
+    # Check how many facts are mentioned
+    found = sum(1 for fact in expected_facts if fact.strip() in output_lower)
+
+    return found / len(expected_facts) if expected_facts else 0.0
+```
+
+## Using Custom Scorers
+
+```python
+from lunar import Lunar
+
+client = Lunar()
+
+result = client.evals.run(
+    name="Custom Scorer Test",
+    dataset=[
+        {"input": "Write a greeting", "expected": "hello"},
+        {"input": "Write Python code", "expected": "function"},
+    ],
+    task=lambda x: client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": x}]
+    ).choices[0].message.content,
+    scorers=[
+        has_greeting,      # Custom scorer
+        code_quality,      # Custom scorer
+        exactMatch,        # Built-in scorer
+    ],
+)
+```

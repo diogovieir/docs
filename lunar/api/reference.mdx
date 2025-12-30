@@ -1,0 +1,279 @@
+---
+title: 'API Reference'
+description: 'Complete API reference for the Lunar SDK'
+---
+
+# API Reference
+
+## Base URL
+
+```
+https://api.pureai-api.com
+```
+
+## Authentication
+
+All requests require an API key via header:
+
+```
+x-api-key: {your-api-key}
+```
+
+## Endpoints
+
+### POST /v1/chat/completions
+
+Create a chat completion.
+
+**Request:**
+
+```json
+{
+  "model": "gpt-4o-mini",
+  "messages": [
+    {"role": "system", "content": "You are helpful."},
+    {"role": "user", "content": "Hello!"}
+  ],
+  "max_tokens": 100,
+  "temperature": 0.7,
+  "top_p": 1.0,
+  "stream": false,
+  "stop": ["\n"]
+}
+```
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `model` | `string` | Yes | Model identifier |
+| `messages` | `array` | Yes | Conversation messages |
+| `max_tokens` | `integer` | No | Maximum tokens to generate |
+| `temperature` | `float` | No | Randomness (0-2) |
+| `top_p` | `float` | No | Nucleus sampling |
+| `stream` | `boolean` | No | Enable streaming |
+| `stop` | `array` | No | Stop sequences |
+
+**Response:**
+
+```json
+{
+  "id": "chatcmpl-abc123",
+  "object": "chat.completion",
+  "created": 1699123456,
+  "model": "gpt-4o-mini",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "Hello! How can I help you today?"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 12,
+    "completion_tokens": 9,
+    "total_tokens": 21,
+    "input_cost_usd": 0.000018,
+    "output_cost_usd": 0.000027,
+    "total_cost_usd": 0.000045,
+    "latency_ms": 523.4,
+    "ttft_ms": 215.2
+  }
+}
+```
+
+---
+
+### POST /v1/completions
+
+Create a text completion.
+
+**Request:**
+
+```json
+{
+  "model": "gpt-4o-mini",
+  "prompt": "The capital of France is",
+  "max_tokens": 50,
+  "temperature": 0.7,
+  "stop": ["."]
+}
+```
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `model` | `string` | Yes | Model identifier |
+| `prompt` | `string` | Yes | Text prompt |
+| `max_tokens` | `integer` | No | Maximum tokens |
+| `temperature` | `float` | No | Randomness |
+| `stop` | `array` | No | Stop sequences |
+
+**Response:**
+
+```json
+{
+  "id": "cmpl-abc123",
+  "object": "text_completion",
+  "created": 1699123456,
+  "model": "gpt-4o-mini",
+  "choices": [
+    {
+      "index": 0,
+      "text": " Paris",
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 5,
+    "completion_tokens": 1,
+    "total_tokens": 6,
+    "input_cost_usd": 0.000008,
+    "output_cost_usd": 0.000003,
+    "total_cost_usd": 0.000011,
+    "latency_ms": 312.1
+  }
+}
+```
+
+---
+
+### GET /v1/models
+
+List available models.
+
+**Response:**
+
+```json
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "gpt-4o-mini",
+      "object": "model",
+      "created": 1699000000,
+      "owned_by": "openai"
+    },
+    {
+      "id": "claude-3-haiku",
+      "object": "model",
+      "created": 1699000000,
+      "owned_by": "anthropic"
+    }
+  ]
+}
+```
+
+---
+
+### GET /v1/providers
+
+List providers for a model.
+
+**Query Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `model` | `string` | Yes | Model identifier |
+
+**Response:**
+
+```json
+{
+  "providers": [
+    {
+      "id": "openai",
+      "type": "primary",
+      "enabled": true,
+      "params": {}
+    },
+    {
+      "id": "groq",
+      "type": "backup",
+      "enabled": true,
+      "params": {}
+    }
+  ]
+}
+```
+
+---
+
+## Message Object
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `role` | `string` | `system`, `user`, or `assistant` |
+| `content` | `string` | Message content |
+
+---
+
+## Usage Object
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `prompt_tokens` | `integer` | Input token count |
+| `completion_tokens` | `integer` | Output token count |
+| `total_tokens` | `integer` | Total tokens |
+| `input_cost_usd` | `float` | Input cost (USD) |
+| `output_cost_usd` | `float` | Output cost (USD) |
+| `cache_input_cost_usd` | `float` | Cached input cost |
+| `total_cost_usd` | `float` | Total cost (USD) |
+| `latency_ms` | `float` | Request latency (ms) |
+| `ttft_ms` | `float` | Time to first token (ms) |
+
+---
+
+## Streaming
+
+Set `stream: true` to receive Server-Sent Events:
+
+```
+data: {"id":"chatcmpl-abc","object":"chat.completion.chunk","choices":[{"index":0,"delta":{"role":"assistant"}}]}
+
+data: {"id":"chatcmpl-abc","object":"chat.completion.chunk","choices":[{"index":0,"delta":{"content":"Hello"}}]}
+
+data: {"id":"chatcmpl-abc","object":"chat.completion.chunk","choices":[{"index":0,"delta":{"content":"!"}}]}
+
+data: {"id":"chatcmpl-abc","object":"chat.completion.chunk","choices":[{"index":0,"delta":{},"finish_reason":"stop"}]}
+
+data: [DONE]
+```
+
+---
+
+## Rate Limits
+
+Rate limits are applied per API key. When exceeded, you'll receive a 429 response with `retry_after` header.
+
+---
+
+## SDK Usage
+
+```python
+from lunar import Lunar
+
+client = Lunar(api_key="your-key")
+
+# Chat completions
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Hello!"}]
+)
+
+# Text completions
+response = client.completions.create(
+    model="gpt-4o-mini",
+    prompt="Hello"
+)
+
+# List models
+models = client.models.list()
+
+# List providers
+providers = client.providers.list(model="gpt-4o-mini")
+```

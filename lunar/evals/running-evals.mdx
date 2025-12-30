@@ -1,0 +1,213 @@
+---
+title: 'Running Evaluations'
+description: 'Learn how to run evaluations with the Lunar SDK'
+---
+
+# Running Evaluations
+
+The `client.evals.run()` method executes evaluations against your dataset.
+
+## Basic Usage
+
+```python
+from lunar import Lunar
+from lunar.evals import exactMatch
+
+client = Lunar()
+
+result = client.evals.run(
+    name="My Evaluation",
+    dataset=[
+        {"input": "What is 2+2?", "expected": "4"},
+        {"input": "Capital of France?", "expected": "Paris"},
+    ],
+    task=lambda x: client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": x}]
+    ).choices[0].message.content,
+    scorers=[exactMatch],
+)
+```
+
+## Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `name` | `str` | Yes | Name for this evaluation |
+| `dataset` | `list` | Yes | List of test cases |
+| `task` | `callable` | Yes | Function that produces output |
+| `scorers` | `list` | Yes | List of scorers to apply |
+| `max_concurrent` | `int` | No | Max parallel tasks (default: 10) |
+| `show_progress` | `bool` | No | Show progress bar (default: True) |
+
+## Dataset Format
+
+Each item in the dataset is a dictionary:
+
+```python
+dataset = [
+    {
+        "input": "What is Python?",           # Required
+        "expected": "A programming language"  # Optional
+    },
+    {
+        "input": {"question": "What is 2+2?", "context": "Math"},
+        "expected": "4"
+    },
+]
+```
+
+The `input` can be a string or a dictionary for complex inputs.
+
+## Task Function
+
+The task function receives the `input` and returns the output:
+
+```python
+# Simple task
+def simple_task(input_text):
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": input_text}]
+    )
+    return response.choices[0].message.content
+
+# Task with complex input
+def complex_task(input_data):
+    question = input_data["question"]
+    context = input_data.get("context", "")
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": f"Context: {context}"},
+            {"role": "user", "content": question}
+        ]
+    )
+    return response.choices[0].message.content
+```
+
+## Evaluation Result
+
+```python
+result = client.evals.run(...)
+
+# Overall summary
+print(f"Total rows: {result.summary.total}")
+print(f"Successful: {result.summary.successful}")
+print(f"Failed: {result.summary.failed}")
+print(f"Success rate: {result.summary.success_rate:.1%}")
+
+# Per-scorer statistics
+for scorer_name, summary in result.summary.scores.items():
+    print(f"\n{scorer_name}:")
+    print(f"  Mean: {summary.mean:.3f}")
+    print(f"  Std Dev: {summary.std_dev:.3f}")
+    print(f"  Min: {summary.min:.3f}")
+    print(f"  Max: {summary.max:.3f}")
+```
+
+## Individual Results
+
+Access individual row results:
+
+```python
+for row in result.rows:
+    print(f"Input: {row.input}")
+    print(f"Expected: {row.expected}")
+    print(f"Output: {row.output}")
+    print(f"Scores: {row.scores}")
+    print(f"Error: {row.error}")
+    print("---")
+```
+
+## Multiple Scorers
+
+Apply multiple scorers in one run:
+
+```python
+from lunar.evals import exactMatch, contains, jsonValid
+
+result = client.evals.run(
+    name="Multi-Scorer Test",
+    dataset=dataset,
+    task=task,
+    scorers=[exactMatch, contains, jsonValid],
+)
+
+# Each scorer produces its own scores
+print(result.summary.scores["exactMatch"].mean)
+print(result.summary.scores["contains"].mean)
+print(result.summary.scores["jsonValid"].mean)
+```
+
+## Controlling Concurrency
+
+Adjust parallel execution:
+
+```python
+# Run up to 5 tasks in parallel
+result = client.evals.run(
+    name="Limited Concurrency",
+    dataset=large_dataset,
+    task=task,
+    scorers=[exactMatch],
+    max_concurrent=5,  # Default is 10
+)
+```
+
+## Progress Display
+
+```python
+# Show progress bar (default)
+result = client.evals.run(
+    ...,
+    show_progress=True,
+)
+
+# Hide progress bar
+result = client.evals.run(
+    ...,
+    show_progress=False,
+)
+```
+
+## Async Evaluations
+
+```python
+from lunar import AsyncLunar
+from lunar.evals import exactMatch
+
+async def run_eval():
+    async with AsyncLunar() as client:
+        result = await client.evals.run(
+            name="Async Eval",
+            dataset=dataset,
+            task=lambda x: client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[{"role": "user", "content": x}]
+            ).choices[0].message.content,
+            scorers=[exactMatch],
+        )
+        return result
+```
+
+## Error Handling
+
+Task errors are captured per-row:
+
+```python
+result = client.evals.run(...)
+
+for row in result.rows:
+    if row.error:
+        print(f"Error on input '{row.input}': {row.error}")
+```
+
+## Best Practices
+
+1. **Start Small**: Test with a small dataset first
+2. **Multiple Scorers**: Use multiple scorers for comprehensive evaluation
+3. **Limit Concurrency**: Avoid rate limits with `max_concurrent`
+4. **Review Failures**: Check `row.error` for debugging
+5. **Save Results**: Store results for historical comparison

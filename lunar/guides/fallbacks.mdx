@@ -1,0 +1,174 @@
+---
+title: 'Fallbacks'
+description: 'Configure automatic fallback models for reliability'
+---
+
+# Fallbacks
+
+Fallbacks allow the SDK to automatically retry with alternative models when the primary model fails due to infrastructure issues.
+
+## How Fallbacks Work
+
+```
+Request → Model A fails (5xx) → Model B fails (429) → Model C succeeds → Response
+```
+
+The SDK tries each model in order until one succeeds or all fail.
+
+## Configuring Fallbacks
+
+### Per-Request Fallbacks
+
+```python
+from lunar import Lunar
+
+client = Lunar()
+
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Hello!"}],
+    fallbacks=["claude-3-haiku", "llama-3.1-8b"]
+)
+```
+
+### Global Fallbacks
+
+Configure fallbacks at the client level:
+
+```python
+client = Lunar(
+    api_key="your-key",
+    fallbacks={
+        "gpt-4o-mini": ["claude-3-haiku", "llama-3.1-8b"],
+        "gpt-4o": ["claude-3-5-sonnet", "claude-3-opus"],
+        "claude-3-haiku": ["gpt-4o-mini"]
+    }
+)
+
+# These requests use the configured fallbacks automatically
+response = client.chat.completions.create(
+    model="gpt-4o-mini",  # Falls back to claude-3-haiku, then llama-3.1-8b
+    messages=[{"role": "user", "content": "Hello!"}]
+)
+```
+
+### Combining Both
+
+Per-request fallbacks override global fallbacks:
+
+```python
+client = Lunar(
+    fallbacks={"gpt-4o-mini": ["claude-3-haiku"]}  # Global
+)
+
+# This uses request-level fallbacks, not global
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[{"role": "user", "content": "Hello!"}],
+    fallbacks=["llama-3.1-8b"]  # Overrides global
+)
+```
+
+## What Triggers Fallback
+
+Fallbacks are triggered by **infrastructure errors** that might be resolved by trying a different provider:
+
+| Error | Code | Triggers Fallback |
+|-------|------|-------------------|
+| Rate Limit | 429 | Yes |
+| Server Error | 5xx | Yes |
+| Service Unavailable | 503 | Yes |
+| Gateway Timeout | 504 | Yes |
+| Connection Error | - | Yes |
+| Timeout | - | Yes |
+
+## What Does NOT Trigger Fallback
+
+**Client errors** indicate problems with your request that won't be fixed by trying another model:
+
+| Error | Code | Triggers Fallback |
+|-------|------|-------------------|
+| Bad Request | 400 | No |
+| Authentication Error | 401 | No |
+| Permission Denied | 403 | No |
+| Not Found | 404 | No |
+| Validation Error | 422 | No |
+
+```python
+from lunar import Lunar, BadRequestError
+
+client = Lunar()
+
+try:
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[],  # Invalid: empty messages
+        fallbacks=["claude-3-haiku"]
+    )
+except BadRequestError as e:
+    # Fallback NOT attempted - this is a client error
+    print(f"Bad request: {e}")
+```
+
+## Logging Fallback Events
+
+The SDK logs fallback attempts at the WARNING level:
+
+```python
+import logging
+
+logging.basicConfig(level=logging.WARNING)
+
+# Now you'll see:
+# WARNING:lunar:Model gpt-4o-mini failed with RateLimitError, trying fallback: claude-3-haiku
+```
+
+## Best Practices
+
+### 1. Choose Compatible Fallbacks
+
+Select fallback models with similar capabilities:
+
+```python
+# Good: All are capable chat models
+fallbacks=["claude-3-5-sonnet", "gpt-4o"]
+
+# Avoid: Mixing very different capability levels
+fallbacks=["gpt-4o", "llama-3.1-8b"]  # Large gap in capabilities
+```
+
+### 2. Consider Cost
+
+Order fallbacks by cost preference:
+
+```python
+# Cheapest first
+fallbacks=["llama-3.1-8b", "claude-3-haiku", "gpt-4o-mini"]
+```
+
+### 3. Limit Fallback Chain Length
+
+Too many fallbacks add latency:
+
+```python
+# Recommended: 2-3 fallbacks
+fallbacks=["claude-3-haiku", "llama-3.1-8b"]
+
+# Avoid: Long chains
+fallbacks=["model-a", "model-b", "model-c", "model-d", "model-e"]
+```
+
+### 4. Test Your Fallback Chain
+
+```python
+# Verify each fallback model works independently
+for model in ["gpt-4o-mini", "claude-3-haiku", "llama-3.1-8b"]:
+    try:
+        response = client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": "Test"}]
+        )
+        print(f"{model}: OK")
+    except Exception as e:
+        print(f"{model}: {e}")
+```

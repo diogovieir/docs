@@ -1,0 +1,269 @@
+---
+title: 'Instance Tiers'
+description: 'GPU instance types, specifications, and pricing'
+---
+
+# Instance Tiers
+
+Choose the right GPU instance for your model size and performance needs.
+
+## Tier Overview
+
+| Tier | GPU | VRAM | Price | Best For |
+|------|-----|------|-------|----------|
+| XS | 1x L4 | 24GB | ~$0.20/h | 7B-13B models |
+| S | 1x L40S | 48GB | ~$0.60/h | 13B-34B models |
+| M | 4x A10G | 96GB | ~$1.80/h | 30B-70B INT4 |
+| L | 4x L40S | 192GB | ~$3.50/h | 70B FP16 |
+| XL | 8x A100 | 320-640GB | ~$12/h | 70B-180B |
+| XXL | 8x H100/H200 | 640-1128GB | ~$20/h | 405B |
+
+---
+
+## Tier XS - Entry Level
+
+Best for small models (7B-13B parameters).
+
+### GPU XS
+
+| Spec | Value |
+|------|-------|
+| GPU | 1x NVIDIA L4 |
+| VRAM | 24GB |
+| vCPUs | 4 |
+| RAM | 16GB |
+| Storage | 250GB NVMe |
+| Network | 10 Gbps |
+| Price | ~$0.20/h |
+
+**Recommended models**: LLaMA 3.2 1B, Gemma 3 4B, Mistral 7B, LLaMA 3.1 8B
+
+### GPU XS (2x)
+
+| Spec | Value |
+|------|-------|
+| GPU | 1x NVIDIA L4 |
+| VRAM | 24GB |
+| vCPUs | 8 |
+| RAM | 32GB |
+| Storage | 450GB NVMe |
+| Network | 15 Gbps |
+| Price | ~$0.35/h |
+
+---
+
+## Tier S - Small Production
+
+Best for medium models (13B-34B parameters).
+
+### GPU S
+
+| Spec | Value |
+|------|-------|
+| GPU | 1x NVIDIA L40S |
+| VRAM | 48GB |
+| vCPUs | 4 |
+| RAM | 16GB |
+| Storage | 250GB NVMe |
+| Network | 10 Gbps |
+| Price | ~$0.60/h |
+
+**Recommended models**: LLaMA 3.1 13B, CodeLlama 13B, Llama 4 Scout 17B
+
+### GPU S (2x)
+
+| Spec | Value |
+|------|-------|
+| GPU | 1x NVIDIA L40S |
+| VRAM | 48GB |
+| vCPUs | 8 |
+| RAM | 32GB |
+| Storage | 450GB NVMe |
+| Network | 15 Gbps |
+| Price | ~$1.00/h |
+
+**Recommended models**: CodeLlama 34B, Mixtral 8x7B, Qwen3 30B
+
+---
+
+## Tier M - Medium Production
+
+Best for large quantized models (30B-70B INT4).
+
+### GPU M
+
+| Spec | Value |
+|------|-------|
+| GPU | 4x NVIDIA A10G |
+| VRAM | 96GB |
+| vCPUs | 48 |
+| RAM | 192GB |
+| Storage | 3.8TB NVMe |
+| Network | 40 Gbps |
+| Price | ~$1.80/h |
+
+**Recommended models**: LLaMA 3.1 70B (AWQ), Qwen2 72B (AWQ), DeepSeek 67B (AWQ)
+
+### GPU M (2x)
+
+| Spec | Value |
+|------|-------|
+| GPU | 4x NVIDIA A10G |
+| VRAM | 96GB |
+| vCPUs | 96 |
+| RAM | 384GB |
+| Storage | 3.8TB NVMe |
+| Network | 50 Gbps |
+| Price | ~$3.00/h |
+
+### GPU M (4x)
+
+| Spec | Value |
+|------|-------|
+| GPU | 8x NVIDIA A10G |
+| VRAM | 192GB |
+| vCPUs | 192 |
+| RAM | 768GB |
+| Storage | 7.6TB NVMe |
+| Network | 100 Gbps |
+| Price | ~$5.00/h |
+
+---
+
+## Tier L - Large Production
+
+Best for full-precision large models (70B FP16).
+
+### GPU L
+
+| Spec | Value |
+|------|-------|
+| GPU | 4x NVIDIA L40S |
+| VRAM | 192GB |
+| vCPUs | 48 |
+| RAM | 384GB |
+| Storage | 3.8TB NVMe |
+| Network | 40 Gbps |
+| Price | ~$3.50/h |
+
+**Recommended models**: LLaMA 3.1 70B, Qwen2 72B, DeepSeek V3 70B
+
+### GPU L (2x)
+
+| Spec | Value |
+|------|-------|
+| GPU | 4x NVIDIA L40S |
+| VRAM | 192GB |
+| vCPUs | 96 |
+| RAM | 768GB |
+| Storage | 3.8TB NVMe |
+| Network | 50 Gbps |
+| Price | ~$6.00/h |
+
+**Recommended models**: Mixtral 8x22B
+
+### GPU L (4x)
+
+| Spec | Value |
+|------|-------|
+| GPU | 8x NVIDIA L40S |
+| VRAM | 384GB |
+| vCPUs | 192 |
+| RAM | 1536GB |
+| Storage | 7.6TB NVMe |
+| Network | 100 Gbps |
+| Price | ~$10.00/h |
+
+---
+
+## Tier XL - Enterprise
+
+Best for very large models (70B-180B).
+
+### GPU XL
+
+| Spec | Value |
+|------|-------|
+| GPU | 8x NVIDIA A100 (40GB) |
+| VRAM | 320GB |
+| vCPUs | 96 |
+| RAM | 1152GB |
+| Storage | 8TB NVMe |
+| Network | 400 Gbps EFA |
+| Price | ~$12.00/h |
+
+**Recommended models**: Falcon 180B, DeepSeek R1 180B
+
+### GPU XL (80GB)
+
+| Spec | Value |
+|------|-------|
+| GPU | 8x NVIDIA A100 (80GB) |
+| VRAM | 640GB |
+| vCPUs | 96 |
+| RAM | 1152GB |
+| Storage | 8TB NVMe |
+| Network | 400 Gbps EFA |
+| Price | ~$18.00/h |
+
+---
+
+## Tier XXL - Colossal
+
+Best for the largest models (405B).
+
+### GPU XXL
+
+| Spec | Value |
+|------|-------|
+| GPU | 8x NVIDIA H100 (80GB) |
+| VRAM | 640GB |
+| vCPUs | 192 |
+| RAM | 2048GB |
+| Storage | 8TB NVMe |
+| Network | 3200 Gbps EFA v2 |
+| Price | ~$20.00/h |
+
+**Recommended models**: LLaMA 3.1 405B (FP8), DBRX 132B
+
+### GPU XXL (H200)
+
+| Spec | Value |
+|------|-------|
+| GPU | 8x NVIDIA H200 (141GB) |
+| VRAM | 1128GB |
+| vCPUs | 192 |
+| RAM | 2048GB |
+| Storage | 8TB NVMe |
+| Network | 3200 Gbps EFA v2 |
+| Price | ~$30.00/h |
+
+**Recommended models**: LLaMA 3.1 405B (FP16)
+
+---
+
+## Choosing the Right Tier
+
+### By Model Size
+
+| Model Parameters | Precision | Recommended Tier |
+|------------------|-----------|------------------|
+| 1B - 8B | FP16 | XS |
+| 7B - 13B | INT4 | XS |
+| 13B - 30B | FP16 | S |
+| 30B - 34B | INT4/FP16 | S / S-2x |
+| 70B | INT4/AWQ | M |
+| 70B | FP16 | L |
+| 70B - 180B | FP16 | XL |
+| 405B | FP8 | XXL |
+| 405B | FP16 | XXL-H200 |
+
+### By Use Case
+
+| Use Case | Recommended Tier |
+|----------|------------------|
+| Development/Testing | XS |
+| Small production | S |
+| Cost-optimized production | M (quantized) |
+| High-quality production | L |
+| Enterprise/Maximum quality | XL / XXL |

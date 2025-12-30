@@ -1,0 +1,281 @@
+---
+title: 'LLM Judge'
+description: 'Use AI to evaluate LLM outputs'
+---
+
+# LLM Judge
+
+LLM Judge uses an AI model to evaluate outputs based on custom criteria. This is useful when evaluation requires human-like judgment.
+
+## Basic Usage
+
+```python
+from lunar import Lunar
+from lunar.evals import llmJudge
+
+client = Lunar()
+
+helpfulness = llmJudge(
+    name="helpfulness",
+    prompt="Rate how helpful this response is: {output}",
+    output_type="discrete",
+    range=(1, 5),
+)
+
+result = client.evals.run(
+    name="Helpfulness Test",
+    dataset=dataset,
+    task=task,
+    scorers=[helpfulness],
+)
+```
+
+## Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `name` | `str` | Required | Scorer name in results |
+| `prompt` | `str` | Required | Evaluation prompt template |
+| `model` | `str` | `"claude-3-5-haiku"` | Model for judging |
+| `output_type` | `str` | `"percentage"` | Output type (see below) |
+| `categories` | `list` | `None` | For categorical type |
+| `range` | `tuple` | `None` | For discrete type |
+| `chain_of_thought` | `bool` | `False` | Enable reasoning |
+| `temperature` | `float` | `0.0` | Model temperature |
+
+## Prompt Variables
+
+Use these variables in your prompt:
+
+| Variable | Description |
+|----------|-------------|
+| `{input}` | The original input |
+| `{output}` | The task output to evaluate |
+| `{expected}` | The expected output (if provided) |
+
+```python
+accuracy = llmJudge(
+    name="accuracy",
+    prompt="""
+    Compare the response to the expected answer.
+
+    Question: {input}
+    Expected: {expected}
+    Response: {output}
+
+    Is the response accurate?
+    """,
+    output_type="boolean",
+)
+```
+
+## Output Types
+
+### Boolean
+
+Returns 1.0 (true) or 0.0 (false).
+
+```python
+is_polite = llmJudge(
+    name="is_polite",
+    prompt="Is this response polite and professional? {output}",
+    output_type="boolean",
+)
+
+# Judge responds: "true" → 1.0
+# Judge responds: "false" → 0.0
+```
+
+### Discrete
+
+Returns a normalized score from an integer range.
+
+```python
+quality = llmJudge(
+    name="quality",
+    prompt="Rate this response 1-5: {output}",
+    output_type="discrete",
+    range=(1, 5),
+)
+
+# Judge responds: "5" → 1.0
+# Judge responds: "3" → 0.5
+# Judge responds: "1" → 0.0
+```
+
+### Categorical
+
+Returns a position-based score from categories.
+
+```python
+sentiment = llmJudge(
+    name="sentiment",
+    prompt="What is the sentiment? {output}",
+    output_type="categorical",
+    categories=["negative", "neutral", "positive"],
+)
+
+# Judge responds: "positive" → 1.0
+# Judge responds: "neutral" → 0.5
+# Judge responds: "negative" → 0.0
+```
+
+### Percentage
+
+Returns a decimal between 0.0 and 1.0.
+
+```python
+confidence = llmJudge(
+    name="confidence",
+    prompt="How confident is this response (0.0 to 1.0)? {output}",
+    output_type="percentage",
+)
+
+# Judge responds: "0.85" → 0.85
+# Judge responds: "0.3" → 0.3
+```
+
+## Chain of Thought
+
+Enable step-by-step reasoning for better judgments:
+
+```python
+accuracy = llmJudge(
+    name="accuracy",
+    prompt="""
+    Is this response factually accurate?
+
+    Question: {input}
+    Response: {output}
+    """,
+    output_type="boolean",
+    chain_of_thought=True,
+)
+```
+
+With chain of thought, the model will:
+1. Think through the evaluation step by step
+2. Provide reasoning in `<reasoning>` tags
+3. Give final answer in `<answer>` tags
+
+## Practical Examples
+
+### Response Completeness
+
+```python
+completeness = llmJudge(
+    name="completeness",
+    prompt="""
+    Does this response fully answer the question?
+
+    Question: {input}
+    Response: {output}
+
+    Rate completeness 1-5:
+    1 = Doesn't address the question
+    2 = Partially addresses
+    3 = Addresses main point
+    4 = Comprehensive
+    5 = Thorough and complete
+    """,
+    output_type="discrete",
+    range=(1, 5),
+)
+```
+
+### Code Quality
+
+```python
+code_quality = llmJudge(
+    name="code_quality",
+    prompt="""
+    Evaluate this code:
+    {output}
+
+    Consider:
+    - Correctness
+    - Readability
+    - Best practices
+    - Error handling
+
+    Rate 1-10:
+    """,
+    output_type="discrete",
+    range=(1, 10),
+    model="gpt-4o",  # Use more capable model for code
+)
+```
+
+### Tone Analysis
+
+```python
+tone = llmJudge(
+    name="tone",
+    prompt="What is the tone of this response? {output}",
+    output_type="categorical",
+    categories=["hostile", "neutral", "friendly", "enthusiastic"],
+)
+```
+
+### Factual Verification
+
+```python
+factual = llmJudge(
+    name="factual",
+    prompt="""
+    Verify if the response is factually correct.
+
+    Question: {input}
+    Expected facts: {expected}
+    Response: {output}
+
+    Is the response factually accurate?
+    """,
+    output_type="boolean",
+    chain_of_thought=True,
+    model="claude-3-5-sonnet",  # More capable for fact-checking
+)
+```
+
+## Multiple Judges
+
+Use multiple judges for different aspects:
+
+```python
+result = client.evals.run(
+    name="Comprehensive Evaluation",
+    dataset=dataset,
+    task=task,
+    scorers=[
+        llmJudge(
+            name="accuracy",
+            prompt="Is this accurate? {output}",
+            output_type="boolean",
+        ),
+        llmJudge(
+            name="helpfulness",
+            prompt="Rate helpfulness 1-5: {output}",
+            output_type="discrete",
+            range=(1, 5),
+        ),
+        llmJudge(
+            name="tone",
+            prompt="Is the tone appropriate? {output}",
+            output_type="boolean",
+        ),
+    ],
+)
+
+print(f"Accuracy: {result.summary.scores['accuracy'].mean:.1%}")
+print(f"Helpfulness: {result.summary.scores['helpfulness'].mean:.2f}")
+print(f"Tone: {result.summary.scores['tone'].mean:.1%}")
+```
+
+## Best Practices
+
+1. **Be Specific**: Write clear, specific prompts
+2. **Use Examples**: Include examples in prompts when helpful
+3. **Choose Appropriate Type**: Match output type to your criteria
+4. **Use Chain of Thought**: For complex evaluations
+5. **Select Right Model**: Use capable models for nuanced judgments
+6. **Low Temperature**: Keep at 0.0 for consistency

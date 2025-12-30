@@ -1,0 +1,238 @@
+---
+title: 'Async Usage'
+description: 'Use AsyncLunar for high-performance asynchronous applications'
+---
+
+# Async Usage
+
+The `AsyncLunar` client provides the same API as the synchronous `Lunar` client, but with `async/await` support for high-performance applications.
+
+## Basic Async Usage
+
+```python
+from lunar import AsyncLunar
+import asyncio
+
+async def main():
+    async with AsyncLunar() as client:
+        response = await client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": "Hello!"}]
+        )
+        print(response.choices[0].message.content)
+
+asyncio.run(main())
+```
+
+## Why Use Async?
+
+| Scenario | Sync | Async |
+|----------|------|-------|
+| Single request | Fine | Overkill |
+| Sequential requests | Fine | Similar performance |
+| Concurrent requests | Slow | Much faster |
+| High throughput | Limited | Excellent |
+| Web servers | Blocking | Non-blocking |
+
+## Concurrent Requests
+
+Make multiple requests in parallel:
+
+```python
+from lunar import AsyncLunar
+import asyncio
+
+async def ask_question(client, question: str) -> str:
+    response = await client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": question}]
+    )
+    return response.choices[0].message.content
+
+async def main():
+    questions = [
+        "What is Python?",
+        "What is JavaScript?",
+        "What is Rust?",
+        "What is Go?",
+        "What is TypeScript?"
+    ]
+
+    async with AsyncLunar() as client:
+        # Run all requests concurrently
+        tasks = [ask_question(client, q) for q in questions]
+        answers = await asyncio.gather(*tasks)
+
+        for q, a in zip(questions, answers):
+            print(f"Q: {q}")
+            print(f"A: {a[:100]}...")
+            print()
+
+asyncio.run(main())
+```
+
+## Client Initialization
+
+```python
+# With context manager (recommended)
+async with AsyncLunar(api_key="your-key") as client:
+    response = await client.chat.completions.create(...)
+
+# Manual management
+client = AsyncLunar(api_key="your-key")
+try:
+    response = await client.chat.completions.create(...)
+finally:
+    await client.close()
+```
+
+## All Async Methods
+
+```python
+async with AsyncLunar() as client:
+    # Chat completions
+    response = await client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": "Hello"}]
+    )
+
+    # Text completions
+    response = await client.completions.create(
+        model="gpt-4o-mini",
+        prompt="Hello"
+    )
+
+    # List models
+    models = await client.models.list()
+
+    # List providers
+    providers = await client.providers.list(model="gpt-4o-mini")
+
+    # Run evaluations
+    result = await client.evals.run(...)
+```
+
+## Async Streaming
+
+```python
+async def stream_response():
+    async with AsyncLunar() as client:
+        stream = await client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": "Write a poem."}],
+            stream=True
+        )
+
+        async for chunk in stream:
+            content = chunk.choices[0].delta.content
+            if content:
+                print(content, end="", flush=True)
+
+asyncio.run(stream_response())
+```
+
+## Rate Limiting with Semaphores
+
+Control concurrency to avoid rate limits:
+
+```python
+from lunar import AsyncLunar
+import asyncio
+
+async def process_with_limit(questions: list, max_concurrent: int = 5):
+    semaphore = asyncio.Semaphore(max_concurrent)
+
+    async def ask_with_limit(client, question):
+        async with semaphore:  # Limits concurrent requests
+            response = await client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[{"role": "user", "content": question}]
+            )
+            return response.choices[0].message.content
+
+    async with AsyncLunar() as client:
+        tasks = [ask_with_limit(client, q) for q in questions]
+        return await asyncio.gather(*tasks)
+
+# Process 100 questions, max 5 at a time
+questions = [f"Question {i}" for i in range(100)]
+answers = asyncio.run(process_with_limit(questions, max_concurrent=5))
+```
+
+## Error Handling
+
+```python
+from lunar import AsyncLunar, RateLimitError, ServerError
+import asyncio
+
+async def safe_request(client, messages):
+    try:
+        return await client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=messages
+        )
+    except RateLimitError as e:
+        print(f"Rate limited, waiting {e.retry_after}s")
+        await asyncio.sleep(e.retry_after or 1)
+        return await safe_request(client, messages)  # Retry
+    except ServerError as e:
+        print(f"Server error: {e}")
+        return None
+
+async def main():
+    async with AsyncLunar() as client:
+        response = await safe_request(
+            client,
+            [{"role": "user", "content": "Hello!"}]
+        )
+        if response:
+            print(response.choices[0].message.content)
+
+asyncio.run(main())
+```
+
+## Integration with Web Frameworks
+
+### FastAPI
+
+```python
+from fastapi import FastAPI
+from lunar import AsyncLunar
+
+app = FastAPI()
+client = AsyncLunar()
+
+@app.on_event("shutdown")
+async def shutdown():
+    await client.close()
+
+@app.post("/chat")
+async def chat(message: str):
+    response = await client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": message}]
+    )
+    return {"response": response.choices[0].message.content}
+```
+
+### aiohttp
+
+```python
+from aiohttp import web
+from lunar import AsyncLunar
+
+client = AsyncLunar()
+
+async def chat_handler(request):
+    data = await request.json()
+    response = await client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "user", "content": data["message"]}]
+    )
+    return web.json_response({
+        "response": response.choices[0].message.content
+    })
+
+app = web.Application()
+app.router.add_post("/chat", chat_handler)
+```

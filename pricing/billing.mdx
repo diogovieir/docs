@@ -1,0 +1,168 @@
+---
+title: 'Billing'
+description: 'Credit management, payments, and billing details'
+---
+
+# Billing
+
+Manage your credits, payments, and billing settings.
+
+## Credit System
+
+Credits are the currency used to pay for deployments:
+
+- **1 credit = $1 USD**
+- Credits are deducted per hour of active deployment
+- Unused credits remain in your account
+
+## Adding Credits
+
+### Via Dashboard
+
+1. Navigate to **Billing** tab
+2. Click **Add Credits**
+3. Select amount or enter custom value
+4. Complete payment via Stripe
+
+### Purchase Options
+
+| Amount | Credits | Best For |
+|--------|---------|----------|
+| $5 | 500 | Testing |
+| $10 | 1,000 | Small projects |
+| $20 | 2,000 | Regular use |
+| $50 | 5,000 | Production |
+| $100 | 10,000 | Heavy usage |
+| Custom | Min $1 | Flexible |
+
+## Billing Cycle
+
+Deployments are charged per hour:
+
+```
+Hourly Cost = Instance Price × Hours Running
+```
+
+**Example:**
+- GPU S instance: ~$0.60/hour
+- Running for 10 hours: ~$6.00 total
+
+## Credit Deduction
+
+Credits are deducted:
+- When deployment starts (first hour)
+- Every hour while deployment is running
+- Partial hours are rounded up
+
+## Auto-Refill
+
+Enable automatic credit refill to avoid service interruption:
+
+1. Go to **Billing** > **Auto-Refill**
+2. Enable auto-refill
+3. Set refill amount (how much to add)
+4. Set threshold (when to refill)
+
+**Example:**
+- Threshold: 500 credits
+- Refill amount: 2,000 credits
+- When balance drops below 500, automatically add 2,000 credits
+
+## Coupons & Promotions
+
+Apply promotional codes for bonus credits:
+
+1. Go to **Billing** > **Coupons**
+2. Enter coupon code
+3. Click **Apply**
+4. Credits are added instantly
+
+## Cost Monitoring
+
+### Dashboard Metrics
+
+The dashboard shows:
+- **Current Balance**: Available credits
+- **Monthly Spend**: Credits used this month
+- **Projected Cost**: Estimated monthly total
+- **Cost by Model**: Breakdown by deployment
+
+### Cost Analysis
+
+View detailed cost analysis:
+- 7/14/30 day views
+- Cost trends over time
+- Most expensive requests
+- Cost optimization suggestions
+
+## Billing Alerts
+
+Set up notifications:
+- Low balance warnings
+- Daily/weekly spend summaries
+- Deployment cost alerts
+
+## Payment Methods
+
+### Supported Payment Methods
+
+- Credit cards (Visa, Mastercard, Amex)
+- Debit cards
+- Processed securely via Stripe
+
+### Payment Currency
+
+- All payments in USD
+- International cards accepted
+- Currency conversion by your bank
+
+## Invoice & Receipts
+
+- Receipts sent via email after each purchase
+- Transaction history in dashboard
+- Exportable for accounting
+
+## Cost Optimization Tips
+
+### 1. Choose Right Instance
+
+Don't over-provision. A 7B model doesn't need Tier L.
+
+### 2. Use Quantized Models
+
+AWQ/INT4 models run on cheaper instances with similar quality:
+
+| Model | FP16 Instance | AWQ Instance | Savings |
+|-------|---------------|--------------|---------|
+| 70B | GPU L ($3.50/h) | GPU M ($1.80/h) | ~48% |
+
+### 3. Pause When Not Needed
+
+Stop deployments during off-hours:
+- Pause overnight
+- Pause weekends
+- Use auto-scaling
+
+### 4. Monitor Usage
+
+Check the Cost Analysis dashboard regularly to identify:
+- Underutilized deployments
+- Expensive requests
+- Optimization opportunities
+
+## FAQ
+
+**Q: Do credits expire?**
+A: No, credits do not expire.
+
+**Q: Can I get a refund?**
+A: Contact support for refund requests on unused credits.
+
+**Q: What happens if I run out of credits?**
+A: Deployments will be paused. Add credits to resume.
+
+**Q: Is there a free tier?**
+A: Contact sales for trial credits.
+
+**Q: How are partial hours billed?**
+A: Partial hours are rounded up to the nearest hour.
